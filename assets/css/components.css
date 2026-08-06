@@ -299,6 +299,49 @@
   margin-bottom: 18px; background: var(--surface-alt);
 }
 
+/* ============ SHOP DRAWING GALLERY ============ */
+.drawing-group { margin-bottom: 32px; }
+.drawing-group:last-child { margin-bottom: 0; }
+.drawing-group-title {
+  font-size: 0.92rem; font-weight: 700; margin-bottom: 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+.drawing-group-title svg { width: 16px; height: 16px; color: var(--accent); flex-shrink: 0; }
+.drawing-group-desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px; }
+.drawing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+.drawing-thumb {
+  position: relative; display: block; width: 100%; aspect-ratio: 4 / 3;
+  border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border);
+  background: var(--surface-alt); cursor: pointer; padding: 6px;
+  transition: transform var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+}
+.drawing-thumb:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.drawing-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; background: #fff; border-radius: 4px; }
+.drawing-thumb-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(15, 17, 26, 0.75));
+  color: #fff; font-size: 0.72rem; font-weight: 600;
+  padding: 20px 10px 8px; text-align: left;
+}
+
+/* Drawing lightbox modal */
+#drawing-modal .modal-box { max-width: 92vw; width: 100%; padding: 24px; }
+.drawing-modal-img-wrap {
+  width: 100%; max-height: 74vh; overflow: auto; background: var(--surface-alt);
+  border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+.drawing-modal-img-wrap img { max-width: 100%; height: auto; display: block; }
+.drawing-modal-foot { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.drawing-modal-caption { font-size: 0.9rem; color: var(--text-muted); }
+.drawing-modal-caption strong { color: var(--text); }
+
+@media (max-width: 760px) {
+  .drawing-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+  #drawing-modal .modal-box { padding: 16px; }
+  .drawing-modal-img-wrap { max-height: 60vh; }
+}
+
 /* Modal */
 .modal-overlay {
   position: fixed; inset: 0; background: rgba(15, 17, 26, 0.6);
