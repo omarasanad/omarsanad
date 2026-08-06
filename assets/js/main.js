@@ -11,18 +11,18 @@ async function renderPlaylists() {
 
     grid.innerHTML = playlists.map((p) => `
       <article class="playlist-card card card-hover reveal">
-        <div class="playlist-thumb ${p.categoryClass}">
+        <a class="playlist-thumb ${p.categoryClass}" href="${p.url}" target="_blank" rel="noopener noreferrer" aria-label="Watch ${p.title} on YouTube">
           ${p.featured ? '<span class="playlist-featured-tag">Featured</span>' : ''}
           <span class="playlist-video-count">${p.videoCount} Video${p.videoCount > 1 ? 's' : ''}</span>
           <div class="play-icon">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
           </div>
-        </div>
+        </a>
         <div class="playlist-body">
           <span class="playlist-cat">${p.category}</span>
           <h3>${p.title}</h3>
           <p>${p.description}</p>
-          <a href="https://www.youtube.com/@omar-a-sanad" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">Watch on YouTube</a>
+          <a href="${p.url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">Watch on YouTube</a>
         </div>
       </article>
     `).join('');
@@ -47,12 +47,12 @@ async function renderFeaturedPlaylists(limit = 3) {
 
     grid.innerHTML = playlists.slice(0, limit).map((p) => `
       <article class="playlist-card card card-hover reveal">
-        <div class="playlist-thumb ${p.categoryClass}">
+        <a class="playlist-thumb ${p.categoryClass}" href="${p.url}" target="_blank" rel="noopener noreferrer" aria-label="Watch ${p.title} on YouTube">
           <span class="playlist-video-count">${p.videoCount} Video${p.videoCount > 1 ? 's' : ''}</span>
           <div class="play-icon">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
           </div>
-        </div>
+        </a>
         <div class="playlist-body">
           <span class="playlist-cat">${p.category}</span>
           <h3>${p.title}</h3>

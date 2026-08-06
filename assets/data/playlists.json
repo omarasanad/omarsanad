@@ -7,6 +7,7 @@
     "category": "Power Systems",
     "categoryClass": "cat-power",
     "featured": true,
+    "url": "https://www.youtube.com/playlist?list=PLsX-UOfPaiExW36bcykchOYTFcOmsRJ5v",
     "topics": [
       "Performance of Overhead Transmission Line (ABCD parameters, voltage regulation, line modeling)",
       "Variable Load on Power Stations (load curves, diversity factor, capacity planning)",
@@ -21,6 +22,7 @@
     "category": "Lighting Design",
     "categoryClass": "cat-lighting",
     "featured": true,
+    "url": "https://www.youtube.com/playlist?list=PLsX-UOfPaiEymwj_Wzjhkyn1zTOGVXhVD",
     "topics": [
       "Part 1: Overview & 3D Modeling",
       "Parts 2–3: Apertures, Furniture, Pcon Planner Integration, Colors & Textures",
@@ -37,6 +39,7 @@
     "category": "Lighting Design",
     "categoryClass": "cat-lighting",
     "featured": true,
+    "url": "https://www.youtube.com/playlist?list=PLsX-UOfPaiExZFg16r68qxSP-sXbgTJPP",
     "topics": [
       "Manual illuminance calculation methods and lumen calculations",
       "Part 6: Street Lighting Design per European/British standards (BS EN 13201)"
@@ -50,6 +53,7 @@
     "category": "Fundamentals",
     "categoryClass": "cat-power",
     "featured": false,
+    "url": "https://www.youtube.com/playlist?list=PLsX-UOfPaiEwvz5xNJPz6r8jMCLo1QZKp",
     "topics": [
       "Sheet 1 — Electrical Engineering",
       "Magnetic Circuit Analysis",
@@ -64,6 +68,7 @@
     "category": "Power Systems",
     "categoryClass": "cat-power",
     "featured": false,
+    "url": "https://www.youtube.com/playlist?list=PLsX-UOfPaiEwjb-7LxtQc4UHYfhTVj9bB",
     "topics": []
   },
   {
@@ -74,6 +79,7 @@
     "category": "Systems Theory",
     "categoryClass": "cat-systems",
     "featured": false,
+    "url": "https://www.youtube.com/playlist?list=PLsX-UOfPaiEwXt3f_2PcfdiLJRLCS1quo",
     "topics": [
       "Time/frequency domain transformations",
       "Z-transforms & Laplace transform applications"
@@ -87,6 +93,7 @@
     "category": "Power Systems",
     "categoryClass": "cat-power",
     "featured": false,
+    "url": "https://www.youtube.com/playlist?list=PLsX-UOfPaiEwvM_vj0voyts4ENVh5R1KQ",
     "topics": [
       "Part 1: Power Factor Correction",
       "Part 2: Power Factor Correction"
@@ -100,6 +107,7 @@
     "category": "Infrastructure",
     "categoryClass": "cat-infra",
     "featured": false,
+    "url": "https://www.youtube.com/playlist?list=PLsX-UOfPaiEyESRhNcJqeed8qtFgEhQcf",
     "topics": [
       "Distribution System Architecture & MV Network"
     ]
