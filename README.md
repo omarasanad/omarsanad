@@ -22,17 +22,10 @@ python3 -m http.server 8000
 
 Then visit `http://localhost:8000`.
 
-## Adding your profile photo
+## Profile photo
 
-Drop a photo at `assets/img/profile.jpg`, then in `index.html` replace the
-`.avatar` div (inside `.avatar-ring`) with:
-
-```html
-<img src="assets/img/profile.jpg" alt="Omar Ahmed Sanad" class="avatar-photo">
-```
-
-and add a matching `.avatar-photo { width:100%; height:100%; border-radius:50%; object-fit:cover; }`
-rule to `css/style.css`.
+The hero photo lives at `assets/img/profile.jpg`. Replace that file with a new
+image (same filename) to update it — no other changes needed.
 
 ## Deploying
 
