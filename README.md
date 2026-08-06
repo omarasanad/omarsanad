@@ -23,6 +23,7 @@ assets/js/reveal.js                        Scroll-reveal animation (Intersection
 assets/js/modal.js                         Accessible modal (used by Certificates page)
 assets/js/main.js                          Page-specific logic (playlists, publications, filters, contact form)
 assets/js/certificates.js                  Certificates page logic (render, search, filter, sort, modal)
+assets/js/gallery.js                       Shop-drawing lightbox (used by project case studies with a drawing gallery)
 assets/data/playlists.json                 YouTube playlist data — edit to add/update playlists
 assets/data/publications.json              Publications data — currently empty ([])
 assets/data/certificates.json              Certificate data — title, org, date, category, skills, pdfUrl
@@ -69,6 +70,10 @@ Then visit `http://localhost:8080/omarsanad/`.
   with disabled View/Download buttons until the file is ready.
 - **Project galleries**: drop images into `assets/img/projects/<project-slug>/` (create the folder),
   then replace that case study's `.gallery-placeholder` div with an image grid referencing the files.
+- **Shop drawing galleries**: see `projects/therba-medical-center/index.html` for the pattern —
+  drawings are grouped into `.drawing-group` sections, each with a `.drawing-grid` of
+  `.drawing-thumb` buttons (`data-src` + `data-label`). Include `assets/js/gallery.js` and the
+  `#drawing-modal` lightbox markup on any page that uses this pattern.
 - **New project case study**: copy an existing `projects/<slug>/index.html` as a template, add a
   matching card to `projects/index.html`, and add the URL to `sitemap.xml`.
 - **Profile photo**: replace `assets/img/profile.jpg` (same filename, no other changes needed).
