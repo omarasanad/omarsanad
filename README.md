@@ -10,7 +10,7 @@ about/index.html                           About (experience, education, skills,
 projects/index.html                        Projects listing (filterable by category)
 projects/<slug>/index.html                 Individual project case studies
 youtube/index.html                         YouTube playlists (rendered from assets/data/playlists.json)
-certificates/index.html                    Certificates (placeholder cards + preview modal)
+certificates/index.html                    Certificates (categorized, searchable, sortable, with preview modal)
 publications/index.html                    Publications (empty state until real entries are added)
 contact/index.html                         Contact page (mailto-based form)
 
@@ -22,10 +22,14 @@ assets/js/include.js                       Loads header/footer partials, mobile 
 assets/js/reveal.js                        Scroll-reveal animation (IntersectionObserver)
 assets/js/modal.js                         Accessible modal (used by Certificates page)
 assets/js/main.js                          Page-specific logic (playlists, publications, filters, contact form)
-assets/data/playlists.json                 YouTube playlist data — edit this to add/update playlists
+assets/js/certificates.js                  Certificates page logic (render, search, filter, sort, modal)
+assets/data/playlists.json                 YouTube playlist data — edit to add/update playlists
 assets/data/publications.json              Publications data — currently empty ([])
+assets/data/certificates.json              Certificate data — title, org, date, category, skills, pdfUrl
+assets/certificates/                       Certificate PDF files
 assets/resume/                             Resume PDF
 assets/img/                                Profile photo
+assets/img/projects/<slug>/                Gallery images for each project case study
 ```
 
 ## Important: every page uses `<base href="/omarsanad/">`
@@ -55,14 +59,18 @@ Then visit `http://localhost:8080/omarsanad/`.
 
 ## Adding content later
 
-- **YouTube playlists**: edit `assets/data/playlists.json`. Each entry's `url` currently isn't set
-  (cards link to the channel) — add exact playlist links there once you have them.
+- **YouTube playlists**: edit `assets/data/playlists.json` — each entry's `url` is its real playlist link.
 - **Publications**: edit `assets/data/publications.json` (currently `[]`). Add objects with
   `title`, `venue`, `year`, `abstract`, `pdfUrl`, `doi` — the page automatically switches from the
   empty state to rendering cards once the array is non-empty.
-- **Certificates**: drop certificate image/PDF files into `assets/certificates/` (create the folder),
-  then update `certificates/index.html` to point the Preview/Download buttons at the real files and
-  remove the `disabled` attribute.
+- **Certificates**: drop the PDF into `assets/certificates/`, add an entry to
+  `assets/data/certificates.json` (title, org, orgShort, orgColor, date, category, description,
+  skills, pdfUrl) — the page picks it up automatically. Leave `pdfUrl: null` for a placeholder card
+  with disabled View/Download buttons until the file is ready.
+- **Project galleries**: drop images into `assets/img/projects/<project-slug>/` (create the folder),
+  then replace that case study's `.gallery-placeholder` div with an image grid referencing the files.
+- **New project case study**: copy an existing `projects/<slug>/index.html` as a template, add a
+  matching card to `projects/index.html`, and add the URL to `sitemap.xml`.
 - **Profile photo**: replace `assets/img/profile.jpg` (same filename, no other changes needed).
 
 ## Deploying
