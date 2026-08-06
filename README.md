@@ -70,6 +70,7 @@ Then visit `http://localhost:8080/omarsanad/`.
   with disabled View/Download buttons until the file is ready.
 - **Project galleries**: drop images into `assets/img/projects/<project-slug>/` (create the folder),
   then replace that case study's `.gallery-placeholder` div with an image grid referencing the files.
+  See `assets/img/projects/therba-medical-center/` for a populated example.
 - **Shop drawing galleries**: see `projects/therba-medical-center/index.html` for the pattern —
   drawings are grouped into `.drawing-group` sections, each with a `.drawing-grid` of
   `.drawing-thumb` buttons (`data-src` + `data-label`). Include `assets/js/gallery.js` and the
