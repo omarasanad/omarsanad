@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Certificates — Omar Ahmed Sanad</title>
-<meta name="description" content="Professional certifications held by Omar Ahmed Sanad, including LEED and BIM Management.">
+<meta name="description" content="Professional certifications held by Omar Ahmed Sanad across smart buildings, industrial automation, ABB programs, and professional development.">
 <link rel="canonical" href="https://omarasanad.github.io/omarsanad/certificates/">
 <meta property="og:title" content="Certificates — Omar Ahmed Sanad">
 <meta property="og:type" content="website">
@@ -29,64 +29,67 @@
     <div class="container">
       <p class="eyebrow reveal">Achievements</p>
       <h1 class="page-title reveal">Certificates</h1>
-      <p class="lede reveal">Professional certifications earned alongside my academic and industry work.</p>
+      <p class="lede reveal">10 professional certifications across smart buildings, industrial automation, and continued professional development — earned alongside my academic and industry work.</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <div class="cert-grid">
-        <div class="card cert-card reveal">
-          <div class="cert-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M8.5 12.5 7 22l5-3 5 3-1.5-9.5" stroke-linejoin="round"/></svg>
-          </div>
-          <h3>LEED Certification</h3>
-          <p class="cert-issuer">EVEN1001 — The American University in Cairo (AUC)</p>
-          <div class="cert-actions">
-            <button type="button" class="btn btn-outline btn-sm" data-modal-target="modal-leed">Preview</button>
-            <a class="btn btn-outline btn-sm" href="assets/certificates/leed-certificate.pdf" download>Download</a>
-          </div>
-        </div>
 
-        <div class="card cert-card reveal">
-          <div class="cert-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8" r="5"/><path d="M8.5 12.5 7 22l5-3 5 3-1.5-9.5" stroke-linejoin="round"/></svg>
-          </div>
-          <h3>BIM Management Diploma</h3>
-          <p class="cert-issuer">Kayan Academy</p>
-          <div class="cert-actions">
-            <button type="button" class="btn btn-outline btn-sm" data-modal-target="modal-bim">Preview</button>
-            <button type="button" class="btn btn-outline btn-sm" disabled>Download</button>
-          </div>
-          <p class="cert-status">Certificate file coming soon</p>
+      <div class="cert-toolbar reveal">
+        <div class="cert-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" stroke-linecap="round"/></svg>
+          <input type="search" id="cert-search-input" placeholder="Search certificates, organizations, or skills…" aria-label="Search certificates">
+        </div>
+        <div class="cert-sort">
+          <label for="cert-sort-select">Sort by</label>
+          <select id="cert-sort-select">
+            <option value="newest" selected>Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="org">Organization</option>
+          </select>
         </div>
       </div>
+
+      <div class="filter-bar reveal" id="cert-filter-bar" role="group" aria-label="Filter certificates by category">
+        <button type="button" class="filter-pill active" data-filter="all">All</button>
+        <button type="button" class="filter-pill" data-filter="smart-buildings-knx">Smart Buildings &amp; KNX</button>
+        <button type="button" class="filter-pill" data-filter="professional-programs-internships">Professional Programs &amp; Internships</button>
+        <button type="button" class="filter-pill" data-filter="online-training">Online Training</button>
+        <button type="button" class="filter-pill" data-filter="industrial-automation">Industrial Automation</button>
+        <button type="button" class="filter-pill" data-filter="professional-development">Professional Development</button>
+      </div>
+
+      <div id="cert-container"></div>
+
+      <div class="cert-empty" id="cert-empty">
+        <p>No certificates match your search.</p>
+      </div>
+
     </div>
   </section>
 
 </main>
 
-<!-- MODALS -->
-<div class="modal-overlay" id="modal-leed" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-leed-title">
+<!-- CERTIFICATE MODAL (populated dynamically) -->
+<div class="modal-overlay" id="cert-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="cert-modal-title">
   <div class="modal-box">
     <button type="button" class="modal-close" aria-label="Close">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
     </button>
-    <h3 id="modal-leed-title">LEED Certification</h3>
-    <p class="lede" style="margin-top: 12px;">EVEN1001 — The American University in Cairo (AUC).</p>
-    <iframe src="assets/certificates/leed-certificate.pdf" title="LEED Certification preview" style="width:100%; height:60vh; border:1px solid var(--border); border-radius: var(--radius-sm); margin-top: 20px;"></iframe>
-    <a href="assets/certificates/leed-certificate.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm" style="margin-top: 14px;">Open in new tab →</a>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-bim" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-bim-title">
-  <div class="modal-box">
-    <button type="button" class="modal-close" aria-label="Close">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
-    </button>
-    <h3 id="modal-bim-title">BIM Management Diploma</h3>
-    <p class="lede" style="margin-top: 12px;">Kayan Academy.</p>
-    <div class="gallery-placeholder" style="margin-top: 20px;">Certificate image coming soon.</div>
+    <div class="cert-modal-head">
+      <span class="org-badge" id="cert-modal-badge"></span>
+      <h3 id="cert-modal-title"></h3>
+    </div>
+    <p class="cert-modal-org" id="cert-modal-org"></p>
+    <p class="cert-modal-date" id="cert-modal-date"></p>
+    <div id="cert-modal-preview-slot"></div>
+    <p class="cert-modal-desc" id="cert-modal-desc"></p>
+    <div class="cert-modal-skills">
+      <h4>Skills Gained</h4>
+      <div class="tag-pills" id="cert-modal-skills"></div>
+    </div>
+    <a class="btn btn-primary btn-sm" id="cert-modal-download" download>Download PDF</a>
   </div>
 </div>
 
@@ -96,5 +99,6 @@
 <script src="assets/js/reveal.js"></script>
 <script src="assets/js/modal.js"></script>
 <script src="assets/js/main.js"></script>
+<script src="assets/js/certificates.js"></script>
 </body>
 </html>

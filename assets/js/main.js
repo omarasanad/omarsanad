@@ -106,6 +106,8 @@ async function renderPublications() {
 
 /* ============ PROJECTS FILTER ============ */
 function initProjectFilter() {
+  const grid = document.getElementById('projects-grid');
+  if (!grid) return;
   const bar = document.querySelector('.filter-bar');
   if (!bar) return;
   const pills = bar.querySelectorAll('.filter-pill');
