@@ -84,3 +84,9 @@ Then visit `http://localhost:8080/omarsanad/`.
 This is a static site — deploy as-is to GitHub Pages, Netlify, Vercel, or any static host. If deploying
 somewhere other than `github.io/omarsanad/`, update `<base href>` in every page and the URLs in
 `sitemap.xml` / `robots.txt`.
+
+**If a GitHub Pages deploy gets stuck** ("Current status: deployment_queued" until it times out):
+try Actions → the run → "Re-run jobs", or Settings → Pages → unpublish and republish. If neither
+clears it, check Settings → Environments → github-pages for stuck/uncancellable runs — that likely
+means a GitHub-side platform issue, not something wrong with the repo, and is worth a support ticket
+at support.github.com.
