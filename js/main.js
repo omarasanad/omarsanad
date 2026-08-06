@@ -51,3 +51,20 @@ const revealObserver = new IntersectionObserver(
   { threshold: 0.12 }
 );
 revealEls.forEach((el) => revealObserver.observe(el));
+
+// Work tabs (Academic / Construction)
+const tabButtons = document.querySelectorAll('.tab-btn');
+tabButtons.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const targetId = `panel-${btn.dataset.tab}`;
+    tabButtons.forEach((b) => {
+      const isActive = b === btn;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-selected', String(isActive));
+      b.tabIndex = isActive ? 0 : -1;
+    });
+    document.querySelectorAll('.tab-panel').forEach((panel) => {
+      panel.hidden = panel.id !== targetId;
+    });
+  });
+});

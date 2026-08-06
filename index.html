@@ -24,7 +24,7 @@
         <li><a href="#about" class="nav-link">About</a></li>
         <li><a href="#skills" class="nav-link">Skills</a></li>
         <li><a href="#experience" class="nav-link">Experience</a></li>
-        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#work" class="nav-link">Work</a></li>
         <li><a href="#education" class="nav-link">Education</a></li>
         <li><a href="#contact" class="nav-link">Contact</a></li>
       </ul>
@@ -61,7 +61,7 @@
           design challenges.
         </p>
         <div class="hero-actions reveal">
-          <a href="#projects" class="btn btn-primary">View My Work</a>
+          <a href="#work" class="btn btn-primary">View My Work</a>
           <a href="#contact" class="btn btn-outline">Get In Touch</a>
         </div>
         <ul class="social-links reveal" aria-label="Social links">
@@ -231,45 +231,205 @@
     </div>
   </section>
 
-  <!-- PROJECTS -->
-  <section class="section section-alt" id="projects">
+  <!-- WORK (TABS) -->
+  <section class="section section-alt" id="work">
     <div class="container">
-      <p class="section-eyebrow reveal">Projects &amp; Research</p>
-      <h2 class="section-title reveal">Selected work</h2>
+      <p class="section-eyebrow reveal">My Work</p>
+      <h2 class="section-title reveal">Academic &amp; Construction</h2>
 
-      <div class="projects-grid">
-        <article class="project-card reveal">
-          <span class="project-tag">Research</span>
-          <h3>Performance Enhancement of Renewable Energy Systems Using FACTS</h3>
-          <p>M.Sc. thesis researching optimization of renewable energy power grids using FACTS controllers paired with advanced control units and automated tuning algorithms.</p>
-          <div class="tag-pills">
-            <span>MATLAB</span>
-            <span>Simulink</span>
-            <span>Optimization Algorithms</span>
-          </div>
-        </article>
+      <div class="tabs reveal" role="tablist" aria-label="Work categories">
+        <button type="button" class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-academic" id="tab-academic" data-tab="academic">Academic Work</button>
+        <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-construction" id="tab-construction" data-tab="construction" tabindex="-1">Construction Work</button>
+      </div>
 
-        <article class="project-card reveal">
-          <span class="project-tag">Competition</span>
-          <h3>Siemens Global SIMARIS Challenge 2026 — 3rd Place Globally</h3>
-          <p>Served as Academic Advisor supervising a student team designing a high-availability power supply system for an AI data center.</p>
-          <div class="tag-pills">
-            <span>Siemens SIMARIS</span>
-            <span>Power System Design</span>
-          </div>
-        </article>
+      <!-- ACADEMIC WORK -->
+      <div class="tab-panel" id="panel-academic" role="tabpanel" aria-labelledby="tab-academic">
 
-        <article class="project-card reveal">
-          <span class="project-tag">Industry</span>
-          <h3>Mega-Project BIM Engineering</h3>
-          <p>BIM modeling, MEP trade coordination, clash resolution, and LOD 300–500 submittals for multi-billion dollar projects in KSA — SINDALAH Island, Banan AlRiyadh, AMAALA, and Tharbah.</p>
-          <div class="tag-pills">
-            <span>Revit</span>
-            <span>Navisworks</span>
-            <span>ACC</span>
-            <span>Revizto</span>
+        <h3 class="tab-subheading">Research &amp; Mentorship</h3>
+        <div class="projects-grid">
+          <article class="project-card">
+            <span class="project-tag">Research</span>
+            <h3>Performance Enhancement of Renewable Energy Systems Using FACTS</h3>
+            <p>M.Sc. thesis researching optimization of renewable energy power grids using FACTS controllers paired with advanced control units and automated tuning algorithms.</p>
+            <div class="tag-pills">
+              <span>MATLAB</span>
+              <span>Simulink</span>
+              <span>Optimization Algorithms</span>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <span class="project-tag">Competition</span>
+            <h3>Siemens Global SIMARIS Challenge 2026 — 3rd Place Globally</h3>
+            <p>Served as Academic Advisor supervising a student team designing a high-availability power supply system for an AI data center.</p>
+            <div class="tag-pills">
+              <span>Siemens SIMARIS</span>
+              <span>Power System Design</span>
+            </div>
+          </article>
+        </div>
+
+        <h3 class="tab-subheading">Teaching &amp; YouTube Courses</h3>
+        <p class="tab-intro">
+          As a Teaching Assistant, I publish full course playlists on my YouTube channel covering
+          electrical power engineering, lighting design, and more — 49 videos across 8 playlists.
+        </p>
+        <a href="https://www.youtube.com/@omar-a-sanad" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm youtube-cta">
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>
+          Visit YouTube Channel
+        </a>
+
+        <div class="course-grid">
+          <article class="course-card">
+            <div class="course-card-head">
+              <h4>Electrical Power Engineering</h4>
+              <span class="video-count">14 Videos</span>
+            </div>
+            <p>Theoretical and numerical analysis of electrical grid components and power station operations.</p>
+            <ul>
+              <li>Performance of Overhead Transmission Line (ABCD parameters, voltage regulation, line modeling)</li>
+              <li>Variable Load on Power Stations (load curves, diversity factor, capacity planning)</li>
+              <li>Magnetic Circuits &amp; Power in AC Circuits</li>
+            </ul>
+          </article>
+
+          <article class="course-card">
+            <div class="course-card-head">
+              <h4>Lighting Design Using DIALux Evo</h4>
+              <span class="video-count">9 Videos</span>
+            </div>
+            <p>Comprehensive hands-on workflow for indoor, outdoor, and commercial lighting design.</p>
+            <ul>
+              <li>Part 1: Overview &amp; 3D Modeling</li>
+              <li>Parts 2–3: Apertures, Furniture, Pcon Planner Integration, Colors &amp; Textures</li>
+              <li>Part 7: Light Scenes &amp; Emergency Escape Routes</li>
+              <li>Part 8: Calculation Reports &amp; PDF Export</li>
+              <li>Part 9: Street Lighting Design</li>
+            </ul>
+          </article>
+
+          <article class="course-card">
+            <div class="course-card-head">
+              <h4>Theoretical &amp; Calculation of Lighting Design</h4>
+              <span class="video-count">6 Videos</span>
+            </div>
+            <p>Engineering fundamentals and standards governing photometric design prior to software implementation.</p>
+            <ul>
+              <li>Manual illuminance calculation methods and lumen calculations</li>
+              <li>Part 6: Street Lighting Design per European/British standards (BS EN 13201)</li>
+            </ul>
+          </article>
+
+          <article class="course-card">
+            <div class="course-card-head">
+              <h4>Electrical Engineering</h4>
+              <span class="video-count">8 Videos</span>
+            </div>
+            <p>Academic problem-solving sessions and step-by-step sheet walkthroughs for foundational circuits courses.</p>
+            <ul>
+              <li>Sheet 1 — Electrical Engineering</li>
+              <li>Magnetic Circuit Analysis</li>
+              <li>Power Analysis in AC Circuits</li>
+            </ul>
+          </article>
+
+          <article class="course-card">
+            <div class="course-card-head">
+              <h4>Power System Planning</h4>
+              <span class="video-count">5 Videos</span>
+            </div>
+            <p>High-level network development, load forecasting, feeder routing, and grid architecture strategy.</p>
+          </article>
+
+          <article class="course-card">
+            <div class="course-card-head">
+              <h4>Signals &amp; Systems</h4>
+              <span class="video-count">4 Videos</span>
+            </div>
+            <p>Higher-level dynamic systems engineering, mathematical transformations, and network responses.</p>
+            <ul>
+              <li>Time/frequency domain transformations</li>
+              <li>Z-transforms &amp; Laplace transform applications</li>
+            </ul>
+          </article>
+
+          <article class="course-card">
+            <div class="course-card-head">
+              <h4>Power Factor Correction</h4>
+              <span class="video-count">2 Videos</span>
+            </div>
+            <p>Specialized two-part series covering reactive power compensation, capacitor bank calculations, and power quality enhancement.</p>
+            <ul>
+              <li>Part 1: Power Factor Correction</li>
+              <li>Part 2: Power Factor Correction</li>
+            </ul>
+          </article>
+
+          <article class="course-card">
+            <div class="course-card-head">
+              <h4>Infrastructure</h4>
+              <span class="video-count">1 Video</span>
+            </div>
+            <p>Practical distribution architecture for large-scale utility and urban developments.</p>
+            <ul>
+              <li>Distribution System Architecture &amp; MV Network</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+
+      <!-- CONSTRUCTION WORK -->
+      <div class="tab-panel" id="panel-construction" role="tabpanel" aria-labelledby="tab-construction" hidden>
+
+        <h3 class="tab-subheading">Industry Experience</h3>
+        <div class="projects-grid">
+          <article class="project-card">
+            <span class="project-tag">Industry</span>
+            <h3>BIM Technical Office Engineer</h3>
+            <p>BEC Arabia — Jul 2024 – Present. Conduct BIM modeling, MEP coordination, LOD 300–500 shop/as-built drawing preparation, and technical submittals for mega-projects.</p>
+            <div class="tag-pills">
+              <span>MEP Coordination</span>
+              <span>Clash Detection</span>
+              <span>LOD 300–500</span>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <span class="project-tag">Industry</span>
+            <h3>Mega-Project BIM Engineering</h3>
+            <p>BIM modeling, MEP trade coordination, clash resolution, and LOD 300–500 submittals for multi-billion dollar projects in KSA.</p>
+            <div class="tag-pills">
+              <span>SINDALAH Island</span>
+              <span>Banan AlRiyadh</span>
+              <span>AMAALA</span>
+              <span>Tharbah</span>
+            </div>
+          </article>
+        </div>
+
+        <h3 class="tab-subheading">Tools &amp; Certifications</h3>
+        <div class="extras-grid">
+          <div class="extras-card">
+            <h3>Software &amp; Tools</h3>
+            <div class="tag-pills">
+              <span>Revit</span>
+              <span>Navisworks</span>
+              <span>AutoCAD</span>
+              <span>ACC</span>
+              <span>Revizto</span>
+              <span>ETAP</span>
+              <span>DIALux evo</span>
+              <span>Ecodial</span>
+            </div>
           </div>
-        </article>
+          <div class="extras-card">
+            <h3>Certifications</h3>
+            <ul>
+              <li>LEED Certification — AUC (EVEN1001)</li>
+              <li>BIM Management Diploma — Kayan Academy</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -319,7 +479,7 @@
         </div>
       </div>
 
-      <div class="extras-grid">
+      <div class="extras-grid extras-grid-single">
         <div class="extras-card reveal">
           <h3>Honors &amp; Awards</h3>
           <ul>
@@ -327,14 +487,8 @@
             <li>Ranked 3rd Place Globally as Academic Advisor in the Siemens Global SIMARIS Challenge 2026.</li>
           </ul>
         </div>
-        <div class="extras-card reveal">
-          <h3>Certifications</h3>
-          <ul>
-            <li>LEED Certification — AUC (EVEN1001)</li>
-            <li>BIM Management Diploma — Kayan Academy</li>
-          </ul>
-        </div>
       </div>
+      <p class="extras-note">Certifications are listed under <a href="#work">Work → Construction Work</a>.</p>
     </div>
   </section>
 
