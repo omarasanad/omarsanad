@@ -1,0 +1,107 @@
+[
+  {
+    "slug": "electrical-power-engineering",
+    "title": "Electrical Power Engineering",
+    "description": "Theoretical and numerical analysis of electrical grid components and power station operations.",
+    "videoCount": 14,
+    "category": "Power Systems",
+    "categoryClass": "cat-power",
+    "featured": true,
+    "topics": [
+      "Performance of Overhead Transmission Line (ABCD parameters, voltage regulation, line modeling)",
+      "Variable Load on Power Stations (load curves, diversity factor, capacity planning)",
+      "Magnetic Circuits & Power in AC Circuits"
+    ]
+  },
+  {
+    "slug": "lighting-design-dialux-evo",
+    "title": "Lighting Design Using DIALux Evo",
+    "description": "Comprehensive hands-on workflow for indoor, outdoor, and commercial lighting design.",
+    "videoCount": 9,
+    "category": "Lighting Design",
+    "categoryClass": "cat-lighting",
+    "featured": true,
+    "topics": [
+      "Part 1: Overview & 3D Modeling",
+      "Parts 2–3: Apertures, Furniture, Pcon Planner Integration, Colors & Textures",
+      "Part 7: Light Scenes & Emergency Escape Routes",
+      "Part 8: Calculation Reports & PDF Export",
+      "Part 9: Street Lighting Design"
+    ]
+  },
+  {
+    "slug": "theoretical-calculation-lighting-design",
+    "title": "Theoretical & Calculation of Lighting Design",
+    "description": "Engineering fundamentals and standards governing photometric design prior to software implementation.",
+    "videoCount": 6,
+    "category": "Lighting Design",
+    "categoryClass": "cat-lighting",
+    "featured": true,
+    "topics": [
+      "Manual illuminance calculation methods and lumen calculations",
+      "Part 6: Street Lighting Design per European/British standards (BS EN 13201)"
+    ]
+  },
+  {
+    "slug": "electrical-engineering",
+    "title": "Electrical Engineering",
+    "description": "Academic problem-solving sessions and step-by-step sheet walkthroughs for foundational circuits courses.",
+    "videoCount": 8,
+    "category": "Fundamentals",
+    "categoryClass": "cat-power",
+    "featured": false,
+    "topics": [
+      "Sheet 1 — Electrical Engineering",
+      "Magnetic Circuit Analysis",
+      "Power Analysis in AC Circuits"
+    ]
+  },
+  {
+    "slug": "power-system-planning",
+    "title": "Power System Planning",
+    "description": "High-level network development, load forecasting, feeder routing, and grid architecture strategy.",
+    "videoCount": 5,
+    "category": "Power Systems",
+    "categoryClass": "cat-power",
+    "featured": false,
+    "topics": []
+  },
+  {
+    "slug": "signals-and-systems",
+    "title": "Signals & Systems",
+    "description": "Higher-level dynamic systems engineering, mathematical transformations, and network responses.",
+    "videoCount": 4,
+    "category": "Systems Theory",
+    "categoryClass": "cat-systems",
+    "featured": false,
+    "topics": [
+      "Time/frequency domain transformations",
+      "Z-transforms & Laplace transform applications"
+    ]
+  },
+  {
+    "slug": "power-factor-correction",
+    "title": "Power Factor Correction",
+    "description": "Specialized two-part series covering reactive power compensation, capacitor bank calculations, and power quality enhancement.",
+    "videoCount": 2,
+    "category": "Power Systems",
+    "categoryClass": "cat-power",
+    "featured": false,
+    "topics": [
+      "Part 1: Power Factor Correction",
+      "Part 2: Power Factor Correction"
+    ]
+  },
+  {
+    "slug": "infrastructure",
+    "title": "Infrastructure",
+    "description": "Practical distribution architecture for large-scale utility and urban developments.",
+    "videoCount": 1,
+    "category": "Infrastructure",
+    "categoryClass": "cat-infra",
+    "featured": false,
+    "topics": [
+      "Distribution System Architecture & MV Network"
+    ]
+  }
+]

@@ -1,68 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<base href="/omarsanad/">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Omar Ahmed Sanad — Electrical Power Engineer &amp; Researcher</title>
-<meta name="description" content="Portfolio of Omar Ahmed Sanad — Teaching Assistant at Benha University, M.Sc. Researcher in Power Systems, and Electrical BIM Engineer.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 font-family=%22Arial, sans-serif%22 font-weight=%22700%22 fill=%22%232563eb%22>O</text></svg>">
+<title>Omar Ahmed Sanad — Electrical Power Engineer, BIM Engineer &amp; Researcher</title>
+<meta name="description" content="Portfolio of Omar Ahmed Sanad — Teaching Assistant at Benha University, M.Sc. Researcher in Power Systems, and Electrical BIM Engineer. Explore projects, research, and teaching content.">
+<link rel="canonical" href="https://omarasanad.github.io/omarsanad/">
+<meta property="og:title" content="Omar Ahmed Sanad — Electrical Power Engineer &amp; Researcher">
+<meta property="og:description" content="Teaching Assistant, M.Sc. Researcher in Power Systems, and Electrical BIM Engineer based in Cairo, Egypt.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://omarasanad.github.io/omarsanad/">
+<meta property="og:image" content="https://omarasanad.github.io/omarsanad/assets/img/profile.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2222%22 fill=%22%231d4ed8%22/><text x=%2250%22 y=%2266%22 font-size=%2252%22 font-family=%22Arial, sans-serif%22 font-weight=%22800%22 fill=%22white%22 text-anchor=%22middle%22>O</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
 </head>
-<body>
+<body data-page="home">
 
 <a class="skip-link" href="#main">Skip to content</a>
-
-<header class="site-header" id="site-header">
-  <div class="container header-inner">
-    <a href="#hero" class="logo">Omar<span>.</span></a>
-
-    <nav class="nav" id="nav">
-      <ul class="nav-list">
-        <li><a href="#about" class="nav-link">About</a></li>
-        <li><a href="#skills" class="nav-link">Skills</a></li>
-        <li><a href="#experience" class="nav-link">Experience</a></li>
-        <li><a href="#work" class="nav-link">Work</a></li>
-        <li><a href="#education" class="nav-link">Education</a></li>
-        <li><a href="#contact" class="nav-link">Contact</a></li>
-      </ul>
-    </nav>
-
-    <div class="header-actions">
-      <a href="assets/resume/Omar_Ahmed_Sanad_CV.pdf" class="btn btn-primary btn-sm" download>Resume</a>
-      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </div>
-</header>
+<div id="site-header-mount"></div>
 
 <main id="main">
 
   <!-- HERO -->
-  <section class="hero" id="hero">
-    <div class="container hero-inner">
-      <div class="hero-text">
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
         <p class="eyebrow reveal">Hello, I'm</p>
         <h1 class="reveal">Omar Ahmed Sanad</h1>
-        <p class="hero-role reveal">
+        <p class="hero-roles reveal">
           <span>Teaching Assistant, Benha University</span>
-          <span>M.Sc. Researcher in Power Systems</span>
+          <span>M.Sc. Researcher, Power Systems</span>
           <span>Electrical BIM Engineer</span>
         </p>
         <p class="hero-bio reveal">
-          Teaching Assistant in the Electrical Power and Machines Department at the Faculty of Engineering,
-          Shoubra (Benha University), where I graduated 1st in my class with a 94.44% cumulative grade.
-          Currently pursuing an M.Sc. focused on enhancing renewable energy integration through FACTS
-          controllers and advanced control units. Alongside my academic and research work, I serve as a
-          BIM Technical Office Engineer and mentor student engineering teams competing in international
-          design challenges.
+          I work across academia and industry — instructing electrical power engineering courses,
+          researching renewable energy integration using FACTS controllers, and delivering BIM
+          coordination for multi-billion dollar mega-projects.
         </p>
         <div class="hero-actions reveal">
-          <a href="#work" class="btn btn-primary">View My Work</a>
-          <a href="#contact" class="btn btn-outline">Get In Touch</a>
+          <a href="projects/" class="btn btn-primary">View Projects</a>
+          <a href="contact/" class="btn btn-outline">Get In Touch</a>
         </div>
         <ul class="social-links reveal" aria-label="Social links">
           <li>
@@ -85,453 +69,143 @@
 
       <div class="hero-visual reveal">
         <div class="avatar-ring">
-          <img src="assets/img/profile.jpg" alt="Omar Ahmed Sanad" class="avatar">
+          <img src="assets/img/profile.jpg" alt="Omar Ahmed Sanad" class="avatar" width="260" height="260">
         </div>
         <div class="hero-badge">📍 Cairo, Egypt</div>
       </div>
     </div>
-    <a href="#about" class="scroll-cue" aria-label="Scroll to content"><span></span></a>
   </section>
 
-  <!-- ABOUT -->
-  <section class="section" id="about">
+  <!-- ABOUT TEASER -->
+  <section class="section">
     <div class="container">
-      <p class="section-eyebrow reveal">About</p>
-      <h2 class="section-title reveal">A bit about my work</h2>
-
-      <div class="about-grid">
-        <p class="about-text reveal">
-          I split my time between academia, research, and industry. As a Teaching Assistant, I instruct
-          undergraduate students in electrical power engineering and mentor teams competing in international
-          design challenges. My M.Sc. research focuses on improving renewable energy integration into power
-          grids using FACTS controllers and advanced, automatically-tuned control units. On the industry side,
-          I work as a BIM Technical Office Engineer, coordinating MEP trades and producing LOD 300–500
-          deliverables for multi-billion dollar mega-projects.
-        </p>
-
-        <ul class="about-facts reveal">
-          <li>
-            <span class="fact-label">Location</span>
-            <span class="fact-value">Cairo, Egypt</span>
-          </li>
-          <li>
-            <span class="fact-label">Email</span>
-            <span class="fact-value"><a href="mailto:omarsanad162712@gmail.com">omarsanad162712@gmail.com</a></span>
-          </li>
-          <li>
-            <span class="fact-label">Phone</span>
-            <span class="fact-value"><a href="tel:+201093309835">+20 109 330 9835</a></span>
-          </li>
-          <li>
-            <span class="fact-label">Current Roles</span>
-            <span class="fact-value">Teaching Assistant · BIM Engineer</span>
-          </li>
-          <li>
-            <span class="fact-label">B.Sc. Rank</span>
-            <span class="fact-value">1st overall — 94.44%</span>
-          </li>
-        </ul>
+      <div class="section-head-row reveal">
+        <div>
+          <p class="eyebrow">About</p>
+          <h2 class="section-title mt-0">A bit about my work</h2>
+        </div>
+        <a href="about/" class="btn btn-ghost">Learn more about me →</a>
       </div>
-    </div>
-  </section>
-
-  <!-- SKILLS -->
-  <section class="section section-alt" id="skills">
-    <div class="container">
-      <p class="section-eyebrow reveal">Skills</p>
-      <h2 class="section-title reveal">What I work with</h2>
-
-      <div class="skills-grid">
-        <div class="skill-card reveal">
-          <h3>Academic &amp; Research</h3>
-          <ul class="tag-list">
-            <li>Renewable Energy Systems &amp; Grid Performance</li>
-            <li>FACTS &amp; D-STATCOM Optimization</li>
-            <li>Advanced Control Units &amp; Auto-Tuning Algorithms</li>
-            <li>Dynamic Power System Simulation &amp; Stability Analysis</li>
-          </ul>
-        </div>
-
-        <div class="skill-card reveal">
-          <h3>Instruction &amp; Academic Leadership</h3>
-          <ul class="tag-list">
-            <li>Higher Education Instruction &amp; Lab Facilitation</li>
-            <li>Mentorship &amp; Academic Advising</li>
-            <li>Siemens Global SIMARIS Challenge 2026 — Finalist Advisor</li>
-            <li>Student Workshops &amp; Seminars</li>
-          </ul>
-        </div>
-
-        <div class="skill-card reveal">
-          <h3>BIM &amp; Electrical Distribution</h3>
-          <ul class="tag-list">
-            <li>Multidisciplinary MEP Coordination &amp; Clash Detection</li>
-            <li>BIM Modeling (LOD 300–500)</li>
-            <li>Smart Compound Electrical Distribution</li>
-            <li>Building Automation (KNX)</li>
-          </ul>
-        </div>
-
-        <div class="skill-card reveal">
-          <h3>Software &amp; Tools</h3>
-          <div class="tag-pills">
-            <span>MATLAB / Simulink</span>
-            <span>Siemens SIMARIS</span>
-            <span>ETAP</span>
-            <span>DIALux evo</span>
-            <span>Ecodial</span>
-            <span>Revit</span>
-            <span>Navisworks</span>
-            <span>AutoCAD</span>
-            <span>ACC</span>
-            <span>Revizto</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- EXPERIENCE -->
-  <section class="section" id="experience">
-    <div class="container">
-      <p class="section-eyebrow reveal">Experience</p>
-      <h2 class="section-title reveal">Where I've worked</h2>
-
-      <div class="timeline">
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <div class="timeline-head">
-              <h3>Teaching Assistant — Electrical Power and Machines Department</h3>
-              <span class="timeline-date">Sep 2024 – Present</span>
-            </div>
-            <p class="timeline-org">Faculty of Engineering at Shoubra, Benha University</p>
-            <ul>
-              <li>Instruct undergraduate students in electrical power engineering courses, lab sessions, and summer training modules on electronics and transistor characteristics.</li>
-              <li>Serve as Academic Advisor for student teams participating in international technical competitions.</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <div class="timeline-head">
-              <h3>BIM Technical Office Engineer</h3>
-              <span class="timeline-date">Jul 2024 – Present</span>
-            </div>
-            <p class="timeline-org">BEC Arabia</p>
-            <ul>
-              <li>Conduct BIM modeling, MEP coordination, and LOD 300–500 shop/as-built drawing preparation for mega-projects.</li>
-              <li>Prepare and manage technical submittals across multidisciplinary project teams.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- WORK (TABS) -->
-  <section class="section section-alt" id="work">
-    <div class="container">
-      <p class="section-eyebrow reveal">My Work</p>
-      <h2 class="section-title reveal">Academic &amp; Construction</h2>
-
-      <div class="tabs reveal" role="tablist" aria-label="Work categories">
-        <button type="button" class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-academic" id="tab-academic" data-tab="academic">Academic Work</button>
-        <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-construction" id="tab-construction" data-tab="construction" tabindex="-1">Construction Work</button>
-      </div>
-
-      <!-- ACADEMIC WORK -->
-      <div class="tab-panel" id="panel-academic" role="tabpanel" aria-labelledby="tab-academic">
-
-        <h3 class="tab-subheading">Research &amp; Mentorship</h3>
-        <div class="projects-grid">
-          <article class="project-card">
-            <span class="project-tag">Research</span>
-            <h3>Performance Enhancement of Renewable Energy Systems Using FACTS</h3>
-            <p>M.Sc. thesis researching optimization of renewable energy power grids using FACTS controllers paired with advanced control units and automated tuning algorithms.</p>
-            <div class="tag-pills">
-              <span>MATLAB</span>
-              <span>Simulink</span>
-              <span>Optimization Algorithms</span>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <span class="project-tag">Competition</span>
-            <h3>Siemens Global SIMARIS Challenge 2026 — 3rd Place Globally</h3>
-            <p>Served as Academic Advisor supervising a student team designing a high-availability power supply system for an AI data center.</p>
-            <div class="tag-pills">
-              <span>Siemens SIMARIS</span>
-              <span>Power System Design</span>
-            </div>
-          </article>
-        </div>
-
-        <h3 class="tab-subheading">Teaching &amp; YouTube Courses</h3>
-        <p class="tab-intro">
-          As a Teaching Assistant, I publish full course playlists on my YouTube channel covering
-          electrical power engineering, lighting design, and more — 49 videos across 8 playlists.
-        </p>
-        <a href="https://www.youtube.com/@omar-a-sanad" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm youtube-cta">
-          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>
-          Visit YouTube Channel
-        </a>
-
-        <div class="course-grid">
-          <article class="course-card">
-            <div class="course-card-head">
-              <h4>Electrical Power Engineering</h4>
-              <span class="video-count">14 Videos</span>
-            </div>
-            <p>Theoretical and numerical analysis of electrical grid components and power station operations.</p>
-            <ul>
-              <li>Performance of Overhead Transmission Line (ABCD parameters, voltage regulation, line modeling)</li>
-              <li>Variable Load on Power Stations (load curves, diversity factor, capacity planning)</li>
-              <li>Magnetic Circuits &amp; Power in AC Circuits</li>
-            </ul>
-          </article>
-
-          <article class="course-card">
-            <div class="course-card-head">
-              <h4>Lighting Design Using DIALux Evo</h4>
-              <span class="video-count">9 Videos</span>
-            </div>
-            <p>Comprehensive hands-on workflow for indoor, outdoor, and commercial lighting design.</p>
-            <ul>
-              <li>Part 1: Overview &amp; 3D Modeling</li>
-              <li>Parts 2–3: Apertures, Furniture, Pcon Planner Integration, Colors &amp; Textures</li>
-              <li>Part 7: Light Scenes &amp; Emergency Escape Routes</li>
-              <li>Part 8: Calculation Reports &amp; PDF Export</li>
-              <li>Part 9: Street Lighting Design</li>
-            </ul>
-          </article>
-
-          <article class="course-card">
-            <div class="course-card-head">
-              <h4>Theoretical &amp; Calculation of Lighting Design</h4>
-              <span class="video-count">6 Videos</span>
-            </div>
-            <p>Engineering fundamentals and standards governing photometric design prior to software implementation.</p>
-            <ul>
-              <li>Manual illuminance calculation methods and lumen calculations</li>
-              <li>Part 6: Street Lighting Design per European/British standards (BS EN 13201)</li>
-            </ul>
-          </article>
-
-          <article class="course-card">
-            <div class="course-card-head">
-              <h4>Electrical Engineering</h4>
-              <span class="video-count">8 Videos</span>
-            </div>
-            <p>Academic problem-solving sessions and step-by-step sheet walkthroughs for foundational circuits courses.</p>
-            <ul>
-              <li>Sheet 1 — Electrical Engineering</li>
-              <li>Magnetic Circuit Analysis</li>
-              <li>Power Analysis in AC Circuits</li>
-            </ul>
-          </article>
-
-          <article class="course-card">
-            <div class="course-card-head">
-              <h4>Power System Planning</h4>
-              <span class="video-count">5 Videos</span>
-            </div>
-            <p>High-level network development, load forecasting, feeder routing, and grid architecture strategy.</p>
-          </article>
-
-          <article class="course-card">
-            <div class="course-card-head">
-              <h4>Signals &amp; Systems</h4>
-              <span class="video-count">4 Videos</span>
-            </div>
-            <p>Higher-level dynamic systems engineering, mathematical transformations, and network responses.</p>
-            <ul>
-              <li>Time/frequency domain transformations</li>
-              <li>Z-transforms &amp; Laplace transform applications</li>
-            </ul>
-          </article>
-
-          <article class="course-card">
-            <div class="course-card-head">
-              <h4>Power Factor Correction</h4>
-              <span class="video-count">2 Videos</span>
-            </div>
-            <p>Specialized two-part series covering reactive power compensation, capacitor bank calculations, and power quality enhancement.</p>
-            <ul>
-              <li>Part 1: Power Factor Correction</li>
-              <li>Part 2: Power Factor Correction</li>
-            </ul>
-          </article>
-
-          <article class="course-card">
-            <div class="course-card-head">
-              <h4>Infrastructure</h4>
-              <span class="video-count">1 Video</span>
-            </div>
-            <p>Practical distribution architecture for large-scale utility and urban developments.</p>
-            <ul>
-              <li>Distribution System Architecture &amp; MV Network</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-
-      <!-- CONSTRUCTION WORK -->
-      <div class="tab-panel" id="panel-construction" role="tabpanel" aria-labelledby="tab-construction" hidden>
-
-        <h3 class="tab-subheading">Industry Experience</h3>
-        <div class="projects-grid">
-          <article class="project-card">
-            <span class="project-tag">Industry</span>
-            <h3>BIM Technical Office Engineer</h3>
-            <p>BEC Arabia — Jul 2024 – Present. Conduct BIM modeling, MEP coordination, LOD 300–500 shop/as-built drawing preparation, and technical submittals for mega-projects.</p>
-            <div class="tag-pills">
-              <span>MEP Coordination</span>
-              <span>Clash Detection</span>
-              <span>LOD 300–500</span>
-            </div>
-          </article>
-
-          <article class="project-card">
-            <span class="project-tag">Industry</span>
-            <h3>Mega-Project BIM Engineering</h3>
-            <p>BIM modeling, MEP trade coordination, clash resolution, and LOD 300–500 submittals for multi-billion dollar projects in KSA.</p>
-            <div class="tag-pills">
-              <span>SINDALAH Island</span>
-              <span>Banan AlRiyadh</span>
-              <span>AMAALA</span>
-              <span>Tharbah</span>
-            </div>
-          </article>
-        </div>
-
-        <h3 class="tab-subheading">Tools &amp; Certifications</h3>
-        <div class="extras-grid">
-          <div class="extras-card">
-            <h3>Software &amp; Tools</h3>
-            <div class="tag-pills">
-              <span>Revit</span>
-              <span>Navisworks</span>
-              <span>AutoCAD</span>
-              <span>ACC</span>
-              <span>Revizto</span>
-              <span>ETAP</span>
-              <span>DIALux evo</span>
-              <span>Ecodial</span>
-            </div>
-          </div>
-          <div class="extras-card">
-            <h3>Certifications</h3>
-            <ul>
-              <li>LEED Certification — AUC (EVEN1001)</li>
-              <li>BIM Management Diploma — Kayan Academy</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- EDUCATION -->
-  <section class="section" id="education">
-    <div class="container">
-      <p class="section-eyebrow reveal">Education</p>
-      <h2 class="section-title reveal">Academic background</h2>
-
-      <div class="timeline">
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <div class="timeline-head">
-              <h3>M.Sc. in Electrical Power Systems</h3>
-              <span class="timeline-date">Oct 2025 – Present</span>
-            </div>
-            <p class="timeline-org">Faculty of Engineering at Shoubra, Benha University</p>
-            <p>Thesis: Performance Enhancement of Renewable Energy Systems Using FACTS with Advanced Control Units.</p>
-          </div>
-        </div>
-
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <div class="timeline-head">
-              <h3>Advanced Diploma in Electrical Power Systems</h3>
-              <span class="timeline-date">Sep 2024 – Jun 2025</span>
-            </div>
-            <p class="timeline-org">Faculty of Engineering at Shoubra, Benha University</p>
-            <p>Grade: A+</p>
-          </div>
-        </div>
-
-        <div class="timeline-item reveal">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <div class="timeline-head">
-              <h3>B.Sc. in Electrical Power Engineering</h3>
-              <span class="timeline-date">Sep 2019 – Jun 2024</span>
-            </div>
-            <p class="timeline-org">Faculty of Engineering at Shoubra, Benha University</p>
-            <p>Grade: Excellent — Cumulative 94.44%, Ranked 1st overall.</p>
-            <p>Graduation Project: Electrical Distribution Design for a Smart Integrated Compound (Grade: Excellent).</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="extras-grid extras-grid-single">
-        <div class="extras-card reveal">
-          <h3>Honors &amp; Awards</h3>
-          <ul>
-            <li>Ranked 1st overall in B.Sc. Electrical Power Engineering, Class of 2024 (94.44%).</li>
-            <li>Ranked 3rd Place Globally as Academic Advisor in the Siemens Global SIMARIS Challenge 2026.</li>
-          </ul>
-        </div>
-      </div>
-      <p class="extras-note">Certifications are listed under <a href="#work">Work → Construction Work</a>.</p>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section class="section section-alt" id="contact">
-    <div class="container contact-inner">
-      <p class="section-eyebrow reveal">Contact</p>
-      <h2 class="section-title reveal">Let's get in touch</h2>
-      <p class="contact-lede reveal">
-        Whether it's a research collaboration, a mentorship opportunity, or a BIM engineering project —
-        feel free to reach out.
+      <p class="lede reveal">
+        I split my time between academia, research, and industry — teaching electrical power engineering,
+        researching renewable energy integration through FACTS controllers, and coordinating BIM delivery
+        for mega-projects across the Gulf. Graduated 1st in my class with a 94.44% cumulative grade.
       </p>
+    </div>
+  </section>
 
-      <div class="contact-cards reveal">
-        <a class="contact-card" href="mailto:omarsanad162712@gmail.com">
-          <span class="contact-card-label">Email</span>
-          <span class="contact-card-value">omarsanad162712@gmail.com</span>
-        </a>
-        <a class="contact-card" href="tel:+201093309835">
-          <span class="contact-card-label">Phone</span>
-          <span class="contact-card-value">+20 109 330 9835</span>
-        </a>
-        <a class="contact-card" href="https://www.linkedin.com/in/omar-a-sanad/" target="_blank" rel="noopener noreferrer">
-          <span class="contact-card-label">LinkedIn</span>
-          <span class="contact-card-value">/in/omar-a-sanad</span>
-        </a>
-        <a class="contact-card" href="https://www.youtube.com/@omar-a-sanad" target="_blank" rel="noopener noreferrer">
-          <span class="contact-card-label">YouTube</span>
-          <span class="contact-card-value">@omar-a-sanad</span>
-        </a>
+  <!-- FEATURED PROJECTS -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head-row reveal">
+        <div>
+          <p class="eyebrow">Featured Work</p>
+          <h2 class="section-title mt-0">Selected projects</h2>
+        </div>
+        <a href="projects/" class="btn btn-ghost">View all projects →</a>
+      </div>
+
+      <div class="projects-grid">
+        <article class="project-card card card-hover reveal">
+          <div class="project-thumb thumb-research">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 3h6v4l4 9a2 2 0 0 1-2 3H7a2 2 0 0 1-2-3l4-9V3z"/><path d="M9 3h6M6 14h12" stroke-linecap="round"/></svg>
+          </div>
+          <div class="project-body">
+            <span class="badge">Research</span>
+            <h3><a href="projects/facts-renewable-energy/">Renewable Energy Systems Using FACTS</a></h3>
+            <p>M.Sc. thesis optimizing renewable energy power grids with FACTS controllers and automated tuning algorithms.</p>
+            <div class="project-footer">
+              <a href="projects/facts-renewable-energy/" class="btn btn-ghost btn-sm">Read case study →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card card card-hover reveal">
+          <div class="project-thumb thumb-competition">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M7 5H4a3 3 0 0 0 3 5M17 5h3a3 3 0 0 1-3 5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="project-body">
+            <span class="badge badge-2">Competition</span>
+            <h3><a href="projects/siemens-simaris-challenge/">Siemens Global SIMARIS Challenge 2026</a></h3>
+            <p>Academic Advisor for a student team that placed 3rd globally designing a high-availability power supply for an AI data center.</p>
+            <div class="project-footer">
+              <a href="projects/siemens-simaris-challenge/" class="btn btn-ghost btn-sm">Read case study →</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="project-card card card-hover reveal">
+          <div class="project-thumb thumb-industry">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 21h18M6 21V8l6-4 6 4v13M9 21v-6h6v6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="project-body">
+            <span class="badge">Industry</span>
+            <h3><a href="projects/mega-project-bim-engineering/">Mega-Project BIM Engineering</a></h3>
+            <p>BIM modeling and MEP coordination across four mega-projects in KSA — SINDALAH Island, Banan AlRiyadh, AMAALA, and Tharbah.</p>
+            <div class="project-footer">
+              <a href="projects/mega-project-bim-engineering/" class="btn btn-ghost btn-sm">Read case study →</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- LATEST YOUTUBE PLAYLISTS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head-row reveal">
+        <div>
+          <p class="eyebrow">Teaching</p>
+          <h2 class="section-title mt-0">Latest YouTube playlists</h2>
+        </div>
+        <a href="youtube/" class="btn btn-ghost">See all playlists →</a>
+      </div>
+      <div class="projects-grid" id="featured-playlist-grid"></div>
+    </div>
+  </section>
+
+  <!-- LATEST PUBLICATION -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head-row reveal">
+        <div>
+          <p class="eyebrow">Research</p>
+          <h2 class="section-title mt-0">Latest publication</h2>
+        </div>
+        <a href="publications/" class="btn btn-ghost">View publications →</a>
+      </div>
+      <div class="empty-state reveal">
+        <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 4h12l4 4v12H4V4z"/><path d="M16 4v4h4M8 12h8M8 16h5" stroke-linecap="round"/></svg>
+        <h3>Publications coming soon</h3>
+        <p>I'm currently completing my M.Sc. thesis on renewable energy performance enhancement using FACTS controllers. Published work will appear here.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-band reveal">
+        <div>
+          <h2>Let's build something great together</h2>
+          <p>Open to research collaboration, mentorship, and BIM engineering opportunities.</p>
+        </div>
+        <div class="cta-actions">
+          <a href="contact/" class="btn btn-primary">Get In Touch</a>
+          <a href="assets/resume/Omar_Ahmed_Sanad_CV.pdf" class="btn btn-outline" download>Download Resume</a>
+        </div>
       </div>
     </div>
   </section>
 
 </main>
 
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <p>&copy; <span id="year"></span> Omar Ahmed Sanad. All rights reserved.</p>
-    <a href="#hero" class="back-to-top">Back to top ↑</a>
-  </div>
-</footer>
+<div id="site-footer-mount"></div>
 
-<script src="js/main.js"></script>
+<script src="assets/js/include.js"></script>
+<script src="assets/js/reveal.js"></script>
+<script src="assets/js/modal.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>

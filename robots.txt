@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://omarasanad.github.io/omarsanad/sitemap.xml
