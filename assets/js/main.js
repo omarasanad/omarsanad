@@ -1,4 +1,22 @@
-/* ============ YOUTUBE PLAYLIST THUMBNAILS (real YouTube images, progressive enhancement) ============ */
+/* ============ YOUTUBE PLAYLIST THUMBNAILS (progressive enhancement) ============ */
+function tryLoadImage(src) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(src);
+    img.onerror = () => resolve(null);
+    img.src = src;
+  });
+}
+
+// Locally uploaded image (assets/img/playlists/<slug>.jpg|jpeg|png) takes priority if present.
+async function getLocalPlaylistThumbnail(slug) {
+  for (const ext of ['jpg', 'jpeg', 'png']) {
+    const found = await tryLoadImage(`assets/img/playlists/${slug}.${ext}`);
+    if (found) return found;
+  }
+  return null;
+}
+
 async function fetchPlaylistThumbnail(url) {
   const cacheKey = `yt-thumb:${url}`;
   const cached = sessionStorage.getItem(cacheKey);
@@ -17,7 +35,7 @@ async function fetchPlaylistThumbnail(url) {
 
 function enhancePlaylistThumbnails(playlists, grid) {
   playlists.forEach(async (p) => {
-    const thumbUrl = await fetchPlaylistThumbnail(p.url);
+    const thumbUrl = (await getLocalPlaylistThumbnail(p.slug)) || (await fetchPlaylistThumbnail(p.url));
     if (!thumbUrl) return;
     const thumbEl = grid.querySelector(`.playlist-thumb[data-slug="${p.slug}"]`);
     if (!thumbEl) return;

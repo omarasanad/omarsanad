@@ -1,0 +1,17 @@
+Drop a preview image here for each playlist, named after its "slug" from
+assets/data/playlists.json — e.g. electrical-power-engineering.jpg
+
+Supported extensions: .jpg, .jpeg, .png (checked in that order).
+If a matching file exists, it's used as the card thumbnail automatically.
+If not, the site falls back to fetching the real YouTube thumbnail, and
+if that's unavailable too, falls back to the plain color-gradient card.
+
+Current slugs (see assets/data/playlists.json):
+- electrical-power-engineering
+- lighting-design-dialux-evo
+- theoretical-calculation-lighting-design
+- electrical-engineering
+- power-system-planning
+- signals-and-systems
+- power-factor-correction
+- infrastructure

@@ -61,11 +61,13 @@ Then visit `http://localhost:8080/omarsanad/`.
 ## Adding content later
 
 - **YouTube playlists**: edit `assets/data/playlists.json` — each entry's `url` is its real playlist link.
-  Card thumbnails are fetched automatically at page load from the real YouTube playlist (via
-  `noembed.com`, no API key needed) and layered over the category-color gradient; if the fetch
-  fails for any reason (offline, third-party outage), the card just keeps its gradient + play-icon
-  look — no broken images. See `fetchPlaylistThumbnail`/`enhancePlaylistThumbnails` in
-  `assets/js/main.js`.
+  Card thumbnails: drop an image into `assets/img/playlists/<slug>.jpg` (or `.jpeg`/`.png`, matching
+  the entry's `slug`) to use your own picture for that playlist's card — it takes priority
+  automatically, no code changes needed. Without one, the card falls back to fetching the real
+  YouTube thumbnail at page load (via `noembed.com`, no API key needed); if that also fails (offline,
+  third-party outage), the card just keeps its plain color-gradient + play-icon look — no broken
+  images either way. See `getLocalPlaylistThumbnail`/`fetchPlaylistThumbnail`/
+  `enhancePlaylistThumbnails` in `assets/js/main.js`.
 - **Publications**: edit `assets/data/publications.json` (currently `[]`). Add objects with
   `title`, `venue`, `year`, `abstract`, `pdfUrl`, `doi` — the page automatically switches from the
   empty state to rendering cards once the array is non-empty.
