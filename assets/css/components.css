@@ -153,6 +153,8 @@
 .thumb-research { background: linear-gradient(135deg, #1d4ed8, #3b82f6); }
 .thumb-competition { background: linear-gradient(135deg, #0d9488, #14b8a6); }
 .thumb-industry { background: linear-gradient(135deg, #334155, #64748b); }
+.thumb-healthcare { background: linear-gradient(135deg, #059669, #10b981); }
+.thumb-residential { background: linear-gradient(135deg, #c2410c, #f97316); }
 .project-thumb::after {
   content: '';
   position: absolute; inset: 0;

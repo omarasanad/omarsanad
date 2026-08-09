@@ -114,6 +114,8 @@ h1, h2, h3, h4, h5 {
   border-radius: var(--radius-pill);
 }
 .badge-2 { background: var(--accent-2-soft); color: var(--accent-2); }
+.badge-3 { background: var(--accent-3-soft); color: var(--accent-3); }
+.badge-4 { background: var(--accent-4-soft); color: var(--accent-4); }
 .tag-pills { display: flex; flex-wrap: wrap; gap: 8px; }
 .tag-pills span {
   background: var(--accent-soft);
