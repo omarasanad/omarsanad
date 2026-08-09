@@ -1,3 +1,37 @@
+/* ============ YOUTUBE PLAYLIST THUMBNAILS (real YouTube images, progressive enhancement) ============ */
+async function fetchPlaylistThumbnail(url) {
+  const cacheKey = `yt-thumb:${url}`;
+  const cached = sessionStorage.getItem(cacheKey);
+  if (cached) return cached === 'none' ? null : cached;
+
+  try {
+    const res = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(url)}&format=json`);
+    const data = await res.json();
+    const thumb = data && data.thumbnail_url ? data.thumbnail_url : null;
+    sessionStorage.setItem(cacheKey, thumb || 'none');
+    return thumb;
+  } catch (err) {
+    return null;
+  }
+}
+
+function enhancePlaylistThumbnails(playlists, grid) {
+  playlists.forEach(async (p) => {
+    const thumbUrl = await fetchPlaylistThumbnail(p.url);
+    if (!thumbUrl) return;
+    const thumbEl = grid.querySelector(`.playlist-thumb[data-slug="${p.slug}"]`);
+    if (!thumbEl) return;
+    const img = document.createElement('img');
+    img.className = 'playlist-thumb-img';
+    img.src = thumbUrl;
+    img.alt = '';
+    img.loading = 'lazy';
+    img.addEventListener('load', () => img.classList.add('is-loaded'));
+    thumbEl.prepend(img);
+    thumbEl.classList.add('has-photo');
+  });
+}
+
 /* ============ YOUTUBE PLAYLISTS PAGE ============ */
 async function renderPlaylists() {
   const grid = document.getElementById('playlist-grid');
@@ -11,7 +45,7 @@ async function renderPlaylists() {
 
     grid.innerHTML = playlists.map((p) => `
       <article class="playlist-card card card-hover reveal">
-        <a class="playlist-thumb ${p.categoryClass}" href="${p.url}" target="_blank" rel="noopener noreferrer" aria-label="Watch ${p.title} on YouTube">
+        <a class="playlist-thumb ${p.categoryClass}" data-slug="${p.slug}" href="${p.url}" target="_blank" rel="noopener noreferrer" aria-label="Watch ${p.title} on YouTube">
           ${p.featured ? '<span class="playlist-featured-tag">Featured</span>' : ''}
           <span class="playlist-video-count">${p.videoCount} Video${p.videoCount > 1 ? 's' : ''}</span>
           <div class="play-icon">
@@ -29,6 +63,7 @@ async function renderPlaylists() {
 
     document.dispatchEvent(new CustomEvent('playlists:rendered'));
     if (typeof initReveal === 'function') initReveal();
+    enhancePlaylistThumbnails(playlists, grid);
   } catch (err) {
     grid.innerHTML = '<p class="lede">Playlists could not be loaded right now. Please visit the YouTube channel directly.</p>';
     console.error(err);
@@ -44,10 +79,11 @@ async function renderFeaturedPlaylists(limit = 3) {
     const res = await fetch('assets/data/playlists.json');
     const playlists = await res.json();
     playlists.sort((a, b) => (b.featured - a.featured) || (b.videoCount - a.videoCount));
+    const featured = playlists.slice(0, limit);
 
-    grid.innerHTML = playlists.slice(0, limit).map((p) => `
+    grid.innerHTML = featured.map((p) => `
       <article class="playlist-card card card-hover reveal">
-        <a class="playlist-thumb ${p.categoryClass}" href="${p.url}" target="_blank" rel="noopener noreferrer" aria-label="Watch ${p.title} on YouTube">
+        <a class="playlist-thumb ${p.categoryClass}" data-slug="${p.slug}" href="${p.url}" target="_blank" rel="noopener noreferrer" aria-label="Watch ${p.title} on YouTube">
           <span class="playlist-video-count">${p.videoCount} Video${p.videoCount > 1 ? 's' : ''}</span>
           <div class="play-icon">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
@@ -61,6 +97,7 @@ async function renderFeaturedPlaylists(limit = 3) {
       </article>
     `).join('');
     if (typeof initReveal === 'function') initReveal();
+    enhancePlaylistThumbnails(featured, grid);
   } catch (err) {
     console.error(err);
   }
