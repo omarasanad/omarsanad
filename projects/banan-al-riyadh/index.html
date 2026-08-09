@@ -33,8 +33,31 @@
       <span class="badge badge-4 reveal">Residential</span>
       <h1 class="page-title reveal" style="margin-top: 14px;">Banan Al Riyadh</h1>
 
-      <div class="case-hero-thumb thumb-residential reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="hero-carousel reveal">
+        <div class="hero-carousel-viewport">
+          <div class="hero-carousel-track" id="hero-carousel-track">
+            <button type="button" class="drawing-thumb hero-carousel-slide" data-src="assets/img/projects/banan-al-riyadh/render-exterior-01.jpg" data-label="Banan Al Riyadh — Street View (rendering)">
+              <img src="assets/img/projects/banan-al-riyadh/render-exterior-01.jpg" alt="Banan Al Riyadh residential buildings street view rendering" loading="eager">
+            </button>
+            <button type="button" class="drawing-thumb hero-carousel-slide" data-src="assets/img/projects/banan-al-riyadh/render-exterior-02.png" data-label="Banan Al Riyadh — Courtyard View (rendering)">
+              <img src="assets/img/projects/banan-al-riyadh/render-exterior-02.png" alt="Banan Al Riyadh courtyard and garden rendering" loading="lazy">
+            </button>
+            <button type="button" class="drawing-thumb hero-carousel-slide" data-src="assets/img/projects/banan-al-riyadh/render-exterior-03.png" data-label="Banan Al Riyadh — Daytime Street View (rendering)">
+              <img src="assets/img/projects/banan-al-riyadh/render-exterior-03.png" alt="Banan Al Riyadh residential buildings daytime rendering" loading="lazy">
+            </button>
+          </div>
+        </div>
+        <div class="hero-carousel-dots">
+          <button type="button" class="hero-carousel-dot active" data-index="0" aria-label="Show image 1"></button>
+          <button type="button" class="hero-carousel-dot" data-index="1" aria-label="Show image 2"></button>
+          <button type="button" class="hero-carousel-dot" data-index="2" aria-label="Show image 3"></button>
+        </div>
+        <button type="button" class="hero-carousel-arrow hero-carousel-prev" aria-label="Previous image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" class="hero-carousel-arrow hero-carousel-next" aria-label="Next image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
       </div>
 
       <div class="case-grid">
@@ -82,8 +105,139 @@
 
           <div class="case-block reveal">
             <h2>Gallery</h2>
-            <div class="gallery-placeholder">
-              Project renders and shop drawings coming soon.
+            <p class="drawing-group-note">Renders below are from the project's architectural and marketing
+            materials — shown here as illustrative context, not as my own design work.</p>
+            <div class="drawing-grid">
+              <button type="button" class="drawing-thumb photo-thumb" data-src="assets/img/projects/banan-al-riyadh/render-exterior-01.jpg" data-label="Banan Al Riyadh — Street View (rendering)">
+                <img src="assets/img/projects/banan-al-riyadh/render-exterior-01.jpg" alt="Banan Al Riyadh street view rendering" loading="lazy">
+                <span class="drawing-thumb-label">Street View</span>
+              </button>
+              <button type="button" class="drawing-thumb photo-thumb" data-src="assets/img/projects/banan-al-riyadh/render-exterior-02.png" data-label="Banan Al Riyadh — Courtyard View (rendering)">
+                <img src="assets/img/projects/banan-al-riyadh/render-exterior-02.png" alt="Banan Al Riyadh courtyard rendering" loading="lazy">
+                <span class="drawing-thumb-label">Courtyard View</span>
+              </button>
+              <button type="button" class="drawing-thumb photo-thumb" data-src="assets/img/projects/banan-al-riyadh/render-exterior-03.png" data-label="Banan Al Riyadh — Daytime Street View (rendering)">
+                <img src="assets/img/projects/banan-al-riyadh/render-exterior-03.png" alt="Banan Al Riyadh daytime street view rendering" loading="lazy">
+                <span class="drawing-thumb-label">Daytime Street View</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="case-block reveal">
+            <h2>BIM Coordination Views</h2>
+            <p style="margin-bottom: 24px;">3D coordination views from the federated Revit MEP model, used during
+            clash detection and trade coordination.</p>
+            <div class="drawing-grid">
+              <button type="button" class="drawing-thumb" data-src="assets/img/projects/banan-al-riyadh/3d-overall-view.png" data-label="Overall 3D Building Model">
+                <img src="assets/img/projects/banan-al-riyadh/3d-overall-view.png" alt="Overall 3D building model, isometric view" loading="lazy">
+                <span class="drawing-thumb-label">Overall 3D View</span>
+              </button>
+              <button type="button" class="drawing-thumb" data-src="assets/img/projects/banan-al-riyadh/3d-mep-coordination.png" data-label="MEP Coordination — Federated 3D Model">
+                <img src="assets/img/projects/banan-al-riyadh/3d-mep-coordination.png" alt="MEP coordination federated 3D model" loading="lazy">
+                <span class="drawing-thumb-label">MEP Coordination</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="case-block reveal">
+            <h2>Shop Drawings</h2>
+            <p style="margin-bottom: 24px;">A selection of the MEP shop drawings I produced for a prototype
+            residential building — click any drawing to view it full size.</p>
+
+            <div class="drawing-group">
+              <div class="drawing-group-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z" stroke-linejoin="round"/></svg>
+                Power System
+              </div>
+              <p class="drawing-group-desc">Small power shop drawing and underground electrical works feeding the building.</p>
+              <div class="drawing-grid">
+                <button type="button" class="drawing-thumb" data-src="assets/img/projects/banan-al-riyadh/power-plan-01.png" data-label="First Floor Power Plan">
+                  <img src="assets/img/projects/banan-al-riyadh/power-plan-01.png" alt="First Floor Power Plan" loading="lazy">
+                  <span class="drawing-thumb-label">First Floor Power Plan</span>
+                </button>
+                <button type="button" class="drawing-thumb" data-src="assets/img/projects/banan-al-riyadh/electrical-underground-works.png" data-label="Underground Electrical Works">
+                  <img src="assets/img/projects/banan-al-riyadh/electrical-underground-works.png" alt="Underground Electrical Works plan and sections" loading="lazy">
+                  <span class="drawing-thumb-label">Underground Electrical Works</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="drawing-group">
+              <div class="drawing-group-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M3 12h3M18 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" stroke-linecap="round"/></svg>
+                Mechanical Equipment Power
+              </div>
+              <p class="drawing-group-desc">Dedicated power circuits and elevation/section details for split AC condensing units (ACCUs).</p>
+              <div class="drawing-grid">
+                <button type="button" class="drawing-thumb" data-src="assets/img/projects/banan-al-riyadh/mech-power-plan-01.png" data-label="Mechanical Equipment Power — Ground Floor Plan">
+                  <img src="assets/img/projects/banan-al-riyadh/mech-power-plan-01.png" alt="Mechanical Equipment Power Ground Floor Plan" loading="lazy">
+                  <span class="drawing-thumb-label">Ground Floor Plan</span>
+                </button>
+                <button type="button" class="drawing-thumb" data-src="assets/img/projects/banan-al-riyadh/mech-power-elevations-01.png" data-label="Mechanical Equipment Power — Elevations &amp; Sections">
+                  <img src="assets/img/projects/banan-al-riyadh/mech-power-elevations-01.png" alt="Mechanical Equipment Power Elevations and Sections" loading="lazy">
+                  <span class="drawing-thumb-label">Elevations &amp; Sections</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="drawing-group">
+              <div class="drawing-group-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 4v16M4 9h5" stroke-linecap="round"/></svg>
+                Electrical Room
+              </div>
+              <p class="drawing-group-desc">Meter box arrangement — plan, 3D view, and sectional details for the electrical room.</p>
+              <div class="drawing-grid">
+                <button type="button" class="drawing-thumb" data-src="assets/img/projects/banan-al-riyadh/electrical-room-arrangement.png" data-label="Electrical Room Arrangement (Plan, 3D &amp; Sections)">
+                  <img src="assets/img/projects/banan-al-riyadh/electrical-room-arrangement.png" alt="Electrical Room Arrangement, plan, 3D and sections" loading="lazy">
+                  <span class="drawing-thumb-label">Electrical Room Arrangement</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="drawing-group">
+              <div class="drawing-group-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.5 8.7 8 10 4.5-1.3 8-5 8-10V5l-8-3z" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Fire Alarm System
+              </div>
+              <p class="drawing-group-desc">Detection and notification device layout with fire loop and sounder circuit routing.</p>
+              <div class="drawing-grid">
+                <button type="button" class="drawing-thumb" data-src="assets/img/projects/banan-al-riyadh/fire-alarm-system.png" data-label="Fire Alarm System — Ground Floor Plan">
+                  <img src="assets/img/projects/banan-al-riyadh/fire-alarm-system.png" alt="Fire Alarm System Ground Floor Plan" loading="lazy">
+                  <span class="drawing-thumb-label">Ground Floor Plan</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="drawing-group">
+              <div class="drawing-group-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h16" stroke-linecap="round"/><circle cx="18" cy="12" r="2"/></svg>
+                Data &amp; Telephone Systems
+              </div>
+              <p class="drawing-group-desc">Data, telephone, and SMATV outlet layout, plus underground telecom duct routing into the building.</p>
+              <div class="drawing-grid">
+                <button type="button" class="drawing-thumb" data-src="assets/img/projects/banan-al-riyadh/data-telephone-systems.png" data-label="Data, Telephone &amp; SMATV Systems Plan">
+                  <img src="assets/img/projects/banan-al-riyadh/data-telephone-systems.png" alt="Data, Telephone and SMATV Systems Plan" loading="lazy">
+                  <span class="drawing-thumb-label">Data, Telephone &amp; SMATV Plan</span>
+                </button>
+                <button type="button" class="drawing-thumb" data-src="assets/img/projects/banan-al-riyadh/telecom-underground-works.png" data-label="Telecom Underground Works">
+                  <img src="assets/img/projects/banan-al-riyadh/telecom-underground-works.png" alt="Telecom Underground Works plan and sections" loading="lazy">
+                  <span class="drawing-thumb-label">Telecom Underground Works</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="drawing-group">
+              <div class="drawing-group-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3v10M6 21h12M8 17h8M9 13h6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Earthing System
+              </div>
+              <p class="drawing-group-desc">Ground floor earthing/grounding plan with down-conductor and earth-pit installation details.</p>
+              <div class="drawing-grid">
+                <button type="button" class="drawing-thumb" data-src="assets/img/projects/banan-al-riyadh/earthing-plan.png" data-label="Earthing System — Ground Floor Plan">
+                  <img src="assets/img/projects/banan-al-riyadh/earthing-plan.png" alt="Ground Floor Earthing Plan" loading="lazy">
+                  <span class="drawing-thumb-label">Ground Floor Plan</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -156,11 +310,29 @@
   </section>
 </main>
 
+<!-- DRAWING LIGHTBOX MODAL -->
+<div class="modal-overlay" id="drawing-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="drawing-modal-caption">
+  <div class="modal-box">
+    <button type="button" class="modal-close" aria-label="Close">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+    </button>
+    <div class="drawing-modal-img-wrap">
+      <img id="drawing-modal-img" src="" alt="">
+    </div>
+    <div class="drawing-modal-foot">
+      <p class="drawing-modal-caption" id="drawing-modal-caption"></p>
+      <a href="#" id="drawing-modal-open-full" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">Open full size →</a>
+    </div>
+  </div>
+</div>
+
 <div id="site-footer-mount"></div>
 
 <script src="assets/js/include.js?v=20260809d"></script>
 <script src="assets/js/reveal.js?v=20260809d"></script>
 <script src="assets/js/modal.js?v=20260809d"></script>
 <script src="assets/js/main.js?v=20260809d"></script>
+<script src="assets/js/gallery.js?v=20260809d"></script>
+<script src="assets/js/hero-carousel.js?v=20260809d"></script>
 </body>
 </html>
