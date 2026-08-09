@@ -90,3 +90,10 @@ try Actions → the run → "Re-run jobs", or Settings → Pages → unpublish a
 clears it, check Settings → Environments → github-pages for stuck/uncancellable runs — that likely
 means a GitHub-side platform issue, not something wrong with the repo, and is worth a support ticket
 at support.github.com.
+
+**If a deploy succeeds but changes to `assets/css/*.css` or `assets/js/*.js` don't show up** (stale
+styling/behavior even after a hard refresh): the CDN or browser is very likely serving a cached copy
+of that specific file — HTML re-fetches more eagerly than CSS/JS on GitHub Pages. Every page loads
+these with a shared `?v=YYYYMMDDx` query string; bump that version string across all 10 pages whenever
+you change a CSS or JS file, to force a fresh fetch. A quick way: find/replace the old version string
+with a new one across every `*.html` file in the repo.
