@@ -174,13 +174,35 @@
 .case-hero-thumb svg { width: 72px; height: 72px; opacity: 0.9; }
 .case-hero-thumb::after { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.16) 1.5px, transparent 1.5px); background-size: 18px 18px; }
 
-.case-hero-photo {
-  height: 420px; aspect-ratio: unset; width: 100%;
-  border-radius: var(--radius-lg); margin-bottom: 48px;
-  padding: 0; border: none;
+/* Hero image carousel (project case studies with real photography) */
+.hero-carousel { position: relative; height: 420px; border-radius: var(--radius-lg); margin-bottom: 48px; overflow: hidden; background: var(--surface-alt); }
+.hero-carousel-viewport { width: 100%; height: 100%; overflow: hidden; }
+.hero-carousel-track { display: flex; height: 100%; transition: transform 0.5s var(--ease); }
+.drawing-thumb.hero-carousel-slide {
+  flex: 0 0 100%; height: 100%; aspect-ratio: unset;
+  padding: 0; border: none; border-radius: 0;
 }
-.case-hero-photo img { object-fit: cover; border-radius: var(--radius-lg); }
-.case-hero-photo .drawing-thumb-label { font-size: 0.85rem; padding: 40px 20px 16px; }
+.drawing-thumb.hero-carousel-slide:hover { transform: none; box-shadow: none; }
+.hero-carousel-slide img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
+.hero-carousel-dots { position: absolute; left: 20px; bottom: 18px; z-index: 2; display: flex; gap: 8px; }
+.hero-carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.55); border: none; padding: 0; cursor: pointer; transition: all var(--dur-fast) var(--ease); }
+.hero-carousel-dot.active { width: 22px; border-radius: 4px; background: #fff; }
+.hero-carousel-arrow {
+  position: absolute; bottom: 16px; width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(15, 17, 26, 0.55); color: #fff; border: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 2; transition: background var(--dur-fast) var(--ease);
+}
+.hero-carousel-arrow:hover { background: rgba(15, 17, 26, 0.85); }
+.hero-carousel-arrow svg { width: 18px; height: 18px; }
+.hero-carousel-prev { right: 66px; }
+.hero-carousel-next { right: 20px; }
+@media (max-width: 760px) {
+  .hero-carousel { height: 240px; }
+  .hero-carousel-arrow { width: 32px; height: 32px; }
+  .hero-carousel-prev { right: 56px; }
+}
+
 .case-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
 .case-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 56px; }
 .case-block { margin-bottom: 44px; }

@@ -33,10 +33,40 @@
       <span class="badge reveal">Industry</span>
       <h1 class="page-title reveal" style="margin-top: 14px;">Therba Medical Center</h1>
 
-      <button type="button" class="drawing-thumb case-hero-photo reveal" data-src="assets/img/projects/therba-medical-center/render-exterior-01.jpg" data-label="Therba Medical Center — Completed Building, Tharba Village, AlUla">
-        <img src="assets/img/projects/therba-medical-center/render-exterior-01.jpg" alt="Therba Medical Center completed building exterior, Tharba village, AlUla" loading="eager">
-        <span class="drawing-thumb-label">Therba Medical Center — click to view full size</span>
-      </button>
+      <div class="hero-carousel reveal">
+        <div class="hero-carousel-viewport">
+          <div class="hero-carousel-track" id="hero-carousel-track">
+            <button type="button" class="drawing-thumb hero-carousel-slide" data-src="assets/img/projects/therba-medical-center/render-exterior-01.jpg" data-label="Therba Medical Center — Completed Building">
+              <img src="assets/img/projects/therba-medical-center/render-exterior-01.jpg" alt="Therba Medical Center completed building exterior, Tharba village, AlUla" loading="eager">
+            </button>
+            <button type="button" class="drawing-thumb hero-carousel-slide" data-src="assets/img/projects/therba-medical-center/render-exterior-03.jpg" data-label="Exterior — Main Entrance (rendering)">
+              <img src="assets/img/projects/therba-medical-center/render-exterior-03.jpg" alt="Therba Medical Center main entrance rendering" loading="lazy">
+            </button>
+            <button type="button" class="drawing-thumb hero-carousel-slide" data-src="assets/img/projects/therba-medical-center/render-exterior-02.jpg" data-label="Exterior — Covered Walkway (rendering)">
+              <img src="assets/img/projects/therba-medical-center/render-exterior-02.jpg" alt="Therba Medical Center covered walkway rendering" loading="lazy">
+            </button>
+            <button type="button" class="drawing-thumb hero-carousel-slide" data-src="assets/img/projects/therba-medical-center/render-interior-01.png" data-label="Interior — Waiting Area (rendering)">
+              <img src="assets/img/projects/therba-medical-center/render-interior-01.png" alt="Therba Medical Center waiting area interior rendering" loading="lazy">
+            </button>
+            <button type="button" class="drawing-thumb hero-carousel-slide" data-src="assets/img/projects/therba-medical-center/render-interior-02.png" data-label="Interior — Reception &amp; Nurse Station (rendering)">
+              <img src="assets/img/projects/therba-medical-center/render-interior-02.png" alt="Therba Medical Center reception and nurse station interior rendering" loading="lazy">
+            </button>
+          </div>
+        </div>
+        <div class="hero-carousel-dots">
+          <button type="button" class="hero-carousel-dot active" data-index="0" aria-label="Show image 1"></button>
+          <button type="button" class="hero-carousel-dot" data-index="1" aria-label="Show image 2"></button>
+          <button type="button" class="hero-carousel-dot" data-index="2" aria-label="Show image 3"></button>
+          <button type="button" class="hero-carousel-dot" data-index="3" aria-label="Show image 4"></button>
+          <button type="button" class="hero-carousel-dot" data-index="4" aria-label="Show image 5"></button>
+        </div>
+        <button type="button" class="hero-carousel-arrow hero-carousel-prev" aria-label="Previous image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" class="hero-carousel-arrow hero-carousel-next" aria-label="Next image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
 
       <div class="case-grid">
         <div>
@@ -425,5 +455,6 @@
 <script src="assets/js/modal.js"></script>
 <script src="assets/js/main.js"></script>
 <script src="assets/js/gallery.js"></script>
+<script src="assets/js/hero-carousel.js"></script>
 </body>
 </html>
