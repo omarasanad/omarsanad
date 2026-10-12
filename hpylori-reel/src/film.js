@@ -177,6 +177,15 @@ const stomachSprite = (() => {
   g.restore();
   // teal rim light
   g.lineWidth = 3; g.strokeStyle = 'rgba(120,240,228,0.55)'; g.stroke(STOMACH);
+  // feather the cut ends of the oesophagus and duodenum
+  g.globalCompositeOperation = 'destination-out';
+  const fe = g.createLinearGradient(0, -490, 0, -390);
+  fe.addColorStop(0, 'rgba(0,0,0,1)'); fe.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = fe; g.fillRect(-200, -500, 300, 110);
+  const fd = g.createLinearGradient(0, 340, 0, 250);
+  fd.addColorStop(0, 'rgba(0,0,0,1)'); fd.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = fd; g.fillRect(-430, 250, 110, 100);
+  g.globalCompositeOperation = 'source-over';
   return s;
 })();
 
@@ -328,7 +337,7 @@ function scene1(c, t) {
   c.restore();
 
   // hook typography
-  wipeText(c, 'حرقان ووجع في المعدة؟', 540, 330, t, 0.05, 3.3, { size: 92, dur: 0.6 });
+  wipeText(c, 'حرقان ووجع في المعدة؟', 540, 330, t, -0.3, 3.3, { size: 92, dur: 0.6 });
   riseText(c, 'ممكن تكون', 540, 265, t, 3.55, 6.0, { size: 62, weight: 600, color: C.white });
   riseText(c, 'جرثومة المعدة!', 540, 400, t, 3.75, 6.0, { size: 108, color: C.teal, stagger: 0.09 });
   return thru;
@@ -665,8 +674,8 @@ function scene6(c, t) {
   // grade: teal cast top, navy floor for typography
   c.save(); c.globalCompositeOperation = 'soft-light';
   c.fillStyle = 'rgba(30,160,170,0.35)'; c.fillRect(0, 0, W, H); c.restore();
-  const fl = c.createLinearGradient(0, 860, 0, 1500);
-  fl.addColorStop(0, 'rgba(3,10,22,0)'); fl.addColorStop(0.55, 'rgba(3,10,22,0.82)'); fl.addColorStop(1, 'rgba(3,10,22,0.96)');
+  const fl = c.createLinearGradient(0, 860, 0, 1600);
+  fl.addColorStop(0, 'rgba(3,10,22,0)'); fl.addColorStop(0.45, 'rgba(3,10,22,0.82)'); fl.addColorStop(1, 'rgba(3,10,22,1)');
   c.fillStyle = fl; c.fillRect(0, 860, W, H - 860);
 
   riseText(c, 'صحتك تبدأ بالمعلومة الصح', 540, 1135, t, 41.3, null, { size: 80, colors: { 3: C.teal } });
