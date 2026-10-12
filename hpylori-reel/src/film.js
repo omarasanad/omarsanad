@@ -674,35 +674,51 @@ function scene6(c, t) {
   // grade: teal cast top, navy floor for typography
   c.save(); c.globalCompositeOperation = 'soft-light';
   c.fillStyle = 'rgba(30,160,170,0.35)'; c.fillRect(0, 0, W, H); c.restore();
-  const fl = c.createLinearGradient(0, 860, 0, 1600);
+  const fl = c.createLinearGradient(0, 700, 0, 1500);
   fl.addColorStop(0, 'rgba(3,10,22,0)'); fl.addColorStop(0.45, 'rgba(3,10,22,0.82)'); fl.addColorStop(1, 'rgba(3,10,22,1)');
-  c.fillStyle = fl; c.fillRect(0, 860, W, H - 860);
+  c.fillStyle = fl; c.fillRect(0, 700, W, H - 700);
 
-  riseText(c, 'صحتك تبدأ بالمعلومة الصح', 540, 1135, t, 41.3, null, { size: 80, colors: { 3: C.teal } });
+  // identity: name + specialty right after the reveal
+  const name = CONFIG.doctorName, title = CONFIG.doctorTitle, handle = CONFIG.doctorHandle;
+  if (name) {
+    riseText(c, name, 540, 985, t, 39.4, null, { size: 76, stagger: 0.08 });
+    if (title) {
+      const tp = easeOut(prog(t, 39.9, 40.4));
+      if (tp > 0) {
+        c.save(); c.fillStyle = C.teal; c.fillRect(540 - 60 * tp, 1040, 120 * tp, 4); c.restore();
+      }
+      riseText(c, title, 540, 1090, t, 40.0, null, { size: 38, weight: 600, color: C.teal, stagger: 0.04 });
+    }
+  } else {
+    const np = spring(t, 39.4, 12, 0.85);
+    if (np > 0) {
+      c.save(); c.globalAlpha = clamp(np);
+      c.setLineDash([10, 10]); c.strokeStyle = 'rgba(200,225,240,0.5)'; c.lineWidth = 2;
+      rrect(c, 300, 990, 480, 92, 20); c.stroke(); c.setLineDash([]);
+      c.direction = 'rtl'; setFont(c, 34, 600); c.textAlign = 'center'; c.textBaseline = 'middle';
+      c.fillStyle = 'rgba(200,225,240,0.7)'; c.fillText('اسم الدكتور  •  التخصص', 540, 1038);
+      c.restore();
+    }
+  }
+  riseText(c, 'صحتك تبدأ بالمعلومة الصح', 540, 1205, t, 41.3, null, { size: 66, colors: { 3: C.teal } });
   // follow CTA pill
   const ps = spring(t, 45.5, 12, 0.75);
   if (ps > 0) {
-    c.save(); c.direction = 'rtl'; setFont(c, 48, 800); c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.save(); c.direction = 'rtl'; setFont(c, 46, 800); c.textAlign = 'center'; c.textBaseline = 'middle';
     const tw = c.measureText('تابعنا لمعلومات طبية أكتر').width + 110, ww = tw * clamp(ps, 0, 1.05);
-    rrect(c, 540 - ww / 2, 1222, ww, 96, 48); c.fillStyle = C.teal; c.fill(); c.clip();
-    c.fillStyle = '#04202a'; c.fillText('تابعنا لمعلومات طبية أكتر', 540, 1272 + (1 - ps) * 60);
+    rrect(c, 540 - ww / 2, 1270, ww, 92, 46); c.fillStyle = C.teal; c.fill(); c.clip();
+    c.fillStyle = '#04202a'; c.fillText('تابعنا لمعلومات طبية أكتر', 540, 1318 + (1 - ps) * 60);
     c.restore();
   }
-  // name / handle — editable in script.js; dashed plate marks an unfilled placeholder
-  const np = spring(t, 46.3, 12, 0.85);
-  if (np > 0) {
-    c.save(); c.globalAlpha = clamp(np); c.translate(0, (1 - np) * 30);
-    const name = CONFIG.doctorName, handle = CONFIG.doctorHandle;
-    if (name || handle) {
-      c.direction = 'rtl'; setFont(c, 44, 800); c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = C.white;
-      c.fillText(name, 540, 1370);
-      c.direction = 'ltr'; setFont(c, 36, 500, EN); c.fillStyle = C.teal; c.fillText(handle, 540, 1420);
-    } else {
-      c.setLineDash([10, 10]); c.strokeStyle = 'rgba(200,225,240,0.5)'; c.lineWidth = 2;
-      rrect(c, 300, 1340, 480, 92, 20); c.stroke(); c.setLineDash([]);
-      c.direction = 'rtl'; setFont(c, 34, 600); c.textAlign = 'center'; c.textBaseline = 'middle';
-      c.fillStyle = 'rgba(200,225,240,0.7)'; c.fillText('اسم الدكتور  •  @الحساب', 540, 1388);
-    }
+  // Facebook page
+  const fp = spring(t, 46.1, 12, 0.85);
+  if (fp > 0 && handle) {
+    c.save(); c.globalAlpha = clamp(fp); c.translate(0, (1 - fp) * 30);
+    c.direction = 'ltr'; setFont(c, 38, 700, EN); c.textBaseline = 'middle'; c.textAlign = 'left';
+    const hw = c.measureText(handle).width, total = 52 + 18 + hw, x0 = 540 - total / 2, y = 1430;
+    c.fillStyle = '#1877f2'; c.beginPath(); c.arc(x0 + 26, y, 26, 0, TAU); c.fill();
+    setFont(c, 40, 700, EN); c.fillStyle = '#ffffff'; c.textAlign = 'center'; c.fillText('f', x0 + 28, y + 4);
+    setFont(c, 38, 700, EN); c.textAlign = 'left'; c.fillStyle = C.white; c.fillText(handle, x0 + 70, y + 1);
     c.restore();
   }
 }

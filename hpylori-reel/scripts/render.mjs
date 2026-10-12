@@ -1,5 +1,6 @@
 // Render src/index.html frame by frame into out/silent.mp4.
 //   node scripts/render.mjs [--fps 30] [--dur 50] [--workers 4] [--out out/silent.mp4]
+//   node scripts/render.mjs --from 37.5 --out out/part.mp4   (partial render)
 //   node scripts/render.mjs --stills 0.5,3,8   -> out/stills/t_<time>.png
 import http from 'node:http';
 import fs from 'node:fs';
@@ -50,7 +51,9 @@ if (args.stills) {
 }
 
 const DUR = +(args.dur || (await (await openPage()).evaluate(() => window.DURATION)));
-const total = Math.round(DUR * FPS);
+// --from/--to (seconds) render only part of the timeline, e.g. to patch one scene.
+const F0 = Math.round(+(args.from || 0) * FPS);
+const total = Math.round(+(args.to || DUR) * FPS) - F0;
 const tmp = path.join(ROOT, 'out/segments'); fs.mkdirSync(tmp, { recursive: true });
 const per = Math.ceil(total / WORKERS);
 const t0 = Date.now();
@@ -64,7 +67,7 @@ async function worker(w) {
   const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'png', '-i', '-',
     '-c:v', 'libx264', '-preset', 'slow', '-crf', '15', '-pix_fmt', 'yuv420p', '-r', String(FPS), file], { stdio: ['pipe', 'inherit', 'inherit'] });
   for (let f = a; f < b; f++) {
-    await page.evaluate((t) => window.seek(t), f / FPS);
+    await page.evaluate((t) => window.seek(t), (F0 + f) / FPS);
     const buf = await shot(page);
     if (!ff.stdin.write(buf)) await new Promise((r) => ff.stdin.once('drain', r));
     if (++done % 60 === 0) console.log(`${done}/${total} frames  ${((Date.now() - t0) / 1000).toFixed(0)}s`);

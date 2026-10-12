@@ -4,8 +4,9 @@
 
 export const CONFIG = {
   // Leave empty to show a clearly marked placeholder plate in the final scene.
-  doctorName: '',     // e.g. 'د. ...'
-  doctorHandle: '',   // e.g. '@...'
+  doctorName: 'د. أبوبكر احمد سند',
+  doctorTitle: 'أخصائي الباطنة والجهاز الهضمي والكبد والمناظير',
+  doctorHandle: 'Dr. Abobakr Sanad', // Facebook page name
   // Image slots (relative to src/). Missing files fall back to a neutral placeholder.
   doctorStylized: '../assets/doctor_stylized.png',
   doctorCutout: '../assets/doctor_cutout.png', // optional transparent PNG for layered compositing
