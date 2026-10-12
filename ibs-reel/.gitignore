@@ -3,4 +3,8 @@ out/stills/
 out/segments/
 out/silent*.mp4
 out/sheet.png
+out/cutout_check.png
+out/zoom.png
+out/z*.png
+out/sheet.png
 out/render.log

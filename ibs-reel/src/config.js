@@ -6,4 +6,6 @@ export const CONFIG = {
   logoName: 'د. أبوبكر سند', // short name in the watermark
   doctorCutout: '../assets/doctor_cutout.png', // made by scripts/cutout.py from assets/doctor.png
   logoMark: '../assets/logo/logo_mark.svg',
+  faceAnchor: [462, 330], // face centre in assets/doctor.png (pixels) — framing for the hero shot and the bubble
+  headTop: 62,            // top of the hair in assets/doctor.png
 };

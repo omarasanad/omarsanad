@@ -267,7 +267,8 @@ function doctor(c, t, p, bx, by, br, push = 1, talk = 0) {
   const breathe = 1 + 0.006 * Math.sin(t * 1.7);
   const sH = 1.12 * push * breathe, sB = (br / 255) * breathe;
   const s = Math.exp(lerp(Math.log(sH), Math.log(sB), e));
-  const ax = lerp(420 + Math.sin(t * 0.5) * 8, bx, e), ay = lerp(452 + Math.sin(t * 0.8) * 4, by + br * 0.08, e);
+  const [fx, fy] = CONFIG.faceAnchor, heroX = 540 + (fx - 512) * sH, heroY = 150 + (fy - CONFIG.headTop) * sH;
+  const ax = lerp(heroX + Math.sin(t * 0.5) * 8, bx, e), ay = lerp(heroY + Math.sin(t * 0.8) * 4, by + br * 0.08, e);
   const cx = lerp(540, bx, e), cy = lerp(800, by, e), R = Math.exp(lerp(Math.log(2400), Math.log(br), e));
   c.save();
   if (e > 0) {
@@ -282,7 +283,7 @@ function doctor(c, t, p, bx, by, br, push = 1, talk = 0) {
   // contact shadow + rim light in hero framing
   if (e < 1) glow(c, SOFT.teal, ax + 40, ay - 120, 520, 0.25 * (1 - e));
   c.save();
-  c.translate(ax, ay); c.rotate(Math.sin(t * 0.7) * 0.006 * (1 - e)); c.translate(-405 * s, -360 * s);
+  c.translate(ax, ay); c.rotate(Math.sin(t * 0.7) * 0.006 * (1 - e)); c.translate(-fx * s, -fy * s);
   c.drawImage(DOC, 0, 0, DOC.naturalWidth * s, DOC.naturalHeight * s);
   c.restore();
   c.restore();
