@@ -37,14 +37,15 @@ async function openPage() {
   await page.evaluate(() => window.ready);
   return page;
 }
-const shot = (page) => page.locator('#c').screenshot({ type: 'png', animations: 'disabled' });
+// PNG for stills; high-quality JPEG for video frames (PNG encoding is ~15x slower).
+const shot = (page, png = false) => page.locator('#c').screenshot(png ? { type: 'png' } : { type: 'jpeg', quality: 97 });
 
 if (args.stills) {
   const page = await openPage();
   const dir = path.join(ROOT, 'out/stills'); fs.mkdirSync(dir, { recursive: true });
   for (const t of String(args.stills).split(',').map(Number)) {
     await page.evaluate((t) => window.seek(t), t);
-    fs.writeFileSync(path.join(dir, `t_${t.toFixed(2)}.png`), await shot(page));
+    fs.writeFileSync(path.join(dir, `t_${t.toFixed(2)}.png`), await shot(page, true));
   }
   console.log('has doctor image:', await page.evaluate(() => window.HAS_DOCTOR));
   await browser.close(); server.close(); process.exit(0);
@@ -64,8 +65,8 @@ async function worker(w) {
   if (a >= b) return null;
   const page = await openPage();
   const file = path.join(tmp, `seg_${w}.mp4`);
-  const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'png', '-i', '-',
-    '-c:v', 'libx264', '-preset', 'slow', '-crf', '15', '-pix_fmt', 'yuv420p', '-r', String(FPS), file], { stdio: ['pipe', 'inherit', 'inherit'] });
+  const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
+    '-c:v', 'libx264', '-preset', 'slow', '-crf', '15', '-pix_fmt', 'yuv420p', '-color_range', 'tv', '-r', String(FPS), file], { stdio: ['pipe', 'inherit', 'inherit'] });
   for (let f = a; f < b; f++) {
     await page.evaluate((t) => window.seek(t), (F0 + f) / FPS);
     const buf = await shot(page);

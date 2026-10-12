@@ -574,7 +574,7 @@ function scene5(c, t) {
   dust(c, t, 0, 0, 0.6);
   wipeText(c, 'العلاج حسب تقييم الدكتور', 540, 340, t, 30.9, 34.2, { size: 74 });
   // clinician assessment board
-  const bin = spring(t, 30.9, 10, 0.8), bout = easeIn(prog(t, 34.2, 34.8));
+  const bin = spring(t, 30.35, 10, 0.8), bout = easeIn(prog(t, 34.2, 34.8));
   if (bout < 1) {
     c.save(); c.translate(540, 860 - bout * 500 + (1 - bin) * 400); c.globalAlpha = 1 - bout;
     rrect(c, -230, -300, 460, 600, 36); c.fillStyle = '#e8f1f5'; c.fill();
@@ -662,6 +662,8 @@ function scene6(c, t) {
     dust(c, t, 0, 0, 0.7);
     placeholderDoctor(c, 540 + par, 40 - (push - 1) * 200, push * 1.05);
   }
+  // foreground particles drifting in front of the portrait for depth
+  c.save(); c.globalAlpha = 0.9; dust(c, t, par * 3, 0, 0.8); c.restore();
   // teal light sweep across the portrait
   const sw = prog(lt, 0.4, 2.8);
   if (sw > 0 && sw < 1) {
@@ -751,11 +753,11 @@ function seek(t) {
   }
   if (t >= 6.3 && t < 13.6) {
     // zoom-through crossfade from the stomach wall into the lining
-    const a = easeInOut(prog(t, 6.3, 6.7));
+    const a = easeInOut(prog(t, 6.3, 6.7)) * (1 - easeInOut(prog(t, 13.05, 13.45)));
     ctx.save(); ctx.globalAlpha = a; scene2(ctx, t); ctx.restore();
   }
   if (t >= 13.2 && t < 22.8) {
-    const a = easeInOut(prog(t, 13.2, 13.6));
+    const a = easeInOut(prog(t, 13.1, 13.5));
     if (t < 22.2) { ctx.save(); ctx.globalAlpha = a; scene3(ctx, t); ctx.restore(); }
     else {
       // diagonal right-to-left wipe into the diagnosis scene
