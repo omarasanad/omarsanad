@@ -10,8 +10,16 @@ import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SR = 48000
-DUR = 50.0
+# Everything below is authored in film time; W() maps it onto the voiceover-aligned video time.
+TL = json.load(open(os.path.join(ROOT, 'src/timeline.json')))
+DUR = float(TL['duration'])
 N = int(SR * DUR)
+_wf, _wv = zip(*TL['warp'])
+
+
+def W(x):
+    return np.interp(x, _wf, _wv)
+
 rng = np.random.default_rng(7)
 
 
@@ -80,6 +88,7 @@ def pad_voice(f, n, detune):
 
 
 music = np.zeros((2, N))
+CHORDS = [(float(W(a)), n) for a, n in CHORDS[:-1]] + [(DUR, None)]
 for i in range(len(CHORDS) - 1):
     a, notes = CHORDS[i]; b = CHORDS[i + 1][0]
     s0, s1 = int(a * SR), min(N, int((b + 0.8) * SR))
@@ -91,19 +100,19 @@ for i in range(len(CHORDS) - 1):
             music[ch, s0:s1] += pad_voice(hz(m), n, det) * env * g
 
 # gentle swell: quieter under the hook text, fuller for the reveal
-swell = np.interp(t, [0, 1, 6.5, 13.5, 30.5, 38.5, 39.5, 47, 50], [0.5, 0.8, 0.8, 0.9, 0.95, 0.75, 1.1, 1.1, 0.0])
+swell = np.interp(t, W([0, 1, 6.5, 13.5, 30.5, 38.5, 39.5, 47, 48.6]).tolist() + [DUR], [0.5, 0.8, 0.8, 0.9, 0.95, 0.75, 1.1, 1.1, 0.9, 0.0])
 music *= swell
 
 # heartbeat sub pulse (scenes 1-5), on beats 1 and 1.5
 pulse = np.zeros(N)
 for bt in np.arange(0.0, 38.0, 2.0):
     for off, g in ((0, 1.0), (0.32, 0.55)):
-        s = int((bt + off) * SR); n = int(0.45 * SR)
+        s = int(W(bt + off) * SR); n = int(0.45 * SR)
         if s + n > N: continue
         tt = np.arange(n) / SR
         f = 48 + 30 * np.exp(-tt * 30)
         pulse[s:s + n] += np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-tt * 9) * g
-pulse *= np.interp(t, [0, 0.2, 6.5, 13.5, 22.5, 36, 38.4], [0.0, 0.16, 0.12, 0.09, 0.1, 0.1, 0.0])
+pulse *= np.interp(t, W([0, 0.2, 6.5, 13.5, 22.5, 36, 38.4]), [0.0, 0.16, 0.12, 0.09, 0.1, 0.1, 0.0])
 music += pulse
 
 # eighth-note plucks over scenes 3-4 and the close
@@ -111,7 +120,7 @@ pl = np.zeros((2, N))
 for i in range(len(CHORDS) - 1):
     a, notes = CHORDS[i]; b = CHORDS[i + 1][0]
     for j, bt in enumerate(np.arange(a, b, 0.25)):
-        if not (13.5 <= bt < 30.5 or 39.5 <= bt < 48.5): continue
+        if not (W(13.5) <= bt < W(30.5) or W(39.5) <= bt < W(48.5)): continue
         m = notes[2:][(j * 2 + (j // 4)) % len(notes[2:])] + 12
         s = int(bt * SR); n = int(0.5 * SR)
         if s + n > N: continue
@@ -123,7 +132,7 @@ for i in range(len(CHORDS) - 1):
 music += pl
 
 # low tension drone + air for the hook
-air = onepole(rng.standard_normal(N), 0.02) * np.interp(t, [0, 0.3, 6, 7], [0, 0.05, 0.05, 0])
+air = onepole(rng.standard_normal(N), 0.02) * np.interp(t, W([0, 0.3, 6, 7]), [0, 0.05, 0.05, 0])
 music += np.stack([air, np.roll(air, 300)])
 
 music = reverb(music, 3.0, 0.35)
@@ -197,7 +206,7 @@ for i, c in enumerate(cues):
     fn = GEN[c['type']]
     v = fn(c['dur']) if 'dur' in c else fn()
     v = v / (np.abs(v).max() + 1e-9) * 10 ** (c.get('gain', -10) / 20)
-    s = int(c['t'] * SR); e = min(N, s + len(v)); v = v[: e - s]
+    s = int(W(c['t']) * SR); e = min(N, s + len(v)); v = v[: e - s]
     pan = 0.5 + (0.25 * np.sin(i * 2.3) if c['type'] in ('pop', 'click', 'tick', 'whoosh') else 0)
     sfx[0, s:e] += v * np.sqrt(1 - pan); sfx[1, s:e] += v * np.sqrt(pan)
 sfx = reverb(sfx, 1.2, 0.18)

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ar"><head><meta charset="utf-8">
+<style>
+  @font-face { font-family: 'Cairo'; font-weight: 800; src: url('../fonts/Cairo-800.ttf'); }
+  @font-face { font-family: 'Cairo'; font-weight: 600; src: url('../fonts/Cairo-600.ttf'); }
+  @font-face { font-family: 'Inter'; font-weight: 700; src: url('../fonts/Inter-700.ttf'); }
+  @font-face { font-family: 'Inter'; font-weight: 500; src: url('../fonts/Inter-500.ttf'); }
+  html, body { margin: 0; background: transparent; }
+  body.dark #lockup { background: #061a33; }
+  body.light #lockup { background: #ffffff; }
+  #lockup { display: inline-flex; flex-direction: row-reverse; align-items: center; gap: 44px; padding: 70px 90px; direction: ltr; }
+  #lockup img { width: 260px; height: 260px; }
+  .txt { text-align: right; }
+  .ar { font: 800 104px/1.15 Cairo; color: #ffffff; direction: rtl; }
+  .en { font: 700 44px/1.3 Inter; letter-spacing: 0.14em; color: #2fd0c0; margin-top: 4px; }
+  .spec { font: 600 34px/1.5 Cairo; color: #b9cbdc; direction: rtl; margin-top: 10px; }
+  body.light .ar { color: #0b2340; } body.light .spec { color: #4b6278; } body.light .en { color: #0f8f86; }
+  #mark { display: none; } body.mark #lockup { display: none; } body.mark #mark { display: block; width: 1024px; height: 1024px; }
+</style></head>
+<body class="dark">
+  <div id="lockup">
+    <img src="logo_mark.svg" alt="">
+    <div class="txt">
+      <div class="ar">د. أبوبكر احمد سند</div>
+      <div class="en">DR. ABOBAKR SANAD</div>
+      <div class="spec">أخصائي الباطنة والجهاز الهضمي والكبد والمناظير</div>
+    </div>
+  </div>
+  <img id="mark" src="logo_mark.svg" alt="">
+</body></html>

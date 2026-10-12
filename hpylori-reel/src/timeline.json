@@ -1,0 +1,5 @@
+{
+  "_note": "Maps film time (the times written in film.js / cues.json) to video time, so each scene lines up with the recorded voiceover. Pairs are [filmTime, videoTime]; linear in between.",
+  "duration": 51.5,
+  "warp": [[0, 0], [6.5, 7.4], [13.5, 14.85], [22.5, 23.45], [30.5, 30.65], [38.5, 39.05], [50, 51.5]]
+}

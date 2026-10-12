@@ -622,7 +622,7 @@ function scene5(c, t) {
 }
 
 // ---------------------------------------------------------------- scene 6 — doctor reveal
-let IMG = null, CUT = null;
+let IMG = null, CUT = null, MARK = null;
 function placeholderDoctor(c, cx, top, s) {
   c.save(); c.translate(cx, top); c.scale(s, s);
   const g = c.createLinearGradient(0, 0, 0, 1300);
@@ -682,6 +682,12 @@ function scene6(c, t) {
 
   // identity: name + specialty right after the reveal
   const name = CONFIG.doctorName, title = CONFIG.doctorTitle, handle = CONFIG.doctorHandle;
+  const es = spring(t, 39.15, 11, 0.62);
+  if (MARK && es > 0) {
+    const sz = 150 * clamp(es, 0, 1.2);
+    c.save(); c.shadowColor = 'rgba(0,0,0,0.45)'; c.shadowBlur = 24;
+    c.drawImage(MARK, 540 - sz / 2, 845 - sz / 2, sz, sz); c.restore();
+  }
   if (name) {
     riseText(c, name, 540, 985, t, 39.4, null, { size: 76, stagger: 0.08 });
     if (title) {
@@ -725,6 +731,22 @@ function scene6(c, t) {
   }
 }
 
+// ---------------------------------------------------------------- brand watermark
+// Doctor's logo lockup, top centre, through scenes 1-5; it hands over to the large lockup in scene 6.
+function watermark(c, t) {
+  const a = 1 - easeInOut(prog(t, 38.2, 38.7));
+  if (!MARK || a <= 0) return;
+  c.save(); c.globalAlpha = a * 0.95;
+  c.direction = 'rtl'; setFont(c, 34, 800); c.textBaseline = 'middle'; c.textAlign = 'right';
+  const name = CONFIG.logoName || CONFIG.doctorName;
+  const tw = c.measureText(name).width, ms = 64, gap = 14, total = ms + gap + tw;
+  const right = 540 + total / 2, y = 150;
+  c.shadowColor = 'rgba(0,0,0,0.35)'; c.shadowBlur = 12;
+  c.drawImage(MARK, right - ms, y - ms / 2, ms, ms);
+  c.fillStyle = C.white; c.fillText(name, right - ms - gap, y + 2);
+  c.restore();
+}
+
 // ---------------------------------------------------------------- captions
 function captions(c, t) {
   if (NOSUBS) return;
@@ -742,8 +764,18 @@ function captions(c, t) {
 
 // ---------------------------------------------------------------- compositor
 function layer(fn, t) { fn(ctx, t); }
-function seek(t) {
-  t = clamp(t, 0, DURATION);
+// Video time -> film time (see timeline.json). Captions use video time; the scenes use film time.
+let TIMELINE = { duration: DURATION, warp: [[0, 0], [DURATION, DURATION]] };
+function filmTime(T) {
+  const w = TIMELINE.warp;
+  for (let i = 1; i < w.length; i++) {
+    if (T <= w[i][1]) return lerp(w[i - 1][0], w[i][0], (T - w[i - 1][1]) / (w[i][1] - w[i - 1][1]));
+  }
+  return w[w.length - 1][0];
+}
+function seek(T) {
+  T = clamp(T, 0, TIMELINE.duration);
+  const t = clamp(filmTime(T), 0, DURATION);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.filter = 'none';
   ctx.fillStyle = C.navy0; ctx.fillRect(0, 0, W, H);
@@ -789,7 +821,8 @@ function seek(t) {
     }
   }
   finish(ctx, t);
-  captions(ctx, t);
+  watermark(ctx, t);
+  captions(ctx, T);
 }
 
 // ---------------------------------------------------------------- boot
@@ -797,11 +830,12 @@ function loadImg(src) {
   return new Promise((res) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = src; });
 }
 window.seek = seek;
-window.DURATION = DURATION;
 window.ready = (async () => {
+  try { TIMELINE = await (await fetch('timeline.json')).json(); } catch (e) { /* identity mapping */ }
+  window.DURATION = TIMELINE.duration;
   const fams = ["800 64px Cairo", "700 64px Cairo", "600 64px Cairo", "400 64px Cairo", "500 64px 'Noto Kufi Arabic'", "800 64px 'Noto Kufi Arabic'", "500 64px Inter", "700 64px Inter", "italic 700 64px Inter"];
   await Promise.all(fams.map((f) => document.fonts.load(f, 'جرثومة المعدة H. pylori CO₂')));
-  [IMG, CUT] = await Promise.all([loadImg(CONFIG.doctorStylized), loadImg(CONFIG.doctorCutout)]);
+  [IMG, CUT, MARK] = await Promise.all([loadImg(CONFIG.doctorStylized), loadImg(CONFIG.doctorCutout), loadImg(CONFIG.logoMark)]);
   seek(0);
   window.HAS_DOCTOR = !!IMG;
   return true;
@@ -809,15 +843,16 @@ window.ready = (async () => {
 
 if (!RENDER) {
   document.body.classList.add('preview');
-  const bar = Object.assign(document.createElement('input'), { type: 'range', min: 0, max: DURATION, step: 0.01, value: 0, id: 'bar' });
+  const bar = Object.assign(document.createElement('input'), { type: 'range', min: 0, max: 60, step: 0.01, value: 0, id: 'bar' });
   const lab = document.createElement('div');
   document.body.append(bar, lab);
   let playing = true, t0 = performance.now(), base = 0;
   bar.oninput = () => { base = +bar.value; t0 = performance.now(); seek(base); };
   addEventListener('keydown', (e) => { if (e.code === 'Space') { playing = !playing; base = +bar.value; t0 = performance.now(); } });
   window.ready.then(() => {
+    bar.max = window.DURATION;
     const loop = () => {
-      if (playing) { const t = (base + (performance.now() - t0) / 1000) % DURATION; bar.value = t; seek(t); }
+      if (playing) { const t = (base + (performance.now() - t0) / 1000) % window.DURATION; bar.value = t; seek(t); }
       lab.textContent = `${(+bar.value).toFixed(2)}s  (space = play/pause)`;
       requestAnimationFrame(loop);
     };

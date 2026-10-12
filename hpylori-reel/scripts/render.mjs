@@ -19,7 +19,7 @@ const WORKERS = +(args.workers || 4);
 const OUT = path.join(ROOT, args.out || 'out/silent.mp4');
 const QS = args.nosubs ? 'render&nosubs' : 'render';
 
-const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.ttf': 'font/ttf', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg' };
+const TYPES = { '.svg': 'image/svg+xml', '.json': 'application/json', '.html': 'text/html', '.js': 'text/javascript', '.ttf': 'font/ttf', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg' };
 const server = http.createServer((req, res) => {
   const p = path.join(ROOT, decodeURIComponent(req.url.split('?')[0]));
   if (!p.startsWith(ROOT) || !fs.existsSync(p) || fs.statSync(p).isDirectory()) { res.writeHead(404); return res.end(); }

@@ -1,6 +1,6 @@
 # H. pylori — جرثومة المعدة · medical motion reel
 
-A vertical (1080×1920, 30 fps, about 50 s) Egyptian Arabic educational reel about *Helicobacter pylori*.
+A vertical (1080×1920, 30 fps, 51.5 s) Egyptian Arabic educational reel about *Helicobacter pylori*.
 The whole video is code. `src/film.js` paints any frame on an HTML canvas through `window.seek(t)`,
 Playwright screenshots every frame, ffmpeg encodes the result, and the score and sound effects are
 synthesized with numpy.
@@ -15,23 +15,19 @@ synthesized with numpy.
 | `out/captions_ar.srt` | Egyptian Arabic captions, which also serve as the voiceover timing guide |
 | `audio/music.wav`, `audio/sfx.wav` | The synthesized score and sound effects as separate stems |
 
-## Things you need to add
+## Voiceover, timing and logo
 
-1. **Doctor portrait.** Put the stylized portrait at `assets/doctor_stylized.png`. A transparent
-   cutout at `assets/doctor_cutout.png` is optional and enables layered parallax. When the file is
-   missing, scene 6 shows a neutral silhouette marked «صورة الدكتور».
-2. **Name and handle.** Set `doctorName` and `doctorHandle` in `src/script.js`. While they're empty,
-   the end card shows a dashed placeholder plate.
-3. **Voiceover.** No Egyptian Arabic voice generator was available in the build environment, so the
-   reel ships **without narration**. The captions carry the script, and the music and sound effects
-   are mixed for that. To add the voice:
-   - Record the script from `docs/shotlist.md` / `out/captions_ar.srt`, following the caption timings
-     (warm, conversational Egyptian, about 2.6 words per second).
-   - Save it as `audio/voiceover.wav`, starting at 0.0 s.
-   - If your pacing differs, edit the times in `CAPTIONS` in `src/script.js` and re-render, so the
-     captions match the voice.
-   - Run `./scripts/mix.sh`. It detects the voiceover, side-chain ducks the music under it and
-     normalizes to -14 LUFS.
+- **Voiceover:** `audio/voiceover.mp3` (ElevenLabs, from `docs/voiceover_elevenlabs.md`). `scripts/mix.sh` uses it
+  automatically (a `.wav` with the same name also works), loudness-matches it and side-chain ducks the music under it.
+- **Timing:** `src/timeline.json` maps the film's authored times onto the recording, so each scene starts with
+  its sentence. The music and sound effects are generated on the same map. The caption times in `src/script.js`
+  come from the measured pauses in the recording. After a new take, re-measure the pauses
+  (`ffmpeg -i audio/voiceover.mp3 -af silencedetect=noise=-34dB:d=0.12 -f null -`), then update the scene anchors
+  and caption times.
+- **Logo:** `assets/logo/` holds the vector mark (`logo_mark.svg`), the lockup source (`logo.html`) and PNG
+  exports (`logo_mark.png`, and `logo_full_dark.png`, `logo_full_light.png`, `logo_full_transparent.png`), regenerated with `node scripts/logo.mjs`.
+  The mark is the watermark at the top of scenes 1–5 and the emblem above the name in scene 6.
+- **Doctor details:** set in `CONFIG` in `src/script.js` (name, specialty, Facebook page, watermark name).
 
 ## Build
 
@@ -39,6 +35,7 @@ Requires Node 20+, ffmpeg, and Python 3 with numpy.
 
 ```bash
 npm install                       # installs playwright (Chromium: npx playwright install chromium)
+node scripts/logo.mjs             # -> assets/logo/*.png
 python3 scripts/audio.py          # -> audio/music.wav, audio/sfx.wav   (edit audio/cues.json for SFX timing)
 node scripts/render.mjs           # -> out/silent.mp4   (--fps 30 --workers 4; --nosubs renders without captions)
 node scripts/captions.mjs         # -> out/captions_ar.srt
