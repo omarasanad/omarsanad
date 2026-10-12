@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>IBS Reel</title>
+<style>
+  @font-face { font-family: 'Cairo'; font-weight: 400; src: url('../assets/fonts/Cairo-400.ttf'); }
+  @font-face { font-family: 'Cairo'; font-weight: 600; src: url('../assets/fonts/Cairo-600.ttf'); }
+  @font-face { font-family: 'Cairo'; font-weight: 800; src: url('../assets/fonts/Cairo-800.ttf'); }
+  @font-face { font-family: 'Noto Kufi Arabic'; font-weight: 500; src: url('../assets/fonts/NotoKufiArabic-500.ttf'); }
+  @font-face { font-family: 'Noto Kufi Arabic'; font-weight: 800; src: url('../assets/fonts/NotoKufiArabic-800.ttf'); }
+  @font-face { font-family: 'Inter'; font-weight: 500; src: url('../assets/fonts/Inter-500.ttf'); }
+  @font-face { font-family: 'Inter'; font-weight: 700; src: url('../assets/fonts/Inter-700.ttf'); }
+  html, body { margin: 0; background: #030913; }
+  canvas { display: block; }
+  body.preview { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px; color: #cfe; font: 14px Inter, sans-serif; }
+  body.preview canvas { height: 85vh; width: auto; }
+  #bar { width: min(480px, 90vw); }
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script type="module" src="film.js"></script>
+</body>
+</html>
