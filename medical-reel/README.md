@@ -7,9 +7,8 @@ A vertical Reels/TikTok/Shorts edit of a 31 s handheld recording from an endosco
 | File | What it is |
 |---|---|
 | `final_medical_reel.mp4` | Finished reel. 1080×1920, 30 fps, H.264 High (CRF 17) + AAC 256 kb/s, −14 LUFS, faststart. |
-| `medical_logo.png` | Logo mark, 1080×1080 PNG with a transparent background. |
-| `medical_logo.svg` | Editable vector source of the logo mark. |
-| `medical_logo_lockup_editable.svg` | Logo plus an **editable doctor-name / tagline area** (placeholder text; no name was provided). |
+| `medical_logo.png` | The doctor's own mark (stomach + scope), cut out of the supplied banner: 1024×1024, transparent background. |
+| `generic_logo_alternative.png/.svg`, `generic_logo_lockup_editable.svg` | The generic colon-line mark made before the official branding arrived. Kept as an alternative; not used in the reel. |
 | `thumbnail.png` | Cover image, 1080×1920. |
 | `cleaned_voice.wav` | The doctor's original narration, cleaned (mono, 48 kHz, −16 LUFS). |
 | `captions_timing_slots.srt` | Timing slots for the detected speech, numbered `[1]…[n]`, with **no text**. Use them to place the transcript. |
@@ -48,9 +47,15 @@ Result: the speech-to-room-noise gap went from about 11.5 dB to about 20 dB. Bre
 - 15.9–19.6 s: a magnifier callout enlarges the endoscope image from the monitor, placed over the cart, never the face.
 - 22.2–30.9 s: minimal HUD (corner brackets + "منظر داخلي للقولون") on the close endoscopic view.
 - A progress line under the panel. Caption zone in the lower-middle safe area (y ≈ 1360–1580).
-- 31.1–34.0 s: branded outro with the animated logo, "تابعونا للمزيد" and an **editable handle placeholder** (`@your.handle`).
+- 31.1–34.0 s: branded outro with the doctor's mark, name and specialty, "تابعونا للمزيد" and an **editable handle placeholder** (`@your.handle`, since no handle was provided).
 
-**Logo.** A generic mark: a white medical cross framed by one continuous teal line tracing the colon (cecum → rectum) on a deep-navy rounded badge. It is not based on any existing organization's logo.
+**Branding.** The doctor's supplied identity is used throughout: **د. أبوبكر احمد سند · DR. ABOBAKR SANAD · أخصائي الباطنة والجهاز الهضمي والكبد والمناظير**, with their circular stomach-and-scope mark.
+- **Header**, for the whole video: the mark, name and specialty in the top band, with the topic title below.
+- **Watermark**, for the whole video: a small mark in the top-left corner of the footage, so it travels with the picture even if the clip is cropped or reposted.
+- **Outro**: the mark, Arabic and English name, specialty, and the handle placeholder.
+- **Thumbnail**: the mark and the name.
+
+The mark is cut from the supplied PNG banner (`project/graphics/brand/brand_banner.png` → `scripts/cut_brand_mark.py`). That source is only about 240 px across, so it is shown at 240 px or smaller. A vector/high-resolution original would let it be used larger.
 
 ## Editing and re-rendering
 
@@ -65,11 +70,11 @@ node scripts/render.mjs --preview 1,9.6,17.5,25,33 --out build/preview   # quick
 ```
 
 Common edits:
-- **Texts, handle, doctor name** (shown in the outro only when filled in): `data/config.json`.
+- **Texts, handle, doctor name/specialty, logo file**: `data/config.json` (`doctorName`, `doctorNameEn`, `specialty`, `handle`, `logo`).
 - **Captions**: `data/transcript.txt`, then `./build.sh`.
 - **Timing of zooms, split screen, magnifier, HUD, SFX**: `data/timeline.json`.
 - **Look**: CSS variables at the top of `index.html` (`--navy`, `--teal`, `--cyan`, `--orange`).
-- **Logo**: `graphics/logo.svg` (also inlined in the outro in `index.html`) and `graphics/logo_lockup.svg`.
+- **Logo**: replace `graphics/brand/brand_mark.png` (or point `logo` in `config.json` at another file).
 - **Music mood**: the chords, tempo and levels in `scripts/music.py`. Mix levels are in `scripts/mix.sh`.
 
 Using this pipeline for a **different clip**: the monitor tracker's start quad and the blur keyframes in `scripts/anonymize.py` are specific to this recording. Re-check the blur on contact sheets before publishing. Also update `videoDur` and the cue times in `data/timeline.json`.
@@ -85,8 +90,8 @@ medical-reel/
     build.sh              one-command pipeline
     data/                 config.json, timeline.json, transcript.txt, captions.json, track.json, speech_regions.json, beep_notch_filters.txt
     scripts/              render.mjs, mix.sh, music.py, sfx.py, clean_voice.py, track_monitor.py, anonymize.py,
-                          export_track.py, captions.py, transcribe.py, timing_slots.py
-    graphics/             logo.svg, logo_lockup.svg
+                          export_track.py, captions.py, transcribe.py, timing_slots.py, cut_brand_mark.py
+    graphics/             brand/ (doctor's banner + cut-out mark), logo.svg, logo_lockup.svg (generic alternative)
     fonts/                Cairo (SIL Open Font License, see OFL-Cairo.txt)
     audio/                cleaned_voice.wav, music.wav, sfx.wav
     build/                (generated) blurred frames, rendered frames, mixes; not in git

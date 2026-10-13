@@ -48,7 +48,8 @@ ffmpeg -v error -y -framerate 30 -i build/render/%05d.png -i build/mix.wav \
 
 echo "== 9. thumbnail, logo, voice"
 node scripts/render.mjs --page thumbnail.html --preview 0 --out build/thumb && cp build/thumb/t_0.00.png "$OUT/thumbnail.png"
-node scripts/render.mjs --page logo_export.html --preview 0 --w 1080 --h 1080 --transparent --out build/logo && cp build/logo/t_0.00.png "$OUT/medical_logo.png"
-cp graphics/logo.svg "$OUT/medical_logo.svg"; cp graphics/logo_lockup.svg "$OUT/medical_logo_lockup_editable.svg"
+cp graphics/brand/brand_mark.png "$OUT/medical_logo.png"          # doctor's own mark (transparent cut-out)
+node scripts/render.mjs --page logo_export.html --preview 0 --w 1080 --h 1080 --transparent --out build/logo && cp build/logo/t_0.00.png "$OUT/generic_logo_alternative.png"
+cp graphics/logo.svg "$OUT/generic_logo_alternative.svg"; cp graphics/logo_lockup.svg "$OUT/generic_logo_lockup_editable.svg"
 cp audio/cleaned_voice.wav "$OUT/cleaned_voice.wav"
 echo "done -> $OUT"

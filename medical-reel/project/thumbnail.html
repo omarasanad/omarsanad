@@ -18,20 +18,22 @@
 html,body{width:1080px;height:1920px;overflow:hidden;background:#06142a;font-family:Cairo,sans-serif;color:#fff}
 #img{position:absolute;left:0;top:0;width:1080px;height:1330px;object-fit:cover;object-position:50% 75%;filter:saturate(1.05) contrast(1.05)}
 #fade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,20,42,.55) 0%,rgba(6,20,42,0) 16%,rgba(6,20,42,0) 45%,rgba(6,20,42,.8) 60%,#06142a 69%)}
-#logo{position:absolute;right:56px;top:120px;width:150px;height:150px}
+#logo{position:absolute;right:56px;top:110px;width:170px;height:170px;border-radius:50%;box-shadow:0 8px 30px rgba(0,0,0,.4)}
 #en{position:absolute;right:70px;top:1250px;font-weight:800;font-size:40px;letter-spacing:12px;color:var(--cyan);direction:ltr}
 #t{position:absolute;right:62px;top:1300px;font-weight:900;font-size:150px;line-height:1.15;text-align:right}
 #pill{position:absolute;right:70px;top:1520px;font-weight:800;font-size:54px;padding:10px 40px;border-radius:999px;background:var(--teal);color:#06142a}
-#bar{position:absolute;right:70px;top:1660px;width:180px;height:10px;border-radius:5px;background:linear-gradient(90deg,var(--cyan),var(--teal))}
+#bar{position:absolute;right:70px;top:1665px;width:180px;height:10px;border-radius:5px;background:linear-gradient(90deg,var(--cyan),var(--teal))}
+#nm{position:absolute;right:70px;top:1700px;font-weight:900;font-size:56px}
+#sp{position:absolute;right:70px;top:1785px;font-weight:700;font-size:30px;color:#bcd2e4}
 </style></head><body>
 <img id="img" src="build/frames/0835.jpg"><div id="fade"></div>
-<img id="logo" src="graphics/logo.svg">
-<div id="en"></div><div id="t"></div><div id="pill"></div><div id="bar"></div>
+<img id="logo" src="graphics/brand/brand_mark.png">
+<div id="en"></div><div id="t"></div><div id="pill"></div><div id="bar"></div><div id="nm"></div><div id="sp"></div>
 <script>
 fetch('data/config.json').then(r=>r.json()).then(async c=>{
   document.getElementById('t').textContent=c.title; document.getElementById('en').textContent=c.subtitleEn;
-  document.getElementById('pill').textContent=c.subtitleAr;
+  document.getElementById('pill').textContent=c.subtitleAr; document.getElementById('nm').textContent=c.doctorName||''; document.getElementById('sp').textContent=c.specialty||'';
   await Promise.all([800,900].map(w=>document.fonts.load(w+' 40px Cairo','منظار COLON'))); await document.fonts.ready;
-  await document.getElementById('img').decode(); window.ready=true;});
+  await document.getElementById('img').decode(); await document.getElementById('logo').decode(); window.ready=true;});
 window.seek=async()=>{};
 </script></body></html>

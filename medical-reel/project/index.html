@@ -23,10 +23,13 @@ body{font-family:Cairo,sans-serif;color:#fff;position:relative}
   linear-gradient(180deg,#0B1F3A 0%,#081a31 55%,#06142a 100%)}
 #grid{inset:-40px;background-image:radial-gradient(rgba(63,224,208,.13) 1.6px,transparent 1.7px);background-size:40px 40px}
 /* header */
-#logo{width:104px;height:104px;right:44px;top:132px}
-#title{right:168px;top:118px;text-align:right;white-space:nowrap}
-#title h1{font-weight:900;font-size:78px;line-height:1.05;letter-spacing:0}
-#title .sub{display:flex;gap:18px;align-items:center;justify-content:flex-start;margin-top:6px}
+#logo{width:116px;height:116px;right:44px;top:96px;border-radius:50%}
+#brand{right:178px;top:100px;text-align:right;white-space:nowrap}
+#brand .nm{font-weight:900;font-size:48px;line-height:1.15}
+#brand .sp{font-weight:700;font-size:25px;color:#bcd2e4;margin-top:2px}
+#title{right:44px;top:236px;text-align:right;white-space:nowrap}
+#title h1{font-weight:900;font-size:66px;line-height:1.05;letter-spacing:0;display:inline}
+#title .sub{display:inline-flex;gap:16px;align-items:center;margin-right:24px;vertical-align:middle}
 #title .en{font-family:Cairo;font-weight:800;font-size:25px;letter-spacing:7px;color:var(--cyan);direction:ltr}
 #title .ar{font-weight:700;font-size:33px;color:#cfe3f3}
 #title .bar{width:6px;height:6px;border-radius:3px;background:var(--teal)}
@@ -34,6 +37,7 @@ body{font-family:Cairo,sans-serif;color:#fff;position:relative}
 #panel{left:40px;top:400px;width:1000px;height:920px;border-radius:34px;overflow:hidden;background:#000;
   box-shadow:0 24px 60px rgba(0,0,0,.45),0 0 0 2px rgba(63,224,208,.35)}
 #vid{position:absolute;left:0;top:0;transform-origin:0 0}
+#wm{position:absolute;left:26px;top:26px;width:88px;height:88px;border-radius:50%;box-shadow:0 4px 16px rgba(0,0,0,.45)}
 #progress{left:72px;height:5px;border-radius:3px;background:linear-gradient(90deg,var(--teal),var(--cyan))}
 #progressTrack{left:72px;width:936px;height:5px;border-radius:3px;background:rgba(255,255,255,.12)}
 /* split card */
@@ -67,9 +71,11 @@ body{font-family:Cairo,sans-serif;color:#fff;position:relative}
 .w.hl2{color:var(--orange)}
 /* outro */
 #outro{inset:0}
-#oLogo{width:300px;height:300px;left:390px;top:610px}
-#oName{left:0;width:1080px;top:960px;text-align:center;font-weight:900;font-size:66px}
-#oLine{left:0;width:1080px;top:1000px;text-align:center;font-weight:800;font-size:58px;color:#e9f3fa}
+#oLogo{width:240px;height:240px;left:420px;top:560px;border-radius:50%}
+#oName{left:0;width:1080px;top:850px;text-align:center;font-weight:900;font-size:74px}
+#oEn{left:0;width:1080px;top:955px;text-align:center;font-weight:800;font-size:34px;letter-spacing:9px;color:var(--cyan);direction:ltr}
+#oSp{left:0;width:1080px;top:1010px;text-align:center;font-weight:700;font-size:34px;color:#bcd2e4}
+#oLine{left:0;width:1080px;top:1000px;text-align:center;font-weight:800;font-size:50px;color:#e9f3fa}
 #oHandle{left:50%;top:1110px;transform:translateX(-50%);font-weight:800;font-size:44px;direction:ltr;
   padding:10px 40px;border-radius:999px;background:rgba(20,184,166,.18);border:2px solid var(--cyan);color:#fff;white-space:nowrap}
 </style>
@@ -78,7 +84,7 @@ body{font-family:Cairo,sans-serif;color:#fff;position:relative}
 <div id="bg" class="abs"></div>
 <div id="grid" class="abs"></div>
 
-<div id="panel" class="abs"><img id="vid" alt=""></div>
+<div id="panel" class="abs"><img id="vid" alt=""><img id="wm" alt=""></div>
 <div id="progressTrack" class="abs"></div><div id="progress" class="abs"></div>
 
 <div id="hud" class="abs">
@@ -107,20 +113,15 @@ body{font-family:Cairo,sans-serif;color:#fff;position:relative}
   <div id="cardText"><h2 id="aTitle"></h2><div class="note" id="aNote"></div><div id="chips"></div></div>
 </div>
 
-<img id="logo" class="abs" src="graphics/logo.svg" alt="">
-<div id="title" class="abs"><h1 id="tH"></h1><div class="sub"><span class="ar" id="tAr"></span><span class="bar"></span><span class="en" id="tEn"></span></div></div>
+<img id="logo" class="abs" src="graphics/brand/brand_mark.png" alt="">
+<div id="brand" class="abs"><div class="nm" id="bNm"></div><div class="sp" id="bSp"></div></div>
+<div id="title" class="abs"><h1 id="tH"></h1><div class="sub"><span class="bar"></span><span class="en" id="tEn"></span></div><div class="ar" id="tAr" style="margin-top:2px"></div></div>
 
 <div id="caps" class="abs"><div id="capLine"></div></div>
 
 <div id="outro" class="abs">
-  <svg id="oLogo" class="abs" viewBox="0 0 512 512">
-    <defs><linearGradient id="obg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#12305A"/><stop offset="1" stop-color="#0B1F3A"/></linearGradient></defs>
-    <rect x="16" y="16" width="480" height="480" rx="116" fill="url(#obg)" stroke="rgba(63,224,208,.45)" stroke-width="4"/>
-    <path id="oCross" fill="#fff" d="M222 160 h68 a14 14 0 0 1 14 14 v54 h54 a14 14 0 0 1 14 14 v68 a14 14 0 0 1 -14 14 h-54 v54 a14 14 0 0 1 -14 14 h-68 a14 14 0 0 1 -14 -14 v-54 h-54 a14 14 0 0 1 -14 -14 v-68 a14 14 0 0 1 14 -14 h54 v-54 a14 14 0 0 1 14 -14 z" style="transform-origin:256px 256px"/>
-    <path id="oColon" fill="none" stroke="#3FE0D0" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" d="M150 398 C116 398 106 368 110 340 L110 168 C110 124 140 104 178 114 C222 128 290 128 334 112 C372 98 404 116 402 160 L402 330 C402 382 362 398 330 388 C300 378 274 390 274 418 L274 440"/>
-    <circle id="oDot" cx="274" cy="452" r="15" fill="#fff"/>
-  </svg>
-  <div id="oName" class="abs"></div>
+  <img id="oLogo" class="abs" src="graphics/brand/brand_mark.png" alt="">
+  <div id="oName" class="abs"></div><div id="oEn" class="abs"></div><div id="oSp" class="abs"></div>
   <div id="oLine" class="abs"></div>
   <div id="oHandle" class="abs"></div>
 </div>
@@ -146,10 +147,10 @@ async function init(){
   const j=p=>fetch(p).then(r=>r.json());
   [CFG,TL,TRK,CAPS]=await Promise.all([j('data/config.json'),j('data/timeline.json'),j('data/track.json'),j('data/captions.json')]);
   frameCount=TRK.mon.length; vidDur=TL.videoDur;
-  $('tH').textContent=CFG.title; $('tEn').textContent=CFG.subtitleEn; $('tAr').textContent=CFG.subtitleAr;
+  $('tH').textContent=CFG.title; $('bNm').textContent=CFG.doctorName||''; $('bSp').textContent=CFG.specialty||''; if(CFG.logo) $('logo').src=CFG.logo; $('wm').src=CFG.logo||'graphics/logo.svg'; $('tEn').textContent=CFG.subtitleEn; $('tAr').textContent=CFG.subtitleAr;
   $('aTitle').textContent=CFG.anatomyTitle; $('aNote').textContent=CFG.anatomyNote;
   $('hudLbl').textContent='● '+CFG.hudLabel; $('magLbl').textContent=CFG.magnifierLabel;
-  $('oName').textContent=CFG.doctorName||''; $('oLine').textContent=CFG.outroLine; $('oHandle').textContent=CFG.handle;
+  $('oName').textContent=CFG.doctorName||''; $('oEn').textContent=CFG.doctorNameEn||''; $('oSp').textContent=CFG.specialty||''; if(CFG.logo) $('oLogo').src=CFG.logo; $('oLine').textContent=CFG.outroLine; $('oHandle').textContent=CFG.handle;
   $('chips').innerHTML=ROUTE.map((s,i)=>`<span class="chip" id="ch${i}">${s.n}</span>`).join('');
   prepCaptions();
   const weights=[500,700,800,900]; await Promise.all(weights.map(w=>document.fonts.load(`${w} 40px Cairo`,'منظار القولون COLONOSCOPY @')));
@@ -195,7 +196,7 @@ async function seek(t){
   // ---- header (logo + title) ----
   const lg=spring(t-0.1,10,.5), tt=eOut((t-.3)/.5), hFade=out?1-eOut(ou/.4):1;
   $('logo').style.transform=`scale(${.4+.6*lg}) rotate(${(1-lg)*-25}deg)`; $('logo').style.opacity=clamp(lg*1.5)*hFade;
-  $('title').style.opacity=tt*hFade; $('title').style.transform=`translateX(${(1-tt)*60}px)`;
+  $('title').style.opacity=tt*hFade; const bt=eOut((t-.18)/.5); $('brand').style.opacity=bt*hFade; $('brand').style.transform=`translateX(${(1-bt)*50}px)`; $('title').style.transform=`translateX(${(1-tt)*60}px)`;
   $('title').style.clipPath=`inset(0 0 0 ${(1-tt)*100}%)`;
 
   // ---- panel geometry ----
@@ -208,6 +209,8 @@ async function seek(t){
   panel.style.transform=`scale(${pScale})`; panel.style.transformOrigin='50% 50%';
   panel.style.clipPath=`inset(0 0 ${(1-intro)*100}% 0 round 34px)`;
   panel.style.opacity=out?1-eOut(ou/.4):1;
+
+  {const w=spring(t-.7,10,.6); $('wm').style.opacity=.92*clamp((t-.7)*4); $('wm').style.transform=`scale(${.5+.5*w})`;}
 
   // ---- camera: punch-ins + gentle drift, focused on the tracked monitor ----
   const m=monAt(fi), monValid=t<21.4;
@@ -262,7 +265,7 @@ async function seek(t){
   const bs=[[0,0,'Left','Top'],[1,0,'Right','Top'],[0,1,'Left','Bottom'],[1,1,'Right','Bottom']];
   bs.forEach(([ix,iy,sx,sy],k)=>{const b=$('b'+k); b.style.left=(ix?1000-ins-74:ins)+'px'; b.style.top=(iy?pH-ins-74:ins)+'px';
     b.style.borderWidth='0'; b.style['border'+sx+'Width']='5px'; b.style['border'+sy+'Width']='5px';
-    b.style['border'+sy+sx+'Radius']='22px'; b.style.opacity=hu*.9;});
+    b.style['border'+sy+sx+'Radius']='22px'; b.style.opacity=k===0?0:hu*.9;});
   const hl=$('hudLbl'); hl.style.opacity=clamp((hu-.2)*1.6); hl.style.right='40px'; hl.style.top='36px';
   hl.style.transform=`translateY(${(1-eOut((t-H.t0-.2)/.5))*-20}px)`;
   $('hud').style.height=pH+'px'; $('hud').style.transform=panel.style.transform; $('hud').style.transformOrigin='50% 50%';
@@ -283,12 +286,12 @@ async function seek(t){
   // ---- outro ----
   const og=$('outro'); og.style.opacity=out?1:0;
   if(out){
-    const s1=spring((ou-.2)*1.0,9,.55); $('oLogo').style.transform=`scale(${.3+.7*s1})`; $('oLogo').style.opacity=clamp((ou-.2)*4);
-    const oc=$('oColon'), OL=1500; oc.style.strokeDasharray=`${OL} ${OL}`; oc.style.strokeDashoffset=OL*(1-eOut((ou-.35)/.9));
-    $('oDot').style.opacity=clamp((ou-1.1)*4); $('oCross').style.transform=`scale(${spring((ou-.3),10,.5)})`;
-    const nm=!!CFG.doctorName; $('oName').style.opacity=nm?eOut((ou-.6)/.4):0;
-    $('oLine').style.top=(nm?1050:990)+'px'; $('oHandle').style.top=(nm?1160:1100)+'px';
-    const l1=eOut((ou-.75)/.45), l2=eOut((ou-.95)/.45);
+    const s1=spring((ou-.15)*1.0,9,.55); $('oLogo').style.transform=`scale(${.3+.7*s1}) rotate(${(1-s1)*-20}deg)`; $('oLogo').style.opacity=clamp((ou-.15)*4);
+    const nm=!!CFG.doctorName; const n1=eOut((ou-.45)/.4), n2=eOut((ou-.6)/.4), n3=eOut((ou-.75)/.4);
+    $('oName').style.opacity=nm?n1:0; $('oName').style.transform=`translateY(${(1-n1)*24}px)`;
+    $('oEn').style.opacity=nm?n2:0; $('oSp').style.opacity=nm?n3:0;
+    $('oLine').style.top=(nm?1100:990)+'px'; $('oHandle').style.top=(nm?1200:1100)+'px';
+    const l1=eOut((ou-.95)/.45), l2=eOut((ou-1.1)/.45);
     $('oLine').style.opacity=l1; $('oLine').style.transform=`translateY(${(1-l1)*24}px)`;
     $('oHandle').style.opacity=l2; $('oHandle').style.transform=`translateX(-50%) translateY(${(1-l2)*24}px)`;
   }
