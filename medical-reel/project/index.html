@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>Medical Reel</title>
+<style>
+@font-face{font-family:Cairo;font-weight:500;src:url(fonts/cairo-arabic-500-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E}
+@font-face{font-family:Cairo;font-weight:700;src:url(fonts/cairo-arabic-700-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E}
+@font-face{font-family:Cairo;font-weight:800;src:url(fonts/cairo-arabic-800-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E}
+@font-face{font-family:Cairo;font-weight:900;src:url(fonts/cairo-arabic-900-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E}
+@font-face{font-family:Cairo;font-weight:500;src:url(fonts/cairo-latin-500-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Cairo;font-weight:700;src:url(fonts/cairo-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Cairo;font-weight:800;src:url(fonts/cairo-latin-800-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Cairo;font-weight:900;src:url(fonts/cairo-latin-900-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+:root{--navy:#0B1F3A;--navy2:#071629;--teal:#14B8A6;--cyan:#3FE0D0;--white:#fff;--orange:#FF9F45}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--navy2)}
+body{font-family:Cairo,sans-serif;color:#fff;position:relative}
+.abs{position:absolute}
+#bg{inset:0;background:
+  radial-gradient(900px 700px at 85% 8%,rgba(20,184,166,.20),transparent 70%),
+  radial-gradient(1000px 900px at 10% 95%,rgba(18,48,90,.9),transparent 70%),
+  linear-gradient(180deg,#0B1F3A 0%,#081a31 55%,#06142a 100%)}
+#grid{inset:-40px;background-image:radial-gradient(rgba(63,224,208,.13) 1.6px,transparent 1.7px);background-size:40px 40px}
+/* header */
+#logo{width:104px;height:104px;right:44px;top:132px}
+#title{right:168px;top:118px;text-align:right;white-space:nowrap}
+#title h1{font-weight:900;font-size:78px;line-height:1.05;letter-spacing:0}
+#title .sub{display:flex;gap:18px;align-items:center;justify-content:flex-start;margin-top:6px}
+#title .en{font-family:Cairo;font-weight:800;font-size:25px;letter-spacing:7px;color:var(--cyan);direction:ltr}
+#title .ar{font-weight:700;font-size:33px;color:#cfe3f3}
+#title .bar{width:6px;height:6px;border-radius:3px;background:var(--teal)}
+/* panel */
+#panel{left:40px;top:400px;width:1000px;height:920px;border-radius:34px;overflow:hidden;background:#000;
+  box-shadow:0 24px 60px rgba(0,0,0,.45),0 0 0 2px rgba(63,224,208,.35)}
+#vid{position:absolute;left:0;top:0;transform-origin:0 0}
+#progress{left:72px;height:5px;border-radius:3px;background:linear-gradient(90deg,var(--teal),var(--cyan))}
+#progressTrack{left:72px;width:936px;height:5px;border-radius:3px;background:rgba(255,255,255,.12)}
+/* split card */
+#card{left:40px;width:1000px;height:330px;border-radius:30px;overflow:hidden;
+  background:linear-gradient(135deg,rgba(18,48,90,.96),rgba(11,31,58,.98));box-shadow:0 0 0 2px rgba(63,224,208,.3)}
+#card svg{position:absolute;left:40px;top:12px;width:300px;height:300px;direction:ltr}
+#cardText{position:absolute;right:40px;top:30px;width:570px;text-align:right}
+#cardText h2{font-weight:900;font-size:44px;line-height:1.2}
+#cardText .note{font-weight:700;font-size:28px;color:var(--cyan);margin-top:4px}
+#chips{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px;justify-content:flex-start}
+.chip{font-weight:700;font-size:27px;padding:6px 20px;border-radius:999px;background:rgba(255,255,255,.08);color:#9fb6cc;border:2px solid transparent}
+.chip.on{background:rgba(20,184,166,.22);color:#fff;border-color:var(--cyan)}
+.chip.done{color:#d9e7f2}
+/* magnifier */
+#mag{width:340px;height:340px;border-radius:50%;overflow:hidden;background:#000;
+  box-shadow:0 0 0 6px rgba(11,31,58,.95),0 0 0 9px var(--cyan),0 18px 40px rgba(0,0,0,.5)}
+#magImg{position:absolute;left:0;top:0;transform-origin:0 0}
+#magLbl,#hudLbl{font-weight:800;font-size:28px;padding:6px 22px;border-radius:999px;background:rgba(11,31,58,.92);
+  border:2px solid var(--cyan);white-space:nowrap}
+#callout{left:0;top:0;width:1080px;height:1920px;overflow:visible}
+/* HUD */
+#hud{left:40px;top:400px;width:1000px;height:920px;pointer-events:none}
+.br{position:absolute;width:74px;height:74px;border-color:var(--cyan);border-style:solid;border-width:0}
+/* captions */
+#caps{left:60px;width:960px;top:1360px;height:220px;display:flex;align-items:center;justify-content:center}
+#capLine{display:flex;flex-wrap:wrap;justify-content:center;gap:0 16px;direction:rtl;max-width:960px;
+  padding:14px 34px 20px;border-radius:26px;background:rgba(7,22,41,.72);box-shadow:0 0 0 2px rgba(63,224,208,.18)}
+.w{font-weight:800;font-size:62px;line-height:1.35;color:#fff;display:inline-block;
+  text-shadow:0 3px 0 rgba(0,0,0,.35)}
+.w.hl{color:var(--cyan)}
+.w.hl2{color:var(--orange)}
+/* outro */
+#outro{inset:0}
+#oLogo{width:300px;height:300px;left:390px;top:610px}
+#oName{left:0;width:1080px;top:960px;text-align:center;font-weight:900;font-size:66px}
+#oLine{left:0;width:1080px;top:1000px;text-align:center;font-weight:800;font-size:58px;color:#e9f3fa}
+#oHandle{left:50%;top:1110px;transform:translateX(-50%);font-weight:800;font-size:44px;direction:ltr;
+  padding:10px 40px;border-radius:999px;background:rgba(20,184,166,.18);border:2px solid var(--cyan);color:#fff;white-space:nowrap}
+</style>
+</head>
+<body>
+<div id="bg" class="abs"></div>
+<div id="grid" class="abs"></div>
+
+<div id="panel" class="abs"><img id="vid" alt=""></div>
+<div id="progressTrack" class="abs"></div><div id="progress" class="abs"></div>
+
+<div id="hud" class="abs">
+  <div class="br" id="b0"></div><div class="br" id="b1"></div><div class="br" id="b2"></div><div class="br" id="b3"></div>
+  <div id="hudLbl" class="abs"></div>
+</div>
+
+<svg id="callout" class="abs"><line id="cLine" stroke="#3FE0D0" stroke-width="4" stroke-linecap="round"/>
+  <circle id="cDot" r="10" fill="#3FE0D0"/><circle id="cRing" r="22" fill="none" stroke="#3FE0D0" stroke-width="3"/></svg>
+<div id="mag" class="abs"><img id="magImg" alt=""></div>
+<div id="magLbl" class="abs"></div>
+
+<div id="card" class="abs">
+  <svg viewBox="0 0 400 400">
+    <defs><clipPath id="cc"><rect width="400" height="400"/></clipPath></defs>
+    <!-- simplified anterior view of the large intestine (patient's right on viewer's left) -->
+    <path id="appx" d="M96 322 C96 338 104 352 116 356" fill="none" stroke="#d9786b" stroke-width="9" stroke-linecap="round"/>
+    <path id="colTube" d="M104 306 C80 308 70 288 74 266 L78 124 C80 88 112 76 142 92 C190 128 244 128 284 88 C308 62 338 72 332 108 L326 250 C322 290 290 292 262 282 C228 272 206 300 214 326 L214 374"
+      fill="none" stroke="#e8846f" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="colFold" d="M104 306 C80 308 70 288 74 266 L78 124 C80 88 112 76 142 92 C190 128 244 128 284 88 C308 62 338 72 332 108 L326 250 C322 290 290 292 262 282 C228 272 206 300 214 326 L214 374"
+      fill="none" stroke="#b9554a" stroke-width="40" stroke-dasharray="3 17" stroke-linejoin="round" opacity=".7"/>
+    <path id="colHi" d="M104 306 C80 308 70 288 74 266 L78 124 C80 88 112 76 142 92 C190 128 244 128 284 88 C308 62 338 72 332 108 L326 250 C322 290 290 292 262 282 C228 272 206 300 214 326 L214 374"
+      fill="none" stroke="#3FE0D0" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle id="scope" r="13" fill="#fff" stroke="#3FE0D0" stroke-width="5"/>
+  </svg>
+  <div id="cardText"><h2 id="aTitle"></h2><div class="note" id="aNote"></div><div id="chips"></div></div>
+</div>
+
+<img id="logo" class="abs" src="graphics/logo.svg" alt="">
+<div id="title" class="abs"><h1 id="tH"></h1><div class="sub"><span class="ar" id="tAr"></span><span class="bar"></span><span class="en" id="tEn"></span></div></div>
+
+<div id="caps" class="abs"><div id="capLine"></div></div>
+
+<div id="outro" class="abs">
+  <svg id="oLogo" class="abs" viewBox="0 0 512 512">
+    <defs><linearGradient id="obg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#12305A"/><stop offset="1" stop-color="#0B1F3A"/></linearGradient></defs>
+    <rect x="16" y="16" width="480" height="480" rx="116" fill="url(#obg)" stroke="rgba(63,224,208,.45)" stroke-width="4"/>
+    <path id="oCross" fill="#fff" d="M222 160 h68 a14 14 0 0 1 14 14 v54 h54 a14 14 0 0 1 14 14 v68 a14 14 0 0 1 -14 14 h-54 v54 a14 14 0 0 1 -14 14 h-68 a14 14 0 0 1 -14 -14 v-54 h-54 a14 14 0 0 1 -14 -14 v-68 a14 14 0 0 1 14 -14 h54 v-54 a14 14 0 0 1 14 -14 z" style="transform-origin:256px 256px"/>
+    <path id="oColon" fill="none" stroke="#3FE0D0" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" d="M150 398 C116 398 106 368 110 340 L110 168 C110 124 140 104 178 114 C222 128 290 128 334 112 C372 98 404 116 402 160 L402 330 C402 382 362 398 330 388 C300 378 274 390 274 418 L274 440"/>
+    <circle id="oDot" cx="274" cy="452" r="15" fill="#fff"/>
+  </svg>
+  <div id="oName" class="abs"></div>
+  <div id="oLine" class="abs"></div>
+  <div id="oHandle" class="abs"></div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const lerp=(a,b,u)=>a+(b-a)*u;
+const eOut=u=>1-Math.pow(1-clamp(u),3);
+const eInOut=u=>{u=clamp(u);return u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2};
+// closed-form damped spring 0->1
+const spring=(u,k=9,z=.55)=>{if(u<=0)return 0;const w=k,d=z*w,wd=w*Math.sqrt(1-z*z);return 1-Math.exp(-d*u)*(Math.cos(wd*u)+d/wd*Math.sin(wd*u))};
+// window envelope: rises over `a` after t0, falls over `b` before t1
+const env=(t,t0,t1,a=.4,b=.4)=>Math.min(eOut((t-t0)/a),eOut((t1-t)/b));
+
+let CFG,TL,TRK,CAPS,frameCount,vidDur;
+const SEG=[ // fraction of tube length measured from the cecum end
+  {n:'الأعور',a:0,b:.07},{n:'الصاعد',a:.07,b:.27},{n:'المستعرض',a:.27,b:.6},
+  {n:'النازل',a:.6,b:.79},{n:'السيني',a:.79,b:.93},{n:'المستقيم',a:.93,b:1.01}];
+const ROUTE=[...SEG].reverse(); // scope travels rectum -> cecum
+
+async function init(){
+  const j=p=>fetch(p).then(r=>r.json());
+  [CFG,TL,TRK,CAPS]=await Promise.all([j('data/config.json'),j('data/timeline.json'),j('data/track.json'),j('data/captions.json')]);
+  frameCount=TRK.mon.length; vidDur=TL.videoDur;
+  $('tH').textContent=CFG.title; $('tEn').textContent=CFG.subtitleEn; $('tAr').textContent=CFG.subtitleAr;
+  $('aTitle').textContent=CFG.anatomyTitle; $('aNote').textContent=CFG.anatomyNote;
+  $('hudLbl').textContent='● '+CFG.hudLabel; $('magLbl').textContent=CFG.magnifierLabel;
+  $('oName').textContent=CFG.doctorName||''; $('oLine').textContent=CFG.outroLine; $('oHandle').textContent=CFG.handle;
+  $('chips').innerHTML=ROUTE.map((s,i)=>`<span class="chip" id="ch${i}">${s.n}</span>`).join('');
+  prepCaptions();
+  const weights=[500,700,800,900]; await Promise.all(weights.map(w=>document.fonts.load(`${w} 40px Cairo`,'منظار القولون COLONOSCOPY @')));
+  await document.fonts.ready;
+  window.TUBE_LEN=$('colTube').getTotalLength();
+  window.ready=true;
+}
+
+function prepCaptions(){
+  // Each caption: {start,end,text,hl:[terms],words?:[{w,s,e}]}. Without word timings, words are spread by length.
+  for(const c of CAPS){
+    if(!c.words){
+      const ws=c.text.trim().split(/\s+/); const tot=ws.reduce((a,w)=>a+w.length+1,0); let acc=c.start;
+      c.words=ws.map(w=>{const d=(c.end-c.start)*(w.length+1)/tot; const o={w,s:acc,e:acc+d}; acc+=d; return o});
+    }
+    const hl=c.hl||[], hl2=c.hl2||[];
+    c.words.forEach(o=>{const bare=o.w.replace(/[،؟.!:,]/g,''); o.cls=hl.some(h=>bare.includes(h))?'hl':hl2.some(h=>bare.includes(h))?'hl2':''});
+  }
+}
+
+function monAt(i){ // normalized monitor bbox centre + size for frame i
+  const r=TRK.mon[Math.min(i,frameCount-1)]; const [w,h]=TRK.src;
+  return {cx:(r[0]+r[2])/2/w, cy:(r[1]+r[3])/2/h, w:(r[2]-r[0])/w, h:(r[3]-r[1])/h, r};
+}
+
+function placeImg(img,W,H,z,fx,fy){
+  const [sw,sh]=TRK.src; const s=Math.max(W/sw,H/sh)*z; const iw=sw*s, ih=sh*s;
+  let x=W/2-fx*iw, y=H/2-fy*ih; x=clamp(x,W-iw,0); y=clamp(y,H-ih,0);
+  img.style.width=iw+'px'; img.style.height=ih+'px'; img.style.transform=`translate(${x}px,${y}px)`;
+  return {x,y,iw,ih};
+}
+
+let lastSrc='';
+async function seek(t){
+  const fps=TL.fps, out=t>=vidDur, fi=Math.min(frameCount-1,Math.floor(Math.min(t,vidDur-1e-3)*fps));
+  const src=`build/frames/${String(fi+1).padStart(4,'0')}.jpg`;
+  const vid=$('vid'), mimg=$('magImg');
+  if(src!==lastSrc){vid.src=src; mimg.src=src; lastSrc=src; await Promise.all([vid.decode(),mimg.decode()]).catch(()=>{});}
+
+  $('grid').style.transform=`translate(${-(t*6)%40}px,${-(t*10)%40}px)`;
+  const ou=out?t-vidDur:0;
+
+  // ---- header (logo + title) ----
+  const lg=spring(t-0.1,10,.5), tt=eOut((t-.3)/.5), hFade=out?1-eOut(ou/.4):1;
+  $('logo').style.transform=`scale(${.4+.6*lg}) rotate(${(1-lg)*-25}deg)`; $('logo').style.opacity=clamp(lg*1.5)*hFade;
+  $('title').style.opacity=tt*hFade; $('title').style.transform=`translateX(${(1-tt)*60}px)`;
+  $('title').style.clipPath=`inset(0 0 0 ${(1-tt)*100}%)`;
+
+  // ---- panel geometry ----
+  const S=TL.split, sp=env(t,S.t0,S.t1,.55,.55);
+  let pH=lerp(920,560,eInOut(sp)), pY=400;
+  const intro=eOut(t/.6);
+  const pScale=lerp(.92,1,intro)*(out?lerp(1,.88,eOut(ou/.45)):1);
+  const panel=$('panel');
+  panel.style.height=pH+'px';
+  panel.style.transform=`scale(${pScale})`; panel.style.transformOrigin='50% 50%';
+  panel.style.clipPath=`inset(0 0 ${(1-intro)*100}% 0 round 34px)`;
+  panel.style.opacity=out?1-eOut(ou/.4):1;
+
+  // ---- camera: punch-ins + gentle drift, focused on the tracked monitor ----
+  const m=monAt(fi), monValid=t<21.4;
+  let zAmt=0; for(const zz of TL.zooms){zAmt=Math.max(zAmt,env(t,zz.t0,zz.t1,.35,.55)*(zz.z-1));}
+  const z=1.02+.015*Math.sin(t*2*Math.PI/14)+zAmt;
+  const focusW=monValid?Math.max(zAmt>0?1:0,sp)*Math.max(clamp(zAmt*12),sp):0;
+  const fx=lerp(.5,m.cx,focusW), fy=lerp(.5,m.cy,focusW);
+  const pl=placeImg(vid,1000,pH,z,fx,fy);
+
+  // progress bar under panel
+  const pb=pY+pH+18; $('progressTrack').style.top=pb+'px'; $('progress').style.top=pb+'px';
+  $('progress').style.width=(936*clamp(t/vidDur))+'px';
+  const pbo=out?0:intro; $('progressTrack').style.opacity=pbo; $('progress').style.opacity=pbo;
+
+  // ---- split-screen anatomy card ----
+  const card=$('card'); card.style.top=(pY+pH+40)+'px'; card.style.height='326px';
+  card.style.opacity=clamp(sp*1.6); card.style.transform=`translateY(${(1-eOut(sp))*40}px)`;
+  const cu=t-S.t0;
+  const draw=eOut((cu-.3)/.9), L=window.TUBE_LEN||800;
+  for(const id of ['colTube','colFold']){const p=$(id); p.style.strokeDasharray=id==='colFold'?'3 17':`${L} ${L}`; p.style.opacity=id==='colFold'?.7*draw:1;}
+  $('colTube').style.strokeDashoffset=L*(1-draw);
+  $('appx').style.opacity=draw;
+  const travel=eInOut((cu-1.3)/2.8); // scope progress along route (0 at rectum)
+  const frac=1-travel;
+  const hi=$('colHi'); hi.style.strokeDasharray=`${L} ${L}`; hi.style.strokeDashoffset=-L*frac; hi.style.opacity=cu>1.3?1:0;
+  const pt=$('colTube').getPointAtLength(L*frac); $('scope').setAttribute('cx',pt.x); $('scope').setAttribute('cy',pt.y);
+  $('scope').style.opacity=clamp((cu-1.1)/.3);
+  ROUTE.forEach((s,i)=>{const c=$('ch'+i); const on=cu>1.25&&frac<=s.b&&frac>s.a; const done=cu>1.25&&frac<=s.a;
+    c.className='chip'+(on?' on':done?' done':''); c.style.opacity=clamp((cu-.6-i*.08)/.3);});
+
+  // ---- magnifier callout on the monitor image ----
+  const M=TL.magnifier, mg=env(t,M.t0,M.t1,.45,.4);
+  const mag=$('mag'), D=340, mcx=850, mcy=1130;
+  mag.style.left=(mcx-D/2)+'px'; mag.style.top=(mcy-D/2)+'px';
+  mag.style.opacity=clamp(mg*1.4); mag.style.transform=`scale(${.6+.4*spring((t-M.t0)/1.0*1.1,9,.6)*(mg>0?1:0)})`;
+  {const [sw,sh]=TRK.src; const r=m.r; const mw=r[2]-r[0], mh=r[3]-r[1];
+   const side=Math.min(mw*.66,mh*.95); const cx=r[0]+mw*.36, cy=r[1]+mh*.5;
+   const s=D/side; mimg.style.width=sw*s+'px'; mimg.style.height=sh*s+'px';
+   mimg.style.transform=`translate(${D/2-cx*s}px,${D/2-cy*s}px)`;
+   // callout from monitor image (panel coords -> page coords)
+   const px=40+pl.x+cx/sw*pl.iw, py=pY+pl.y+cy/sh*pl.ih;
+   const lu=eOut((t-M.t0-.15)/.5)*mg;
+   const ex=lerp(px,mcx-D/2*.72,lu), ey=lerp(py,mcy-D/2*.72,lu);
+   $('cLine').setAttribute('x1',px);$('cLine').setAttribute('y1',py);$('cLine').setAttribute('x2',ex);$('cLine').setAttribute('y2',ey);
+   for(const id of ['cDot','cRing']){$(id).setAttribute('cx',px);$(id).setAttribute('cy',py);}
+   $('cRing').setAttribute('r',22+6*Math.sin(t*4)); $('callout').style.opacity=clamp(mg*1.4);}
+  const ml=$('magLbl'); ml.style.opacity=clamp((mg-.3)*2);
+  ml.style.left=(mcx-ml.offsetWidth/2)+'px'; ml.style.top=(mcy+D/2+18)+'px';
+
+  // ---- HUD on the close endoscopic view ----
+  const H=TL.hud, hu=env(t,H.t0,H.t1,.5,.5), ins=lerp(70,26,eOut((t-H.t0)/.6));
+  const bs=[[0,0,'Left','Top'],[1,0,'Right','Top'],[0,1,'Left','Bottom'],[1,1,'Right','Bottom']];
+  bs.forEach(([ix,iy,sx,sy],k)=>{const b=$('b'+k); b.style.left=(ix?1000-ins-74:ins)+'px'; b.style.top=(iy?pH-ins-74:ins)+'px';
+    b.style.borderWidth='0'; b.style['border'+sx+'Width']='5px'; b.style['border'+sy+'Width']='5px';
+    b.style['border'+sy+sx+'Radius']='22px'; b.style.opacity=hu*.9;});
+  const hl=$('hudLbl'); hl.style.opacity=clamp((hu-.2)*1.6); hl.style.right='40px'; hl.style.top='36px';
+  hl.style.transform=`translateY(${(1-eOut((t-H.t0-.2)/.5))*-20}px)`;
+  $('hud').style.height=pH+'px'; $('hud').style.transform=panel.style.transform; $('hud').style.transformOrigin='50% 50%';
+
+  // ---- captions ----
+  const cl=$('capLine'); let cap=null;
+  for(const c of CAPS){ if(t>=c.start-0.05&&t<c.end+0.12&&!out){cap=c;break;} }
+  if(!cap){cl.style.opacity=0;}
+  else{
+    const key=cap.start+'|'+cap.text; if(cl.dataset.key!==key){cl.dataset.key=key;
+      cl.innerHTML=cap.words.map((o,i)=>`<span class="w ${o.cls}" data-i="${i}">${o.w}</span>`).join('');}
+    const a=eOut((t-cap.start+.05)/.2); cl.style.opacity=Math.min(a,clamp((cap.end+.12-t)/.12));
+    cl.style.transform=`translateY(${(1-a)*16}px) scale(${.94+.06*a})`;
+    [...cl.children].forEach((sp_,i)=>{const o=cap.words[i]; const said=t>=o.s-.03; const cur=said&&t<o.e;
+      sp_.style.opacity=said?1:.5; sp_.style.transform=`scale(${cur?1.06:1})`;});
+  }
+
+  // ---- outro ----
+  const og=$('outro'); og.style.opacity=out?1:0;
+  if(out){
+    const s1=spring((ou-.2)*1.0,9,.55); $('oLogo').style.transform=`scale(${.3+.7*s1})`; $('oLogo').style.opacity=clamp((ou-.2)*4);
+    const oc=$('oColon'), OL=1500; oc.style.strokeDasharray=`${OL} ${OL}`; oc.style.strokeDashoffset=OL*(1-eOut((ou-.35)/.9));
+    $('oDot').style.opacity=clamp((ou-1.1)*4); $('oCross').style.transform=`scale(${spring((ou-.3),10,.5)})`;
+    const nm=!!CFG.doctorName; $('oName').style.opacity=nm?eOut((ou-.6)/.4):0;
+    $('oLine').style.top=(nm?1050:990)+'px'; $('oHandle').style.top=(nm?1160:1100)+'px';
+    const l1=eOut((ou-.75)/.45), l2=eOut((ou-.95)/.45);
+    $('oLine').style.opacity=l1; $('oLine').style.transform=`translateY(${(1-l1)*24}px)`;
+    $('oHandle').style.opacity=l2; $('oHandle').style.transform=`translateX(-50%) translateY(${(1-l2)*24}px)`;
+  }
+}
+window.seek=seek; init();
+</script>
+</body>
+</html>

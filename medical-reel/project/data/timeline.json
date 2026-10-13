@@ -1,0 +1,27 @@
+{
+  "fps": 30,
+  "videoDur": 31.1,
+  "outroDur": 2.9,
+  "zooms": [
+    {"t0": 2.85, "t1": 4.75, "z": 1.15},
+    {"t0": 12.85, "t1": 15.3, "z": 1.12},
+    {"t0": 19.75, "t1": 21.3, "z": 1.12}
+  ],
+  "split":     {"t0": 7.9,  "t1": 12.6},
+  "magnifier": {"t0": 15.9, "t1": 19.6},
+  "hud":       {"t0": 22.2, "t1": 30.9},
+  "sfx": [
+    {"t": 0.0,   "type": "whoosh", "gain": 0.5},
+    {"t": 0.55,  "type": "chime",  "gain": 0.35},
+    {"t": 2.85,  "type": "swish",  "gain": 0.35},
+    {"t": 7.85,  "type": "whoosh", "gain": 0.4},
+    {"t": 8.5,   "type": "tick",   "gain": 0.3},
+    {"t": 12.55, "type": "swish",  "gain": 0.3},
+    {"t": 12.85, "type": "swish",  "gain": 0.3},
+    {"t": 15.9,  "type": "pop",    "gain": 0.35},
+    {"t": 19.6,  "type": "swish",  "gain": 0.25},
+    {"t": 22.2,  "type": "tick",   "gain": 0.3},
+    {"t": 31.1,  "type": "whoosh", "gain": 0.5},
+    {"t": 31.6,  "type": "chime",  "gain": 0.45}
+  ]
+}

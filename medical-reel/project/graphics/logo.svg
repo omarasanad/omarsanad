@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Generic reusable medical mark: a clean cross framed by a single continuous line
+       that traces the large-intestine (colon) frame, ending at a small dot.
+       Colours: deep navy #0B1F3A, medical teal #14B8A6, white #FFFFFF. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#12305A"/>
+      <stop offset="1" stop-color="#0B1F3A"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#14B8A6"/>
+      <stop offset="1" stop-color="#3FE0D0"/>
+    </linearGradient>
+  </defs>
+  <rect id="badge" x="16" y="16" width="480" height="480" rx="116" fill="url(#bg)"/>
+  <!-- cross -->
+  <path id="cross" fill="#FFFFFF"
+        d="M222 160 h68 a14 14 0 0 1 14 14 v54 h54 a14 14 0 0 1 14 14 v68 a14 14 0 0 1 -14 14 h-54 v54 a14 14 0 0 1 -14 14 h-68 a14 14 0 0 1 -14 -14 v-54 h-54 a14 14 0 0 1 -14 -14 v-68 a14 14 0 0 1 14 -14 h54 v-54 a14 14 0 0 1 14 -14 z"/>
+  <!-- colon-frame line (cecum -> ascending -> transverse -> descending -> sigmoid -> rectum) -->
+  <path id="colon" fill="none" stroke="url(#line)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"
+        d="M150 398 C116 398 106 368 110 340 L110 168 C110 124 140 104 178 114 C222 128 290 128 334 112 C372 98 404 116 402 160 L402 330 C402 382 362 398 330 388 C300 378 274 390 274 418 L274 440"/>
+  <circle id="dot" cx="274" cy="452" r="15" fill="#FFFFFF"/>
+</svg>

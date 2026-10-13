@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>Medical Reel</title>
+<style>
+@font-face{font-family:Cairo;font-weight:500;src:url(fonts/cairo-arabic-500-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E}
+@font-face{font-family:Cairo;font-weight:700;src:url(fonts/cairo-arabic-700-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E}
+@font-face{font-family:Cairo;font-weight:800;src:url(fonts/cairo-arabic-800-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E}
+@font-face{font-family:Cairo;font-weight:900;src:url(fonts/cairo-arabic-900-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E}
+@font-face{font-family:Cairo;font-weight:500;src:url(fonts/cairo-latin-500-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Cairo;font-weight:700;src:url(fonts/cairo-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Cairo;font-weight:800;src:url(fonts/cairo-latin-800-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Cairo;font-weight:900;src:url(fonts/cairo-latin-900-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+
+:root{--navy:#0B1F3A;--teal:#14B8A6;--cyan:#3FE0D0}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#06142a;font-family:Cairo,sans-serif;color:#fff}
+#img{position:absolute;left:0;top:0;width:1080px;height:1330px;object-fit:cover;object-position:50% 75%;filter:saturate(1.05) contrast(1.05)}
+#fade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,20,42,.55) 0%,rgba(6,20,42,0) 16%,rgba(6,20,42,0) 45%,rgba(6,20,42,.8) 60%,#06142a 69%)}
+#logo{position:absolute;right:56px;top:120px;width:150px;height:150px}
+#en{position:absolute;right:70px;top:1250px;font-weight:800;font-size:40px;letter-spacing:12px;color:var(--cyan);direction:ltr}
+#t{position:absolute;right:62px;top:1300px;font-weight:900;font-size:150px;line-height:1.15;text-align:right}
+#pill{position:absolute;right:70px;top:1520px;font-weight:800;font-size:54px;padding:10px 40px;border-radius:999px;background:var(--teal);color:#06142a}
+#bar{position:absolute;right:70px;top:1660px;width:180px;height:10px;border-radius:5px;background:linear-gradient(90deg,var(--cyan),var(--teal))}
+</style></head><body>
+<img id="img" src="build/frames/0835.jpg"><div id="fade"></div>
+<img id="logo" src="graphics/logo.svg">
+<div id="en"></div><div id="t"></div><div id="pill"></div><div id="bar"></div>
+<script>
+fetch('data/config.json').then(r=>r.json()).then(async c=>{
+  document.getElementById('t').textContent=c.title; document.getElementById('en').textContent=c.subtitleEn;
+  document.getElementById('pill').textContent=c.subtitleAr;
+  await Promise.all([800,900].map(w=>document.fonts.load(w+' 40px Cairo','منظار COLON'))); await document.fonts.ready;
+  await document.getElementById('img').decode(); window.ready=true;});
+window.seek=async()=>{};
+</script></body></html>

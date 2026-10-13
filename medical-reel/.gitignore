@@ -1,0 +1,11 @@
+# generated
+project/build/
+project/source/
+# clinical media stays out of this public repo (patient endoscopy footage, doctor's voice)
+output/*.mp4
+output/thumbnail.png
+output/*.wav
+project/audio/cleaned_voice.wav
+project/audio/music.wav
+project/audio/sfx.wav
+__pycache__/

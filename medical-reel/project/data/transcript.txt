@@ -1,0 +1,5 @@
+# اكتب كلام الدكتور هنا كما قيل بالضبط (باللهجة المصرية) — جملة قصيرة في كل سطر.
+# ضع المصطلحات الطبية المهمة بين *نجمتين* (لون تركوازي) أو بين ^علامتين^ (لون برتقالي).
+# توقيت اختياري لكل سطر:  [12.40-14.10] النص
+# Write the doctor's exact words here, one short phrase per line. Lines starting with # are ignored.
+# Then run:  python3 scripts/captions.py  &&  ./build.sh
