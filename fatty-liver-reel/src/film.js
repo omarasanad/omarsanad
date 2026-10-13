@@ -489,7 +489,7 @@ function scene6(c, t) {
   const T2 = at('لو عندك عوامل', 0.2);
   pill(c, t, 'متعتمدش على الأعراض', 0, 1150, at('بس متعتمدش', 0.05), T2, { center: true, stroke: C.orange, size: 46, icon: '!' });
   pill(c, t, 'ومتبدأش علاج من نفسك', 0, 1265, at('ومتبدأش', 0.05), T2, { center: true, stroke: C.orange, size: 46, icon: '!' });
-  pill(c, t, 'عوامل خطورة؟ استشير دكتور', 0, 1260, at('استشير دكتور', 0.0), at('تابعنا', -0.35), { center: true, fill: C.teal, color: '#04202a', size: 44, icon: '+', iconBg: C.navy });
+  pill(c, t, 'عوامل خطورة؟ استشير دكتور', 0, 1260, at('استشير دكتور', 0.0), at('تابعنا', -0.5), { center: true, fill: C.teal, color: '#04202a', size: 44, icon: '+', iconBg: C.navy });
   const es = spring(t, T2 + 0.3, 11, 0.62);
   if (MARK && es > 0) {
     const sz = 140 * clamp(es, 0, 1.2);
@@ -509,7 +509,7 @@ function scene6(c, t) {
       c.fillText('اسم الدكتور  •  التخصص', 540, 986); c.restore();
     }
   }
-  riseText(c, 'اهتم بصحة كبدك', 540, 1190, t, at('تابعنا', -0.2), null, { size: 76, colors: { 2: C.teal } });
+  riseText(c, 'اهتم بصحة كبدك', 540, 1190, t, at('تابعنا', -0.1), null, { size: 76, colors: { 2: C.teal } });
   const ps = spring(t, at('تابعنا', 0.3), 12, 0.75);
   if (ps > 0) {
     c.save(); c.direction = 'rtl'; setFont(c, 46, 800); c.textAlign = 'center'; c.textBaseline = 'middle';
