@@ -65,7 +65,7 @@ body{font-family:Cairo,sans-serif;color:#fff;position:relative}
 #caps{left:60px;width:960px;top:1360px;height:220px;display:flex;align-items:center;justify-content:center}
 #capLine{display:flex;flex-wrap:wrap;justify-content:center;gap:0 16px;direction:rtl;max-width:960px;
   padding:14px 34px 20px;border-radius:26px;background:rgba(7,22,41,.72);box-shadow:0 0 0 2px rgba(63,224,208,.18)}
-.w{font-weight:800;font-size:62px;line-height:1.35;color:#fff;display:inline-block;
+.w{font-weight:800;font-size:var(--fs,62px);line-height:1.35;color:#fff;display:inline-block;
   text-shadow:0 3px 0 rgba(0,0,0,.35)}
 .w.hl{color:var(--cyan)}
 .w.hl2{color:var(--orange)}
@@ -276,11 +276,11 @@ async function seek(t){
 
   // ---- captions ----
   const cl=$('capLine'); let cap=null;
-  for(const c of CAPS){ if(t>=c.start-0.05&&t<c.end+0.12&&!out){cap=c;break;} }
+  for(const c of CAPS){ if(t>=c.start-0.05&&t<c.end+0.12&&!out) cap=c; }  // latest started caption wins over the previous one's fade-out
   if(!cap){cl.style.opacity=0;}
   else{
     const key=cap.start+'|'+cap.text; if(cl.dataset.key!==key){cl.dataset.key=key;
-      cl.innerHTML=cap.words.map((o,i)=>`<span class="w ${o.cls}" data-i="${i}">${o.w}</span>`).join('');}
+      cl.innerHTML=cap.words.map((o,i)=>`<span class="w ${o.cls}" data-i="${i}">${o.w}</span>`).join(''); cl.style.setProperty('--fs',(cap.text.length>28?54:62)+'px');}
     const a=eOut((t-cap.start+.05)/.2); cl.style.opacity=Math.min(a,clamp((cap.end+.12-t)/.12));
     cl.style.transform=`translateY(${(1-a)*16}px) scale(${.94+.06*a})`;
     [...cl.children].forEach((sp_,i)=>{const o=cap.words[i]; const said=t>=o.s-.03; const cur=said&&t<o.e;

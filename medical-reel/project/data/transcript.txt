@@ -1,5 +1,14 @@
-# اكتب كلام الدكتور هنا كما قيل بالضبط (باللهجة المصرية) — جملة قصيرة في كل سطر.
-# ضع المصطلحات الطبية المهمة بين *نجمتين* (لون تركوازي) أو بين ^علامتين^ (لون برتقالي).
-# توقيت اختياري لكل سطر:  [12.40-14.10] النص
-# Write the doctor's exact words here, one short phrase per line. Lines starting with # are ignored.
-# Then run:  python3 scripts/captions.py  &&  ./build.sh
+# Doctor's words as provided by the requester (Egyptian Arabic).
+# Timing anchored on phrases Whisper large-v3 heard in place: "الجزء الأخير من القولون" (0-6.4 s),
+# "القولون التقرحي … ناخد عينات" (before 13.6 s), "عشان نعمل إعادة تقييم تاني عشان" (13.6-17.0 s).
+# After ~21.9 s the recording has no recognizable speech.
+# Format: [start-end] text ; *teal highlight* ; ^orange highlight^
+[0.15-1.37] زي ما ظاهر معانا
+[1.89-6.18] ^التهابات^ في الجزء الأخير من القولون
+و*زوائد* كتير بالقولون
+اللي ممكن تبقى موجودة
+مع *القولون التقرحي*
+بنبدأ ناخد *عينات*
+[13.78-15.81] عشان نعمل ^إعادة تقييم^ تاني
+[16.25-18.60] عشان نحدد
+[18.60-21.86] *العلاج المناسب*
