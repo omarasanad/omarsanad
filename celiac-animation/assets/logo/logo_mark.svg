@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#103a63"/><stop offset="1" stop-color="#061a33"/>
+    </linearGradient>
+    <linearGradient id="st" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5fe8d8"/><stop offset="1" stop-color="#14a89a"/>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="57" fill="url(#bg)"/>
+  <circle cx="60" cy="60" r="54.5" fill="none" stroke="#2fd0c0" stroke-width="2.2"/>
+  <g transform="translate(-3 0)">
+  <!-- stomach silhouette (same anatomy as the film) -->
+  <path transform="translate(57 64) scale(0.072)" fill="url(#st)" d="M -72 -480 L -62 -330 C -50 -200 10 -40 -60 60 C -110 120 -200 120 -270 112 L -330 106 C -380 106 -402 140 -406 200 L -410 330 L -344 330 L -342 215 C -340 186 -322 176 -292 180 C -230 262 -60 352 90 302 C 250 242 335 60 312 -150 C 296 -330 200 -452 80 -422 C 30 -410 8 -385 -2 -350 L -5 -480 Z"/>
+  <!-- medical cross in the gastric body -->
+  <path d="M65.5 50.5h5v5.5h5.5v5h-5.5v5.5h-5v-5.5h-5.5v-5h5.5z" fill="#ffffff"/>
+  <!-- stethoscope tubing from the oesophagus to a chest piece -->
+  <path d="M54.2 30.5 C54 17, 88 13, 93 38 C97 58, 95 76, 88.5 86" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="86.5" cy="91" r="6.2" fill="#ffffff"/>
+  <circle cx="86.5" cy="91" r="2.8" fill="#14a89a"/>
+  </g>
+</svg>

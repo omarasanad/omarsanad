@@ -1,0 +1,10 @@
+<!doctype html><html><body style="margin:0"><canvas id="c" width="2000" height="1400"></canvas>
+<script type="module">
+import { drawPerson, CAST, drawHead } from './rig.js';
+const c = document.getElementById('c').getContext('2d');
+c.fillStyle = '#d8ecf5'; c.fillRect(0, 0, 2000, 1400);
+drawPerson(c, CAST.sanad, { x: 350, y: 1300, s: 1.6, arms: { r: [1.2, 0.5, 'open'], l: [0.1, 0.15] }, face: { mood: 'happy' } }, 0);
+c.save(); c.translate(1000, 400); c.scale(2.6, 2.6); drawHead(c, CAST.sanad, { mood: 'neutral', talk: 0.5 }, [0, 0], 0); c.restore();
+c.save(); c.translate(1550, 400); c.scale(2.6, 2.6); drawHead(c, CAST.kidB, { mood: 'happy' }, [0, 0], 0); c.restore();
+const im = new Image(); im.onload = () => { c.drawImage(im, 1150, 700, 560, 672); window.done = true; }; im.src = '../assets/doctor_reference.png';
+</script></body></html>
