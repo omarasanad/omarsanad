@@ -47,7 +47,7 @@ Result: the speech-to-room-noise gap went from about 11.5 dB to about 20 dB. Bre
 - 15.9–19.6 s: a magnifier callout enlarges the endoscope image from the monitor, placed over the cart, never the face.
 - 22.2–30.9 s: minimal HUD (corner brackets + "منظر داخلي للقولون") on the close endoscopic view.
 - A progress line under the panel. Caption zone in the lower-middle safe area (y ≈ 1360–1580).
-- 31.1–34.0 s: branded outro with the doctor's mark, name and specialty, "تابعونا للمزيد" and an **editable handle placeholder** (`@your.handle`, since no handle was provided).
+- 31.1–34.0 s: branded outro with the doctor's mark, name and specialty, "تابعونا للمزيد" and a Facebook chip "Facebook · Dr.Abobakr Sanad" (`handle` / `handlePlatform` in `config.json`).
 
 **Branding.** The doctor's supplied identity is used throughout: **د. أبوبكر احمد سند · DR. ABOBAKR SANAD · أخصائي الباطنة والجهاز الهضمي والكبد والمناظير**, with their circular stomach-and-scope mark.
 - **Header**, for the whole video: the mark, name and specialty in the top band, with the topic title below.

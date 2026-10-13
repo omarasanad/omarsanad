@@ -76,8 +76,10 @@ body{font-family:Cairo,sans-serif;color:#fff;position:relative}
 #oEn{left:0;width:1080px;top:955px;text-align:center;font-weight:800;font-size:34px;letter-spacing:9px;color:var(--cyan);direction:ltr}
 #oSp{left:0;width:1080px;top:1010px;text-align:center;font-weight:700;font-size:34px;color:#bcd2e4}
 #oLine{left:0;width:1080px;top:1000px;text-align:center;font-weight:800;font-size:50px;color:#e9f3fa}
-#oHandle{left:50%;top:1110px;transform:translateX(-50%);font-weight:800;font-size:44px;direction:ltr;
-  padding:10px 40px;border-radius:999px;background:rgba(20,184,166,.18);border:2px solid var(--cyan);color:#fff;white-space:nowrap}
+#oHandle{left:50%;top:1110px;transform:translateX(-50%);font-weight:800;font-size:44px;direction:ltr;display:flex;align-items:center;gap:18px;
+  padding:10px 40px 10px 14px;border-radius:999px;background:rgba(20,184,166,.18);border:2px solid var(--cyan);color:#fff;white-space:nowrap}
+#oHandle svg{width:58px;height:58px;flex:none}
+#oHandle .pf{font-weight:700;font-size:30px;color:#bcd2e4}
 </style>
 </head>
 <body>
@@ -150,7 +152,9 @@ async function init(){
   $('tH').textContent=CFG.title; $('bNm').textContent=CFG.doctorName||''; $('bSp').textContent=CFG.specialty||''; if(CFG.logo) $('logo').src=CFG.logo; $('wm').src=CFG.logo||'graphics/logo.svg'; $('tEn').textContent=CFG.subtitleEn; $('tAr').textContent=CFG.subtitleAr;
   $('aTitle').textContent=CFG.anatomyTitle; $('aNote').textContent=CFG.anatomyNote;
   $('hudLbl').textContent='● '+CFG.hudLabel; $('magLbl').textContent=CFG.magnifierLabel;
-  $('oName').textContent=CFG.doctorName||''; $('oEn').textContent=CFG.doctorNameEn||''; $('oSp').textContent=CFG.specialty||''; if(CFG.logo) $('oLogo').src=CFG.logo; $('oLine').textContent=CFG.outroLine; $('oHandle').textContent=CFG.handle;
+  $('oName').textContent=CFG.doctorName||''; $('oEn').textContent=CFG.doctorNameEn||''; $('oSp').textContent=CFG.specialty||''; if(CFG.logo) $('oLogo').src=CFG.logo; $('oLine').textContent=CFG.outroLine; {const fb='<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="#1877F2"/><path fill="#fff" d="M35.5 52V34.6h5.8l.9-6.8h-6.7v-4.3c0-2 .6-3.3 3.4-3.3h3.6v-6.1c-.6-.1-2.8-.3-5.2-.3-5.2 0-8.7 3.2-8.7 9v5H22.8v6.8h5.8V52z"/></svg>';
+   const isFb=(CFG.handlePlatform||'')==='facebook';
+   $('oHandle').innerHTML=(isFb?fb+'<span class="pf">Facebook</span>':'')+'<span>'+CFG.handle+'</span>';}
   $('chips').innerHTML=ROUTE.map((s,i)=>`<span class="chip" id="ch${i}">${s.n}</span>`).join('');
   prepCaptions();
   const weights=[500,700,800,900]; await Promise.all(weights.map(w=>document.fonts.load(`${w} 40px Cairo`,'منظار القولون COLONOSCOPY @')));

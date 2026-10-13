@@ -20,8 +20,9 @@ fs.mkdirSync(outDir, { recursive: true });
 
 const tl = JSON.parse(fs.readFileSync(path.join(root, 'data/timeline.json')));
 const fps = tl.fps, total = tl.videoDur + tl.outroDur;
-const times = args.preview ? String(args.preview).split(',').map(Number)
-  : Array.from({ length: Math.round(total * fps) }, (_, i) => i / fps);
+const allTimes = Array.from({ length: Math.round(total * fps) }, (_, i) => i / fps);
+const from = Number(args.from || 0);            // --from FRAME: re-render only frames >= FRAME (1-based names kept)
+const times = args.preview ? String(args.preview).split(',').map(Number) : allTimes.slice(from);
 
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.svg': 'image/svg+xml', '.jpg': 'image/jpeg', '.png': 'image/png', '.woff2': 'font/woff2' };
 const server = http.createServer((req, res) => {
@@ -42,7 +43,7 @@ await Promise.all(Array.from({ length: Math.min(workers, times.length) }, async 
   await page.waitForFunction(() => window.ready === true, null, { timeout: 30000 });
   for (let i = w; i < times.length; i += workers) {
     await page.evaluate(t => window.seek(t), times[i]);
-    const name = args.preview ? `t_${times[i].toFixed(2)}.png` : `${String(i + 1).padStart(5, '0')}.png`;
+    const name = args.preview ? `t_${times[i].toFixed(2)}.png` : `${String(i + from + 1).padStart(5, '0')}.png`;
     await page.screenshot({ path: path.join(outDir, name), type: 'png', omitBackground: !!args.transparent });
     if (!args.preview && i % 150 === 0) console.log(`frame ${i}/${times.length} ${((Date.now() - t0) / 1000).toFixed(0)}s`);
   }

@@ -3,7 +3,7 @@
   "subtitleEn": "COLONOSCOPY",
   "subtitleAr": "من داخل غرفة المناظير",
   "doctorName": "د. أبوبكر احمد سند",
-  "handle": "@your.handle",
+  "handle": "Dr.Abobakr Sanad",
   "outroLine": "تابعونا للمزيد",
   "anatomyTitle": "القولون (الأمعاء الغليظة)",
   "anatomyNote": "مسار منظار القولون",
@@ -11,5 +11,6 @@
   "magnifierLabel": "صورة المنظار",
   "doctorNameEn": "DR. ABOBAKR SANAD",
   "specialty": "أخصائي الباطنة والجهاز الهضمي والكبد والمناظير",
-  "logo": "graphics/brand/brand_mark.png"
+  "logo": "graphics/brand/brand_mark.png",
+  "handlePlatform": "facebook"
 }
