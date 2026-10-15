@@ -1,0 +1,16 @@
+<!doctype html><html><body style="margin:0"><canvas id="c" width="2000" height="1400"></canvas>
+<script type="module">
+import { drawPerson, drawHead, CAST, VISEMES } from './rig.js';
+const c = document.getElementById('c').getContext('2d');
+const bg = new URLSearchParams(location.search).get('bg');
+if (bg !== 'none') { c.fillStyle = '#e6f3f8'; c.fillRect(0, 0, 2000, 1400); }
+if (location.search.includes('char')) {
+  drawPerson(c, CAST.sanad, { x: 1000, y: 1360, s: 2.0, crossed: true, face: { mood: 'happy' } }, 0);
+} else {
+  drawPerson(c, CAST.sanad, { x: 260, y: 1360, s: 1.6, arms: { r: [1.2, 0.5, 'open'], l: [0.1, 0.15] }, face: { mood: 'happy' } }, 0);
+  VISEMES.forEach((v, i) => { c.save(); c.translate(720 + (i % 3) * 330, 300 + Math.floor(i / 3) * 360); c.scale(1.5, 1.5); drawHead(c, CAST.sanad, { mood: 'neutral', viseme: v, talk: 0.9 }, [0, 0], 0); c.restore();
+    c.font = '700 40px sans-serif'; c.fillStyle = '#123'; c.textAlign = 'center'; c.fillText(v, 720 + (i % 3) * 330, 480 + Math.floor(i / 3) * 360); });
+  [['worried', 0], ['surprised', 1], ['serious', 0.6]].forEach(([m, b], i) => { c.save(); c.translate(720 + i * 330, 1050); c.scale(1.2, 1.2); drawHead(c, CAST.sanad, { mood: m, brows: b }, [0, 0], 0); c.restore(); });
+}
+window.done = true;
+</script></body></html>

@@ -1,0 +1,11 @@
+<!doctype html><html><body style="margin:0"><canvas id="c" width="2000" height="1400"></canvas>
+<script type="module">
+import { drawSanad } from './sanad.js';
+const c = document.getElementById('c').getContext('2d');
+const bg = new URLSearchParams(location.search).get('bg');
+if (bg !== 'none') { const g = c.createLinearGradient(0, 0, 0, 1400); g.addColorStop(0, '#e9f4f6'); g.addColorStop(1, '#cfe7ea'); c.fillStyle = g; c.fillRect(0, 0, 2000, 1400); }
+drawSanad(c, { x: 450, y: 1380, s: 1.25, arms: { r: [0.5, 0.95, 'present'], l: [0.08, 0.1, 'rest'] }, face: { mood: 'happy' } }, 0);
+drawSanad(c, { x: 1150, y: 1380, s: 1.0, arms: { r: [2.3, 0.3, 'point'], l: [0.1, 0.1, 'rest'] }, face: { mood: 'neutral', viseme: 'A', talk: 0.8, brows: 0.6 } }, 0);
+drawSanad(c, { x: 1700, y: 1380, s: 0.9, arms: { r: [0.9, 1.6, 'open'], l: [0.1, 0.1, 'rest'] }, face: { mood: 'serious', viseme: 'E', talk: 0.6 } }, 0);
+window.done = true;
+</script></body></html>
