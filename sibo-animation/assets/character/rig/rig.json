@@ -1,0 +1,80 @@
+{
+ "up": 2,
+ "body": [
+  960,
+  1980
+ ],
+ "neck": [
+  420,
+  372
+ ],
+ "head": {
+  "scale": 0.76,
+  "chin": [
+   280,
+   600
+  ],
+  "size": [
+   600,
+   640
+  ],
+  "eyes": [
+   [
+    200,
+    384
+   ],
+   [
+    332,
+    364
+   ]
+  ]
+ },
+ "elbow": [
+  644,
+  856
+ ],
+ "wrist": [
+  768,
+  760
+ ],
+ "hand_point": {
+  "size": [
+   204,
+   288
+  ]
+ },
+ "offsets": {
+  "mouth_rest": [
+   0,
+   0
+  ],
+  "mouth_mid": [
+   -1,
+   1
+  ],
+  "mouth_open": [
+   -1,
+   1
+  ],
+  "mouth_smile": [
+   0,
+   1
+  ],
+  "mouth_round": [
+   2,
+   -1
+  ],
+  "mouth_concern": [
+   0,
+   0
+  ],
+  "upper_concern": [
+   0,
+   0
+  ],
+  "upper_surprise": [
+   1,
+   -1
+  ]
+ }
+}

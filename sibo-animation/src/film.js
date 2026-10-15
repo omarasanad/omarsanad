@@ -3,7 +3,7 @@
 import { clamp, lerp, prog, easeOut, easeIn, easeInOut, spring, rng } from './motion.js';
 import { drawPerson, drawHead, CAST, drawBread, drawGluten, drawImmune, drawVilli, box, rr, outline, blob, INK } from './rig.js';
 import { CONFIG } from './config.js';
-import { drawSanad } from './sanad.js';
+import { loadDoctorRig, drawDoctor, perform } from './doctor_rig.js';
 
 const W = 1080, H = 1920, TAU = Math.PI * 2;
 const cv = document.getElementById('c');
@@ -148,16 +148,48 @@ function speech(T) {
   return { talk: v, viseme, brow: clamp((v - vPrev - 0.25) * 2.5) * 0.9, nod: Math.sin(T * 3.1) * 0.035 * v };
 }
 const docFace = (t, mood = 'happy', extraBrow = 0) => ({ mood, talk: SP.talk, viseme: SP.viseme, brows: SP.brow + extraBrow, blink: blinkAt(t, 1) });
-// Dr. Sanad is drawn with the illustrated presenter rig (sanad.js), waist-up, coat running off the bottom.
-// Scene code places him by the feet position (x, y) and scale s of a full figure; this maps that to the bust.
+// Dr. Sanad: one layered cutout rig (doctor_rig.js) built from the approved model sheet.
+// Scene code places him by the feet position (x, y) and scale s of a full figure, as before;
+// the arm spec only decides the gesture: 'point' -> raised forearm + index finger, otherwise the palm gestures with the speech.
+// His expression follows the narration (MOODS), his mouth follows the voiceover audio (vo_env.json).
+const MOODS = [  // [caption needle, mood] — holds until the next entry
+  ['بطنك بتنتفخ', 'concern'], ['خليك معايا', 'smile'], ['ولفّيت على دكاترة', 'concern'], ['القولون العصبي تشخيص', 'neutral'],
+  ['واحد من الأسباب', 'neutral'], ['لكن في SIBO', 'surprise'], ['البكتيريا الزيادة دي', 'neutral'], ['وتحس بالانتفاخ', 'concern'],
+  ['من الأعراض', 'concern'], ['بس الأعراض دي', 'neutral'], ['التشخيص غالبًا', 'neutral'], ['والعلاج بيحدده', 'smile'],
+  ['والمتابعة مهمة', 'neutral'], ['فمتشخّصش', 'neutral'], ['أساس العلاج الصح', 'smile'],
+];
+const win = (t, a, b, d = 0.3) => clamp((t - a) / d) * clamp((b - t) / d);
+function moodAt(T) {
+  let m = 'neutral', since = -9;
+  for (const [needle, mood] of MOODS) { const a = at(needle, -0.25); if (a <= T) { m = mood; since = a; } }
+  return { mood: m, amt: clamp((T - since) / 0.35) };
+}
 function doctor(c, t, pose) {
-  const s = pose.s || 1, hs = s * 0.62, walking = pose.legs === 'walk';
-  const bob = walking ? -Math.abs(Math.sin((pose.walk || 0))) * 10 : Math.sin(t * 1.6) * 2;
-  const map = (a) => a ? [a[0], a[1], a[2] === 'fist' ? 'rest' : a[2] || 'rest'] : [0.08, 0.1, 'rest'];
-  drawSanad(c, { x: pose.x, y: pose.y - 250 * s + bob, s: hs, flip: pose.flip, lean: pose.lean || 0,
-    headTilt: (pose.headTilt || 0) + SP.nod, look: pose.look || [0, 0],
-    arms: { l: map(pose.arms && pose.arms.l), r: map(pose.arms && pose.arms.r) },
-    face: pose.face || docFace(t, pose.mood) }, t);
+  const s = pose.s || 1, walking = pose.legs === 'walk';
+  const bob = walking ? -Math.abs(Math.sin(pose.walk || 0)) * 12 : 0;
+  const r = pose.arms && pose.arms.r, hand = r && r[2];
+  const pointing = pose.point ?? (hand === 'point' ? 1 : 0);   // scenes pass a 0..1 ramp so the arm moves smoothly
+  const md = pose.mood === 'surprised' ? { mood: 'surprise', amt: 1 } : moodAt(t);
+  const st = perform(ENV || PLACEHOLDER, t, { mood: md.mood, moodAmt: md.amt, point: pointing, pointDir: 0.15,
+    gesture: hand === 'fist' ? 0.2 : 1, look: pose.look ? [pose.look[0] * 0.4, pose.look[1] * 0.4] : [0, 0] });
+  if (walking) { st.sway = Math.sin(pose.walk || 0) * 0.02; st.arm.rot = 0.15; }
+  st.sway += pose.lean || 0;
+  drawDoctor(c, pose.x, pose.y + 307 * s + bob, 0.57 * s, !!pose.flip, st);
+}
+// Without a recorded voiceover there is no audio to sync to: a placeholder syllable track is made from the
+// planned caption timing so the preview isn't frozen. It is replaced by the real analysis (vo_env.json) once
+// audio/voiceover.mp3 exists — see README.
+let PLACEHOLDER = null;
+function placeholderEnv() {
+  const n = Math.ceil(TL.duration * 30) + 2, o = new Array(n).fill(0), v = new Array(n).fill(0), cc = new Array(n).fill(0.5);
+  for (const [a, b, text] of TL.captions) {
+    const syl = Math.max(2, Math.round(text.replace(/\s/g, '').length / 2.2)), d = (b - a - 0.15) / syl;
+    for (let k = 0; k < syl; k++) for (let f = Math.floor((a + k * d) * 30); f < (a + (k + 1) * d) * 30; f++) {
+      const p = (f / 30 - a - k * d) / d, h = Math.abs(Math.sin((k + a) * 12.9898)) % 1;
+      o[f] = Math.sin(Math.PI * p) * (0.55 + 0.45 * h); v[f] = 0.6; cc[f] = h;
+    }
+  }
+  return { fps: 30, o, v, c: cc };
 }
 function wallClock(c, x, y, r, t, speed = 1) {
   c.beginPath(); c.arc(x, y, r, 0, TAU); c.fillStyle = '#fff'; c.fill(); outline(c, 6);
@@ -245,14 +277,8 @@ function scene2(c, t, T) {
   }, { tail: [-60, 150] });
   if (dr) {
     const inn = spring(t, real - 0.4, 8, 0.8);
-    doctor(c, t, { x: lerp(1300, 780, clamp(inn, 0, 1.05)), y: 1680, s: 1.35, flip: true,
-      arms: t > other ? { r: [1.0, -1.7, 'fist'], l: [0.15, 0.1] } : { r: [0.55, 0.75, 'present'], l: [0.15, 0.1] }, look: [-0.6, 0] });
-    if (t > other) {
-      const s = spring(t, other + 0.1, 10, 0.6);
-      c.save(); c.translate(690, 1090); c.scale(clamp(s, 0, 1.2), clamp(s, 0, 1.2)); c.rotate(-0.5);
-      c.beginPath(); c.arc(0, 0, 54, 0, TAU); c.fillStyle = 'rgba(190,240,255,0.5)'; c.fill(); outline(c, 10);
-      box(c, -11, 54, 22, 80, 10, '#7a5230'); c.restore();
-    }
+    doctor(c, t, { x: lerp(1300, 780, clamp(inn, 0, 1.05)), y: 1680, s: 1.35, flip: true, point: win(t, other, 1e9),
+      arms: t > other ? { r: [0, 0, 'point'] } : { r: [0.55, 0.75, 'present'] }, look: [-0.6, 0] });
     tag(c, t, 'IBS تشخيص حقيقي ✓', 540, 330, real + 0.2, last, { size: 42, fill: '#e3f5e6' });
     tag(c, t, 'الأعراض مستمرة؟', 540, 330, last + 0.1, other, { size: 44, fill: '#fff3b0' });
     tag(c, t, 'ندوّر على أسباب تانية', 540, 330, other + 0.2, null, { size: 44, fill: '#fff3b0' });
@@ -302,9 +328,9 @@ function scene3(c, t, T) {
   // title
   const ts = spring(t, name, 11, 0.55);
   if (ts > 0) { c.save(); c.translate(540, 285); c.scale(clamp(ts, 0, 1.2), clamp(ts, 0, 1.2)); setFont(c, 110, 800, EN); c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 14; c.strokeStyle = INK; c.strokeText('SIBO', 0, 0); c.fillStyle = C.orange; c.fillText('SIBO', 0, 0); c.restore(); }
-  tag(c, t, 'فرط نمو البكتيريا في الأمعاء الدقيقة', 540, 1480, mean, null, { size: 38, fill: '#ffffff' });
+  tag(c, t, 'فرط نمو البكتيريا في الأمعاء الدقيقة', 400, 1480, mean, null, { size: 34, fill: '#ffffff' });
   tag(c, t, 'في المكان الغلط!', 540, 395, wrong + 0.3, null, { size: 40, fill: '#ffe1e1' });
-  doctor(c, t, { x: 930, y: 1690, s: 1.05, flip: true, arms: { r: [1.9, 0.4, 'point'], l: [0.15, 0.1] }, look: [-0.8, -0.4] });
+  doctor(c, t, { x: 900, y: 1600, s: 1.1, flip: true, arms: { r: [1.9, 0.4, 'point'], l: [0.15, 0.1] }, look: [-0.8, -0.4] });
 }
 
 // ------------------------------------------------------------ scene 4 — bacteria + food -> gas -> bloating
@@ -350,7 +376,10 @@ function scene4(c, t, T) {
   bubble(c, 790, 1460, 200, t, feel - 0.1, null, (b) => {
     b.fillStyle = '#eaf4ff'; b.fillRect(-200, -200, 400, 400);
     drawPerson(b, CAST.karim, { x: 0, y: 520, s: 1.0, belly: 1.4 + Math.sin(t * 10) * 0.05, arms: { l: [0.1, -1.1, 'open'], r: [0.1, -1.1, 'open'] }, face: { mood: 'pain', blink: blinkAt(t) } }, t);
-  });
+  });  // the presenter steps in from the left and points up at the gut
+  const din = spring(t, SC[3] + 0.5, 8, 0.8);
+  doctor(c, t, { x: lerp(-300, 250, clamp(din, 0, 1.05)), y: 2200, s: 1.15, point: win(t, feed - 0.2, feel),
+    arms: { r: t > feed - 0.2 && t < feel ? [0, 0, 'point'] : [0, 0, 'open'] } });
 }
 
 // ------------------------------------------------------------ scene 5 — history (educational reconstruction)
@@ -432,7 +461,7 @@ function scene6(c, t, T) {
   }
   if (docIn) {
     const s = spring(t, notOnly - 0.3, 8, 0.8);
-    doctor(c, t, { x: lerp(1300, 800, clamp(s, 0, 1.05)), y: 1720, s: 1.4, flip: true, arms: t > eval_ ? { r: [1.3, 1.4, 'open'], l: [0.15, 0.1] } : { r: [2.6 + Math.sin(t * 8) * 0.15, 0.1, 'point'], l: [0.15, 0.1] }, look: [-0.5, 0] });
+    doctor(c, t, { x: lerp(1300, 800, clamp(s, 0, 1.05)), y: 1720, s: 1.4, flip: true, point: win(t, -1e9, eval_), arms: t > eval_ ? { r: [1.3, 1.4, 'open'], l: [0.15, 0.1] } : { r: [2.6 + Math.sin(t * 8) * 0.15, 0.1, 'point'], l: [0.15, 0.1] }, look: [-0.5, 0] });
     tag(c, t, 'مش خاصة بـ SIBO لوحده', 540, 330, notOnly + 0.2, eval_, { size: 42, fill: '#fff3b0' });
     tag(c, t, 'التقييم الطبي مهم', 540, 330, eval_ + 0.2, null, { size: 46, fill: '#e3f5e6' });
   }
@@ -442,7 +471,7 @@ function scene6(c, t, T) {
 function scene7(c, t, T) {
   lab(c, t);
   const starts = at('التشخيص غالبًا'), drink = at('بتشرب محلول'), measure = at('وبعدها بنقيس'), interval = at('على فترات'), interp = at('والنتيجة بيفسرها'), limits = at('لأن الاختبار');
-  doctor(c, t, { x: 250, y: 1720, s: 1.4, arms: t > interp ? { r: [0.3, -1.9, 'fist'], l: [0.3, -1.9, 'fist'] } : { r: [1.8, 0.5, 'point'], l: [0.15, 0.1] }, mood: t > interp ? 'neutral' : 'happy', look: [0.6, 0] });
+  doctor(c, t, { x: 250, y: 1720, s: 1.4, point: win(t, -1e9, interp), arms: t > interp ? { r: [0.3, -1.9, 'fist'], l: [0.3, -1.9, 'fist'] } : { r: [1.8, 0.5, 'point'], l: [0.15, 0.1] }, mood: t > interp ? 'neutral' : 'happy', look: [0.6, 0] });
   const drinking = t > drink && t < measure;
   const blowing = t > measure && t < interp;
   const sip = drinking ? Math.max(0, Math.sin((t - drink) * 3)) : 0;
@@ -505,7 +534,7 @@ function scene9(c, t, T) {
   studio(c, t);
   const self = at('فمتشخّصش'), ask = at('اسأل دكتورك'), msg = at('أساس العلاج'), follow = at('تابعنا');
   const s = spring(t, SC[8], 7, 0.8);
-  doctor(c, t, { x: 540, y: 2080 + (1 - clamp(s, 0, 1.1)) * 700, s: 1.85, lean: Math.sin(t * 1.2) * 0.015,
+  doctor(c, t, { x: 540, y: 2080 + (1 - clamp(s, 0, 1.1)) * 700, s: 1.85, lean: Math.sin(t * 1.2) * 0.015, point: win(t, -1e9, ask),
     arms: t < ask ? { r: [2.6 + Math.sin(t * 8) * 0.2, 0.1, 'point'], l: [0.15, 0.1] } : t < follow ? { r: [1.1, 1.5, 'open'], l: [0.15, 0.1] } : { r: [2.6 + Math.sin(t * 7) * 0.3, 0.3, 'open'], l: [0.15, 0.1] } });
   riseText(c, CONFIG.doctorName, 540, 385, t, SC[8] + 0.4, null, { size: 70 });
   riseText(c, CONFIG.doctorTitle, 540, 462, t, SC[8] + 0.8, null, { size: 36, weight: 600, color: C.teal });
@@ -591,6 +620,8 @@ window.ready = (async () => {
   window.DURATION = TL.duration;
   await Promise.all(['800 64px Cairo', '700 64px Cairo', '600 64px Cairo', '800 64px Inter', '700 64px Inter'].map((f) => document.fonts.load(f, 'SIBO B12 H₂ CH₄ عيادة')));
   MARK = await loadImg(CONFIG.logoMark);
+  await loadDoctorRig();
+  if (!ENV) PLACEHOLDER = placeholderEnv();
   window.HAS_DOCTOR = !!MARK;
   seek(0);
   return true;

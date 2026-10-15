@@ -27,7 +27,7 @@ const server = http.createServer((req, res) => {
   fs.createReadStream(p).pipe(res);
 });
 await new Promise((r) => server.listen(0, '127.0.0.1', r));
-const URL_ = `http://127.0.0.1:${server.address().port}/src/index.html?${QS}`;
+const URL_ = `http://127.0.0.1:${server.address().port}/src/${args.page || 'index.html'}?${QS}`;
 
 const browser = await chromium.launch({ args: ['--font-render-hinting=none', '--disable-lcd-text'] });
 async function openPage() {

@@ -1,0 +1,34 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Rig test</title>
+<style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="1920"></canvas>
+<script>window.ready = new Promise((r) => (window.__ok = r));</script>
+<script type="module">
+import { loadDoctorRig, drawDoctor, perform } from './doctor_rig.js';
+const c = document.getElementById('c').getContext('2d');
+const ENV = await (await fetch('../test/test_env.json')).json();
+await loadDoctorRig();
+window.DURATION = ENV.v.length / 30;
+function gut(t) {  // a small animated intestine panel with moving bacteria (stand-in illustration)
+  c.save(); c.translate(300, 640);
+  c.fillStyle = '#fff7f0'; c.strokeStyle = '#1b2a4a'; c.lineWidth = 6; c.beginPath(); c.roundRect(-240, -260, 480, 520, 30); c.fill(); c.stroke();
+  c.strokeStyle = '#f08fa0'; c.lineWidth = 46; c.lineCap = 'round'; c.beginPath();
+  for (let i = 0; i <= 60; i++) { const y = -190 + i * 6.4, x = Math.sin(i / 60 * Math.PI * 4) * 140; i ? c.lineTo(x, y) : c.moveTo(x, y); } c.stroke();
+  for (let k = 0; k < 9; k++) { const u = ((t * 0.12 + k / 9) % 1), i = u * 60, y = -190 + i * 6.4, x = Math.sin(i / 60 * Math.PI * 4) * 140;
+    c.fillStyle = '#3aa66a'; c.beginPath(); c.ellipse(x, y, 13, 7, t * 3 + k, 0, 7); c.fill(); }
+  c.restore();
+}
+window.seek = (T) => {
+  const g = c.createLinearGradient(0, 0, 0, 1920); g.addColorStop(0, '#1f5fa8'); g.addColorStop(1, '#0a2448');
+  c.fillStyle = g; c.fillRect(0, 0, 1080, 1920);
+  gut(T);
+  const point = T > 3 && T < 6 ? Math.min(1, (T - 3) / 0.35, (6 - T) / 0.35) : 0;
+  const mood = T > 6.3 ? 'smile' : T < 1.2 ? 'surprise' : 'neutral';
+  const st = perform(ENV, T, { mood, point, pointDir: 0.1 });
+  drawDoctor(c, 760, 2350, 0.72, true, st);
+  c.fillStyle = '#fff'; c.font = '28px sans-serif'; c.fillText(`T=${T.toFixed(2)} v=${(ENV.v[Math.floor(T*30)]||0).toFixed(2)} mouth=${st.mouth.a}`, 30, 1880);
+};
+window.HAS_DOCTOR = true;
+window.__ok(true);
+seek(0);
+</script></body></html>
