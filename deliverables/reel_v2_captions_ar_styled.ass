@@ -1,0 +1,51 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.709
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Cap,Cairo XB,82,&H00FFFFFF,&H00FFFFFF,&H00111111,&H96000000,0,0,0,0,100,100,0,0,1,6,3,5,90,90,0,-1
+Style: Card,Cairo XB,76,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,5,60,60,0,-1
+Style: CardSub,Cairo SB,46,&H00E6E6E6,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,5,60,60,0,-1
+Style: Box,Cairo SB,20,&H00000000,&H00000000,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,7,0,0,0,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 2,0:00:00.11,0:00:01.64,Cap,,0,0,0,,{\an5\pos(540,1300)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}كام مرة قلت لنفسك
+Dialogue: 2,0:00:01.66,0:00:02.57,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}دي شوية {\c&HC0D02F&}حموضة
+Dialogue: 2,0:00:02.57,0:00:03.76,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}وهيروح لحاله
+Dialogue: 2,0:00:03.78,0:00:04.80,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}أو ده {\c&HC0D02F&}قولون عصبي{\c&HFFFFFF&}؟
+Dialogue: 2,0:00:04.80,0:00:06.38,Cap,,0,0,0,,{\an5\pos(540,1300)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}وغالبًا…
+Dialogue: 2,0:00:06.40,0:00:07.84,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}وكتير استحملت {\c&HC0D02F&}الوجع
+Dialogue: 2,0:00:07.84,0:00:08.74,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}اللي إنت فيه
+Dialogue: 2,0:00:08.76,0:00:09.51,Cap,,0,0,0,,{\an5\pos(540,1300)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}الحقيقة
+Dialogue: 2,0:00:09.51,0:00:10.49,Cap,,0,0,0,,{\an5\pos(540,1300)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}إنت {\c&HC0D02F&}مش مضطر
+Dialogue: 2,0:00:10.49,0:00:12.10,Cap,,0,0,0,,{\an5\pos(540,1300)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}إن إنت تستحمل الوجع ده
+Dialogue: 2,0:00:12.12,0:00:12.91,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}حالات {\c&HC0D02F&}كتيرة جدًا
+Dialogue: 2,0:00:12.91,0:00:14.26,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}بشوفها في {\c&HC0D02F&}العيادة
+Dialogue: 2,0:00:14.29,0:00:15.80,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}بالنسبة لي جات
+Dialogue: 2,0:00:15.82,0:00:17.32,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}بعد ما الوجع بدأ
+Dialogue: 2,0:00:17.32,0:00:19.19,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}يأثر على {\c&HC0D02F&}حياتها اليومية
+Dialogue: 2,0:00:19.21,0:00:20.99,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}لدرجة إن هو بدأ
+Dialogue: 2,0:00:20.99,0:00:23.99,Cap,,0,0,0,,{\an5\pos(540,1300)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}يعمل لها {\c&HC0D02F&}مشاكل كتير{\c&HFFFFFF&} جدًا
+Dialogue: 2,0:00:24.00,0:00:25.94,Cap,,0,0,0,,{\an5\pos(540,1300)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}أنا {\c&HC0D02F&}دكتور أبوبكر أحمد سند
+Dialogue: 2,0:00:25.97,0:00:26.80,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}أخصائي {\c&HC0D02F&}الباطنة
+Dialogue: 2,0:00:26.80,0:00:27.92,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}و{\c&HC0D02F&}الجهاز الهضمي
+Dialogue: 2,0:00:27.92,0:00:29.44,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}و{\c&HC0D02F&}الكبد{\c&HFFFFFF&} و{\c&HC0D02F&}المناظير
+Dialogue: 2,0:00:29.45,0:00:30.61,Cap,,0,0,0,,{\an5\pos(540,1300)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}وجاي لك أقول لك
+Dialogue: 2,0:00:30.64,0:00:32.18,Cap,,0,0,0,,{\an5\pos(540,1300)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HC0D02F&}ما تستهونش{\c&HFFFFFF&} بالألم
+Dialogue: 2,0:00:32.18,0:00:33.48,Cap,,0,0,0,,{\an5\pos(540,1300)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}اللي موجود معك
+Dialogue: 2,0:00:33.50,0:00:34.80,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}أنا موجود معك
+Dialogue: 2,0:00:34.91,0:00:36.37,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}في {\c&HC0D02F&}مركز النهضة الطبي
+Dialogue: 2,0:00:36.38,0:00:37.52,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}بـ{\c&HC0D02F&}شبين القناطر
+Dialogue: 2,0:00:37.55,0:00:39.31,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}عشان نبدأ واحدة واحدة
+Dialogue: 2,0:00:39.33,0:00:41.79,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}نوصل {\c&HC0D02F&}للتشخيص الطبي الصح
+Dialogue: 2,0:00:41.81,0:00:44.14,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}باستخدام {\c&HC0D02F&}أحدث الأجهزة الطبية
+Dialogue: 2,0:00:44.16,0:00:45.58,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}وعن طريق {\c&HC0D02F&}التحاليل
+Dialogue: 2,0:00:45.58,0:00:47.23,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}و{\c&HC0D02F&}الإشاعات{\c&HFFFFFF&} المناسبة
+Dialogue: 2,0:00:47.25,0:00:48.21,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}عشان توصل
+Dialogue: 2,0:00:48.21,0:00:50.65,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HC0D02F&}للعلاج الصح
