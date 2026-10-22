@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:CXB;src:url(fonts/Cairo-ExtraBold.ttf)}
+@font-face{font-family:CSB;src:url(fonts/Cairo-SemiBold.ttf)}
+:root{--navy:#061A33;--teal:#2FD0C0;--coral:#FF6A55;--ink:#E9F2F8;--gold:#FFC75A}
+html,body{margin:0;width:1080px;height:1920px;background:transparent;overflow:hidden}
+*{box-sizing:border-box}
+#panel{position:absolute;left:0;top:0;width:1080px;height:0;overflow:hidden;border-radius:0 0 40px 40px;background:radial-gradient(120% 60% at 50% 0%,#0F3560 0%,var(--navy) 60%),var(--navy)}
+#dots{position:absolute;inset:0;background-image:radial-gradient(rgba(47,208,192,.10) 2px,transparent 2.5px);background-size:44px 44px}
+#edge{position:absolute;left:60px;width:960px;height:5px;border-radius:5px;background:var(--teal);box-shadow:0 0 18px rgba(47,208,192,.7)}
+.abs{position:absolute}
+.lbl{font-family:CXB;color:#fff;white-space:nowrap;line-height:1.25}
+.sub{font-family:CSB;color:var(--ink);white-space:nowrap;line-height:1.3}
+.chip{padding:8px 34px 14px;border-radius:999px;font-family:CXB;font-size:50px;color:#fff;white-space:nowrap}
+.card{position:absolute;border-radius:30px;background:rgba(6,26,51,.9);border:2px solid rgba(47,208,192,.35);box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.tile{position:absolute;border-radius:34px;background:rgba(255,255,255,.06);border:3px solid rgba(47,208,192,.55);display:flex;align-items:center;gap:20px;padding:0 30px}
+.tile .t{font-family:CXB;font-size:44px;color:#fff;white-space:nowrap}
+svg{overflow:visible}
+</style></head>
+<body>
+<div id="panel"><div id="dots"></div><div id="sc"></div></div><div id="edge"></div><div id="free"></div>
+<script src="timeline.js"></script><script src="icons.js"></script>
+<script>
+const $=id=>document.getElementById(id), q=s=>document.querySelector(s);
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x)), seg=(t,a,b)=>clamp((t-a)/(b-a));
+const eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2, eout=x=>1-Math.pow(1-x,3);
+const back=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const lerp=(a,b,p)=>a+(b-a)*p;
+function icon(n,s,c){const i=ICONS[n];return `<svg width="${s}" height="${s*i.h/i.w}" viewBox="0 0 ${i.w} ${i.h}" style="color:${c};display:block">${i.body}</svg>`}
+function el(html,parent='sc'){const d=document.createElement('div');d.className='abs';d.innerHTML=html;$(parent).appendChild(d);return d}
+function put(d,x,y,sc=1,op=1,rot=0){if(op<=0.001){d.style.display='none';return}
+  d.style.left='0px';d.style.top='0px';d.style.display='block';const w=d.offsetWidth,h=d.offsetHeight;
+  d.style.transform=`translate(${x-w/2}px,${y-h/2}px) scale(${sc}) rotate(${rot}deg)`;d.style.opacity=op}
+function panelState(t){const M=TL.modes;let bottom=TL.panel[M[0][1]],op=1;
+  for(let i=1;i<M.length;i++){const [s,m,d,k]=M[i];const prev=TL.panel[M[i-1][1]];if(t<s)break;const p=eio(seg(t,s,s+d));
+    if(k==='dissolve'&&m==='S'){bottom=prev;op=1-p;if(p>=1){bottom=0;op=1}}else{bottom=lerp(prev,TL.panel[m],p);op=1}}
+  return {bottom,op}}
+const GLASS=(w)=>`<svg width="${w}" height="${w*1.45}" viewBox="0 0 200 290"><defs><clipPath id="gc${w}"><path d="M30 20 L170 20 L152 270 Q150 282 138 282 L62 282 Q50 282 48 270Z"/></clipPath></defs>
+ <rect class="milk" x="0" y="80" width="200" height="220" fill="#F7F4EC" clip-path="url(#gc${w})"/><path d="M30 20 L170 20 L152 270 Q150 282 138 282 L62 282 Q50 282 48 270Z" fill="rgba(255,255,255,.08)" stroke="#E9F2F8" stroke-width="8" stroke-linejoin="round"/></svg>`;
+// custom stomach (600x700 box)
+const SPATH="M255 0 L255 115 C255 165 215 190 185 240 C130 330 112 440 170 535 C240 645 410 668 510 595 C572 550 588 470 548 428 C516 396 470 404 448 438 C418 488 342 500 304 450 C270 408 296 330 326 262 C348 212 334 168 322 118 L322 0 Z";
+const STOM=`<svg width="600" height="700" viewBox="0 0 600 700"><defs><clipPath id="sclip"><path d="${SPATH}"/></clipPath>
+ <radialGradient id="acid" cx="50%" cy="60%" r="60%"><stop offset="0" stop-color="#FF6A55" stop-opacity=".55"/><stop offset="1" stop-color="#FF6A55" stop-opacity="0"/></radialGradient></defs>
+ <path id="sbody" d="${SPATH}" fill="#123B63" stroke="#2FD0C0" stroke-width="10" stroke-linejoin="round"/>
+ <g clip-path="url(#sclip)"><rect id="pool" x="0" y="700" width="600" height="400" fill="#F7F4EC" opacity=".92"/>
+   <rect id="acidglow" x="0" y="0" width="600" height="700" fill="url(#acid)" opacity="0"/>
+   <g id="parts"></g><g id="acids"></g><g id="drops"></g></g>
+ <path id="coat" d="${SPATH}" fill="none" stroke="#FFFFFF" stroke-width="26" stroke-linejoin="round" opacity=".95" clip-path="url(#sclip)"/>
+</svg>`;
+
+const LPATH="M40 130 C40 62 125 22 265 30 C390 37 525 28 575 72 C606 98 590 145 542 175 C470 220 380 255 300 305 C248 338 188 362 148 352 C88 336 40 262 40 130 Z";
+let pr=11;const R=()=>(pr=(pr*16807)%2147483647)/2147483647;
+const FATS=[...Array(30)].map(()=>{let x,y;do{x=80+R()*470;y=50+R()*270}while(!(y<330-0.42*(x-40)&&y>40));return {x,y,r:10+R()*14,ph:R()*6,o:R()}});
+const SCARS=[...Array(9)].map((_,i)=>{const x=110+i*48+R()*20,y=80+R()*60;return `M${x} ${y} q${20+R()*30} ${40+R()*30} ${-10+R()*40} ${90+R()*40}`});
+const LIVER=(id,w)=>`<svg width="${w}" height="${w*0.62}" viewBox="0 0 620 380"><defs><clipPath id="lc${id}"><path d="${LPATH}"/></clipPath>
+ <radialGradient id="lg${id}" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#C2555E"/><stop offset="1" stop-color="#7E2B3A"/></radialGradient></defs>
+ <path class="lbody" d="${LPATH}" fill="url(#lg${id})" stroke="#2FD0C0" stroke-width="8" stroke-linejoin="round"/>
+ <g clip-path="url(#lc${id})"><rect class="lred" x="0" y="0" width="620" height="380" fill="#FF3B2E" opacity="0"/><rect class="lgrey" x="0" y="0" width="620" height="380" fill="#6B5A55" opacity="0"/>
+ <g class="lfat">${FATS.map((f,i)=>`<circle data-i="${i}" cx="${f.x}" cy="${f.y}" r="${f.r}" fill="#FFD36B" opacity=".9"/>`).join('')}</g>
+ <g class="lscar">${SCARS.map(d=>`<path d="${d}" stroke="#F2E6D8" stroke-width="7" fill="none" stroke-linecap="round" opacity=".85" stroke-dasharray="200" stroke-dashoffset="200"/>`).join('')}</g></g>
+ <path d="M300 40 C318 125 300 220 262 318" stroke="rgba(0,0,0,.25)" stroke-width="6" fill="none"/></svg>`;
+function liverState(root,fat,red,grey,scar,t){root.querySelectorAll('.lfat circle').forEach((c,i)=>{const f=FATS[i];const on=clamp(fat*FATS.length-i);
+  c.setAttribute('r',f.r*on*(1+.06*Math.sin(t*2+f.ph)));});
+  root.querySelector('.lred').setAttribute('opacity',red*(.35+.15*Math.sin(t*6)));root.querySelector('.lgrey').setAttribute('opacity',grey*.75);
+  root.querySelectorAll('.lscar path').forEach((p,i)=>p.setAttribute('stroke-dashoffset',200*(1-clamp(scar*9-i))));}
+const S={};
+// sonar split
+S.screen=el(`<div style="position:relative;width:560px;height:430px;border-radius:30px;background:#0A1424;border:6px solid #2FD0C0;overflow:hidden">
+ <svg width="560" height="430" viewBox="0 0 560 430"><defs><clipPath id="fan"><path d="M280 20 L520 400 Q280 440 40 400Z"/></clipPath></defs>
+ <path d="M280 20 L520 400 Q280 440 40 400Z" fill="#1E2A33"/><g clip-path="url(#fan)" id="noise"></g>
+ <g clip-path="url(#fan)"><g transform="translate(120,150) scale(.52)"><path d="${LPATH}" fill="rgba(200,200,200,.35)" stroke="rgba(255,255,255,.7)" stroke-width="6"/>
+ ${FATS.slice(0,16).map(f=>`<circle class="usf" cx="${f.x}" cy="${f.y}" r="${f.r*.9}" fill="#FFFFFF" opacity="0"/>`).join('')}</g>
+ <rect id="scanl" x="0" y="0" width="560" height="6" fill="rgba(47,208,192,.6)"/></g></svg></div>`);
+S.probe=el(icon('ultrasound-scanner',150,'#2FD0C0'));
+S.sonL=el('<div class="chip" style="background:rgba(6,26,51,.9);border:3px solid #2FD0C0;font-size:44px">سونار</div>');
+S.fatL=el('<div class="chip" style="background:rgba(255,211,107,.16);border:3px solid #FFD36B;font-size:46px">دهون على الكبد</div>');
+// myth card (speaker)
+S.myth=el(`<div class="card" style="position:relative;width:900px;height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+ <div class="lbl" style="font-size:60px">عادي.. كلهم عندهم دهون</div>
+ <div id="tf" style="display:flex;gap:26px;margin-top:6px"><div id="tT" class="chip" style="font-size:40px;padding:2px 26px 8px;border:3px solid #2FD0C0">صح؟</div><div id="tF" class="chip" style="font-size:40px;padding:2px 26px 8px;border:3px solid #FF6A55">غلط؟</div></div>
+ <div id="stamp" class="abs" style="left:270px;top:52px;width:360px;text-align:center;white-space:nowrap;line-height:1.2;padding:2px 0 10px;border:8px solid #FF6A55;border-radius:22px;font-family:CXB;font-size:70px;color:#FF6A55;background:rgba(6,26,51,.92);transform:rotate(-6deg)">مش صح</div></div>`,'free');
+// problem start (split)
+S.l1=el(LIVER('a',560));
+S.probL=el(`<div class="chip" style="display:flex;align-items:center;gap:14px;background:rgba(255,106,85,.16);border:3px solid #FF6A55">${icon('alert-triangle',54,'#FFC75A')}<span>بداية المشكلة</span></div>`);
+// logo (speaker)
+S.logo=el('<img src="logo.png" style="width:900px;border-radius:34px;display:block;box-shadow:0 20px 50px rgba(0,0,0,.35)">','free');
+// functions (full)
+S.l2=el(LIVER('b',620));
+S.net=el(`<svg width="900" height="900" viewBox="-450 -450 900 900">${[...Array(12)].map((_,i)=>{const a=i/12*Math.PI*2;return `<g class="nd"><line x1="0" y1="0" x2="${Math.cos(a)*380}" y2="${Math.sin(a)*330}" stroke="rgba(47,208,192,.35)" stroke-width="4" stroke-dasharray="8 10"/><circle cx="${Math.cos(a)*380}" cy="${Math.sin(a)*330}" r="22" fill="#0B2A4B" stroke="#2FD0C0" stroke-width="5"/><circle class="pk" r="9" fill="#FFC75A"/></g>`}).join('')}</svg>`);
+S.organ=el('<div class="lbl" style="font-size:76px">الكبد <span style="color:#2FD0C0;font-size:56px">عضو مهم جدًا</span></div>');
+S.count=el('<div style="text-align:center;background:rgba(6,26,51,.92);border:3px solid rgba(255,199,90,.5);border-radius:36px;padding:10px 60px 18px"><div id="cnt" class="lbl" dir="ltr" style="font-size:150px;color:#FFC75A;line-height:1">+0</div><div class="sub" style="font-size:50px">عملية حيوية</div></div>');
+// progression (full)
+S.l3=el(LIVER('c',640));
+S.stg=[['كبد دهني','#FFD36B'],['التهاب','#FF6A55'],['تليّف','#C9B8A8']].map(([t,c])=>el(`<div class="chip stg" style="font-size:44px;border:3px solid ${c};background:rgba(6,26,51,.9)">${t}</div>`));
+S.arr=el(`<svg width="760" height="40" viewBox="0 0 760 40">${[535,225].map(cx=>`<path d="M${cx+34} 20 h-68 m20 -14 l-20 14 l20 14" stroke="rgba(233,242,248,.6)" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`).join('')}</svg>`);
+S.comp=el(`<div class="chip" style="display:flex;align-items:center;gap:12px;background:rgba(255,199,90,.14);border:3px solid #FFC75A;font-size:44px">${icon('alert-triangle',50,'#FFC75A')}<span>مضاعفات</span></div>`);
+// action (split)
+const rowA=(t,ic)=>el(`<div class="card" style="position:relative;width:860px;height:170px;display:flex;align-items:center;gap:30px;padding:0 40px"><div style="width:120px;height:120px;border-radius:28px;background:rgba(47,208,192,.12);display:flex;align-items:center;justify-content:center">${ic}</div><div class="lbl" style="font-size:56px">${t}</div><div class="ck abs" style="left:40px;top:45px;width:80px;height:80px;border-radius:50%;background:#2FD0C0;display:flex;align-items:center;justify-content:center"><svg width="46" height="46" viewBox="0 0 46 46"><path d="M8 24 L19 35 L38 12" stroke="#061A33" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>`);
+S.a1=rowA('أتخلّص من الدهون',icon('liver',90,'#2FD0C0'));S.a2=rowA('الفحوصات الصحيحة',icon('test-tubes',90,'#2FD0C0'));S.a3=rowA('تنظيم غذائي',icon('nutrition',90,'#2FD0C0'));
+// improve (full)
+S.l4=el(LIVER('d',640));
+S.up=el(`<div class="chip" style="display:flex;align-items:center;gap:14px;background:rgba(47,208,192,.16);border:3px solid #2FD0C0"><svg width="44" height="50" viewBox="0 0 44 50"><path d="M22 46 V8 M6 24 L22 6 L38 24" stroke="#2FD0C0" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>تتحسّن</span></div>`);
+S.okc=el(`<svg width="200" height="200" viewBox="0 0 200 200"><circle cx="100" cy="100" r="86" fill="rgba(47,208,192,.14)"/><circle id="okr" cx="100" cy="100" r="86" fill="none" stroke="#2FD0C0" stroke-width="10" stroke-dasharray="541" stroke-dashoffset="541" transform="rotate(-90 100 100)" stroke-linecap="round"/><path id="okm" d="M60 102 L88 130 L142 72" stroke="#2FD0C0" stroke-width="14" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="130" stroke-dashoffset="130"/></svg>`);
+S.endLogo=el('<img src="logo.png" style="width:960px;border-radius:34px;display:block">');
+S.endLoc=el(`<div style="display:flex;gap:16px;align-items:center">${icon('geo-location',60,'#2FD0C0')}<div class="sub" style="font-size:52px">مركز النهضة الطبي · شبين القناطر</div></div>`);
+const ALL=Object.values(S).flat();
+
+function render(t){
+  ALL.forEach(d=>d.style.display='none');
+  const P=panelState(t);const pn=$('panel');pn.style.height=P.bottom+'px';pn.style.opacity=P.op;pn.style.borderRadius=P.bottom>=1919?'0':'0 0 40px 40px';
+  const eg=$('edge');eg.style.top=(P.bottom-3)+'px';eg.style.opacity=(P.bottom>20&&P.bottom<1900)?Math.min(1,P.bottom/200)*P.op:0;
+  $('dots').style.backgroundPosition=`${-t*14}px ${t*22}px`;
+  // sonar 1.6-5.7 split
+  if(t>1.55&&t<5.75){const o=1-seg(t,5.45,5.7);put(S.screen,580,420,.8+.2*back(seg(t,1.6,2.0)),Math.min(o,seg(t,1.6,1.8)));
+    put(S.probe,200,560,1,Math.min(o,seg(t,1.75,1.95)),-20+6*Math.sin(t*2));put(S.sonL,200,140,1,Math.min(o,seg(t,1.8,2.0)));
+    let nz='';for(let i=0;i<90;i++){const x=(i*97+Math.floor(t*20)*31)%520+20,y=(i*53+Math.floor(t*20)*17)%380+30;nz+=`<rect x="${x}" y="${y}" width="5" height="3" fill="rgba(255,255,255,${.08+(i%5)*.03})"/>`}q('#noise').innerHTML=nz;
+    q('#scanl').setAttribute('y',30+((t*160)%380));
+    document.querySelectorAll('.usf').forEach((c,i)=>c.setAttribute('opacity',.85*seg(t,3.95+i*.04,4.2+i*.04)));
+    put(S.fatL,580,700,.8+.2*back(seg(t,3.95,4.3)),Math.min(o,seg(t,3.95,4.15)));}
+  // myth 7.3-13.75 speaker
+  if(t>7.3&&t<13.8){const o=Math.min(seg(t,7.33,7.65),1-seg(t,13.5,13.75));put(S.myth,540,290,.94+.06*eout(seg(t,7.33,7.7)),o);
+    q('#tf').style.opacity=seg(t,9.7,9.9);const hl=t>9.7&&t<12?(Math.floor((t-9.7)*1.6)%2):-1;
+    q('#tT').style.background=hl===0?'rgba(47,208,192,.35)':'transparent';q('#tF').style.background=hl===1?'rgba(255,106,85,.35)':'transparent';
+    const sp=seg(t,12.0,12.2);const st=q('#stamp');st.style.opacity=sp>0?1:0;st.style.transform=`rotate(-6deg) scale(${lerp(2.2,1,eout(sp))})`;}
+  // problem 14.0-17.75 split
+  if(t>14.0&&t<17.8){const o=1-seg(t,17.5,17.75);put(S.l1,540,380,.8+.2*back(seg(t,14.0,14.4)),Math.min(o,seg(t,14.0,14.2)));liverState(S.l1,seg(t,14.2,15.4),0,0,0,t);
+    put(S.probL,540,680,.7+.3*back(seg(t,15.75,16.1)),Math.min(o,seg(t,15.75,15.9)));}
+  // logo 17.6-23.6 speaker
+  if(t>17.6&&t<23.6){put(S.logo,540,260+(1-eout(seg(t,17.65,18.05)))*30,1,Math.min(seg(t,17.65,18.0),1-seg(t,23.3,23.55)));}
+  // functions 23.7-29.95 full
+  if(t>23.7&&t<30.0){const o=1-seg(t,29.7,29.95);put(S.organ,420,420,1,Math.min(o,seg(t,23.75,24.05)));
+    put(S.net,540,930,(.85+.15*eout(seg(t,24.2,24.8)))*(1+.02*Math.sin(t)),Math.min(o,seg(t,24.2,24.6)));
+    S.net.querySelectorAll('.nd').forEach((g,i)=>{const a=i/12*Math.PI*2,ph=((t*.8)+i/12)%1;const pk=g.querySelector('.pk');pk.setAttribute('cx',Math.cos(a)*380*ph);pk.setAttribute('cy',Math.sin(a)*330*ph);g.style.opacity=seg(t,24.2+i*.08,24.4+i*.08)});
+    put(S.l2,540,930,(.8+.2*back(seg(t,23.75,24.15)))*(1+.02*Math.sin(t*1.5)),Math.min(o,seg(t,23.75,23.95)));liverState(S.l2,0,0,0,0,t);
+    const n=Math.round(500*eout(seg(t,26.6,27.6)));q('#cnt').textContent='+'+n;put(S.count,540,1250,.8+.2*back(seg(t,26.3,26.6)),Math.min(o,seg(t,26.3,26.45)));}
+  // progression 29.8-34.9 and 37.6-45.65 full
+  if((t>29.75&&t<34.95)||(t>37.55&&t<45.7)){const o=t<35?1-seg(t,34.65,34.92):1-seg(t,45.4,45.68);const fi=t<35?seg(t,29.8,30.1):seg(t,37.6,37.85);
+    put(S.l3,540,880-6*Math.sin(t*1.2),(t>41.76?lerp(1,.9,eio(seg(t,41.76,42.6))):1)*(1+.015*Math.sin(t*1.7)),Math.min(o,fi));
+    const fat=seg(t,29.85,31.6),red=t<34.95?seg(t,32.1,32.6):Math.max(seg(t,37.6,38.0)*(1-seg(t,41.8,42.6)*.6),0),grey=seg(t,41.8,42.6),scar=seg(t,41.9,42.9);
+    liverState(S.l3,fat*(1-grey*.3),red,grey,scar,t);
+    const act=t<32.07?0:t<41.76?1:2;
+    S.stg.forEach((d,i)=>{const on=i<=act;put(d,[850,540,230][i],1220,i===act?1.08:1,Math.min(o,fi,seg(t,[29.85,32.07,41.76][i],[30.1,32.3,42.0][i])+(t>37.5&&i<=act?1:0))*(i===act?1:.55));});
+    put(S.arr,540,1220,1,Math.min(o,fi)*.8);
+    put(S.comp,540,560,.7+.3*back(seg(t,43.1,43.45)),Math.min(o,seg(t,43.1,43.25)));}
+  // action 45.7-54.75 split
+  if(t>45.7&&t<54.8){const o=1-seg(t,54.5,54.75);
+    [[S.a1,47.56,170],[S.a2,49.76,400],[S.a3,51.55,630]].forEach(([d,ta,y])=>{const a=eout(seg(t,ta,ta+.45));put(d,540+(1-a)*-200,y,1,Math.min(o,seg(t,ta,ta+.2)));
+      const ck=d.querySelector('.ck');ck.style.transform=`scale(${back(seg(t,ta+.3,ta+.6))})`});}
+  // improve 54.7-59.4 full
+  if(t>54.7&&t<59.4){const o=1-seg(t,59.1,59.4);put(S.l4,540,880-8*Math.sin(t*1.3),1+.02*Math.sin(t*1.8),Math.min(o,seg(t,54.75,55.0)));
+    liverState(S.l4,1-eio(seg(t,56.8,57.8)),0,0,0,t);
+    put(S.up,420,420,.7+.3*back(seg(t,54.8,55.15)),Math.min(o,seg(t,54.8,54.95)));
+    put(S.okc,540,1210,.8+.2*back(seg(t,57.4,57.75)),Math.min(o,seg(t,57.4,57.55)));
+    q('#okr').setAttribute('stroke-dashoffset',541*(1-eio(seg(t,57.45,57.9))));q('#okm').setAttribute('stroke-dashoffset',130*(1-eio(seg(t,57.8,58.15))));}
+  if(t>59.3){put(S.endLogo,540,830-10*seg(t,59.4,61.6),.9+.06*eout(seg(t,59.4,60.1))+.04*seg(t,60.1,61.6),seg(t,59.4,59.8));
+    put(S.endLoc,540,1080+(1-eout(seg(t,59.9,60.3)))*30,1,seg(t,59.9,60.2));}
+  return true;
+}
+window.render=render;window.ready=document.fonts.ready.then(()=>true);
+</script></body></html>
