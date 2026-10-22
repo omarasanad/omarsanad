@@ -1,0 +1,41 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.709
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Cap,Cairo XB,82,&H00FFFFFF,&H00FFFFFF,&H00111111,&H96000000,0,0,0,0,100,100,0,0,1,6,3,5,90,90,0,-1
+Style: Card,Cairo XB,76,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,5,60,60,0,-1
+Style: CardSub,Cairo SB,46,&H00E6E6E6,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,5,60,60,0,-1
+Style: Box,Cairo SB,20,&H00000000,&H00000000,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,7,0,0,0,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 2,0:00:00.12,0:00:01.10,Cap,,0,0,0,,{\an5\pos(540,1300)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}سؤال يا دكتور
+Dialogue: 2,0:00:01.12,0:00:03.95,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}هل {\c&HC0D02F&}اللبن{\c&HFFFFFF&} بيهدّي {\c&HC0D02F&}حموضة المعدة
+Dialogue: 2,0:00:04.01,0:00:05.33,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}زي ما سمعنا فعلًا؟
+Dialogue: 2,0:00:05.36,0:00:06.92,Cap,,0,0,0,,{\an5\pos(540,1300)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}السؤال ده {\c&HC0D02F&}كويس جدًا
+Dialogue: 2,0:00:06.92,0:00:09.12,Cap,,0,0,0,,{\an5\pos(540,1300)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}وكتير للأسف عندهم المعلومة دي
+Dialogue: 2,0:00:09.12,0:00:10.23,Cap,,0,0,0,,{\an5\pos(540,1300)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HC0D02F&}مش مظبوطة
+Dialogue: 2,0:00:10.26,0:00:11.44,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}إحنا {\c&HC0D02F&}اللبن{\c&HFFFFFF&} لما بنشربه
+Dialogue: 2,0:00:11.44,0:00:13.54,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}بيعمل في الأول {\c&HC0D02F&}طبقة
+Dialogue: 2,0:00:13.54,0:00:15.88,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}عن طريقها {\c&HC0D02F&}بيغلّف المعدة
+Dialogue: 2,0:00:15.88,0:00:17.43,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}بس بعد كده نتيجة وجود
+Dialogue: 2,0:00:17.43,0:00:19.61,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HC0D02F&}الدهون{\c&HFFFFFF&} و{\c&HC0D02F&}الكالسيوم{\c&HFFFFFF&} اللي فيه
+Dialogue: 2,0:00:19.62,0:00:22.39,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}بيزوّد من {\c&HC0D02F&}إفراز الحمض{\c&HFFFFFF&} بتاع المعدة
+Dialogue: 2,0:00:22.41,0:00:24.16,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}فبيعمل لك ما يُسمّى بالـ
+Dialogue: 2,0:00:24.16,0:00:25.92,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HC0D02F&}Rebound Hyperacidity
+Dialogue: 2,0:00:25.93,0:00:28.40,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}تلاقي بعدها بتحس {\c&HC0D02F&}بحموضة جديدة
+Dialogue: 2,0:00:28.42,0:00:29.69,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HC0D02F&}أكتر من الأول
+Dialogue: 2,0:00:29.71,0:00:30.86,Cap,,0,0,0,,{\an5\pos(540,1300)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HC0D02F&}خلّي بالك{\c&HFFFFFF&} دايمًا
+Dialogue: 2,0:00:30.89,0:00:32.27,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HC0D02F&}الحموضة المستمرة
+Dialogue: 2,0:00:32.27,0:00:34.48,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}ممكن تكون {\c&HC0D02F&}إنذار{\c&HFFFFFF&} للمعدة
+Dialogue: 2,0:00:34.48,0:00:36.91,Cap,,0,0,0,,{\an5\pos(540,1420)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}محتاج إن إنت {\c&HC0D02F&}تكشف وتطمّن
+Dialogue: 2,0:00:36.92,0:00:38.61,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}عشان نعرف {\c&HC0D02F&}السبب الرئيسي{\c&HFFFFFF&} ليها
+Dialogue: 2,0:00:38.63,0:00:40.56,Cap,,0,0,0,,{\an5\pos(540,1300)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}أنا {\c&HC0D02F&}دكتور أبوبكر أحمد سند
+Dialogue: 2,0:00:40.69,0:00:41.45,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}أخصائي {\c&HC0D02F&}الباطنة
+Dialogue: 2,0:00:41.45,0:00:44.07,Cap,,0,0,0,,{\an5\pos(540,800)\fad(70,80)\fscx86\fscy86\blur0.6\t(0,150,0.6,\fscx100\fscy100)}{\c&HFFFFFF&}و{\c&HC0D02F&}الجهاز الهضمي{\c&HFFFFFF&} و{\c&HC0D02F&}الكبد{\c&HFFFFFF&} و{\c&HC0D02F&}المناظير
