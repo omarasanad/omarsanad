@@ -1,0 +1,27 @@
+{
+ "title": "القولون التقرحي",
+ "subtitleEn": "ENDOSCOPY",
+ "subtitleAr": "من داخل غرفة المناظير",
+ "frames": "build/ep03/frames",
+ "monValidUntil": 99,
+ "baseFocus": [
+  0.5,
+  0.42
+ ],
+ "card": "steps",
+ "stepsTitle": "علامات بالمنظار",
+ "magPos": [
+  850,
+  1120
+ ],
+ "magCrop": {
+  "cx": 0.354,
+  "cy": 0.5,
+  "w": 0.63,
+  "h": 0.82
+ },
+ "magnifierLabel": "صورة المنظار",
+ "thumbFrame": "0400",
+ "thumbTitle": "القولون التقرحي",
+ "thumbPill": "Vascular pattern · Pseudopolyps"
+}

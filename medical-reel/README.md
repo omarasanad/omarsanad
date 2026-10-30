@@ -86,6 +86,15 @@ The project is a template for a series. Episode 1 (the colonoscopy clip above) u
   - "Activity" is kept in English, as he says it.
   - Edit `episodes/ep02/transcript.txt`, then run `./build_episode.sh ep02`.
 
+**Episode 3: `ep03`** ("القولون التقرحي"; source `WhatsApp_Video_2026-10-28_at_13.32.43`, 478×850, 18.4 s, vertical)
+- **Privacy:** the sidebar is found per frame by `scripts/detect_sidebar.py` (`"trackMethod":"detect"` in settings), not tracked. It locates the pink endoscope image and derives the screen and sidebar from fixed proportions. Feature tracking drifted on this clip because the live image changes every frame.
+- **Audio:** same room tones as ep02; the beep sits at ~656 Hz with a strong 2.64 kHz harmonic. Speech-to-room gap rose from 17.4 dB to 24.6 dB. Voice sits 19.6–22 dB above the music.
+- **Graphics:**
+  - a magnifier on the endoscope image while he says "بيبقى المنظر بتاعنا كده";
+  - a 2-sign card (Vascular pattern مش موجود · Pseudopolyps = زوائد) that lights up as he names each sign;
+  - a punch-in on "زي المنظر اللي احنا شايفين هنا".
+- **Captions — DRAFT, needs the doctor's confirmation:** from about 20 Whisper large-v3 passes. Unsure: the word before "بتبقى موجودة معانا", written as **التقرحات**; and an unclear word before "طبعاً بنلاقي زوائد", left out.
+
 A new episode needs:
 - `source/<ep>.mp4`;
 - `episodes/<ep>/settings.json`: monitor/sidebar quads for tracking, blur options, noise-profile pauses;

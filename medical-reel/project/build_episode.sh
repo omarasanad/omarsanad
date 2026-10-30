@@ -13,7 +13,11 @@ IFS=, read W H < <(ffprobe -v error -select_streams v:0 -show_entries stream=wid
 if [ ! -d "$B/frames" ] || [ "${FORCE:-0}" = 1 ]; then
   echo "== 1. privacy: track monitor + blur patient identifiers"
   mkdir -p "$B/track"
-  python3 scripts/track_monitor.py "$SRC" "$B/track_full.json" "$B/track" "$(J "['trackQuads']")"
+  if [ "$(J "['trackMethod']" 2>/dev/null)" = "detect" ]; then   # per-frame detection from the endoscope image (no drift)
+    python3 scripts/detect_sidebar.py "$SRC" "$B/track_full.json" "$B/detect_check.png"
+  else                                                         # feature tracking from starting quads
+    python3 scripts/track_monitor.py "$SRC" "$B/track_full.json" "$B/track" "$(J "['trackQuads']")"
+  fi
   python3 scripts/export_track.py "$B/track_full.json" "$E/track.json" "$W" "$H"
   python3 scripts/anonymize.py "$SRC" "$B/track_full.json" "$B/private.avi" "$(J "['anonymize']")"
   echo "== 2. frames (2x Lanczos)"
