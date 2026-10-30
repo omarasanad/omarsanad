@@ -1,6 +1,7 @@
 // Frame renderer: serves the project folder, drives window.seek(t) in headless Chromium,
 // and writes PNG frames.
 //   node scripts/render.mjs --out build/render            (all frames)
+//   node scripts/render.mjs --ep ep02                      (episode in episodes/ep02 -> build/ep02/render)
 //   node scripts/render.mjs --preview 0.5,9,17,25,32 --out build/preview
 //   node scripts/render.mjs --page thumbnail.html --preview 0 --out build/thumb
 //   node scripts/render.mjs --page logo_export.html --preview 0 --w 1080 --h 1080 --transparent --out build/logo
@@ -13,12 +14,14 @@ let pw; try { pw = require('playwright'); } catch { pw = require('/opt/node22/li
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const args = Object.fromEntries(process.argv.slice(2).reduce((a, v, i, arr) => (v.startsWith('--') ? a.concat([[v.slice(2), arr[i + 1] && !arr[i + 1].startsWith('--') ? arr[i + 1] : true]]) : a), []));
-const outDir = path.resolve(root, args.out || 'build/render');
+const ep = args.ep || '';                        // --ep ep02 -> episodes/ep02 data, build/ep02/render
+const dataDir = ep ? `episodes/${ep}` : 'data';
+const outDir = path.resolve(root, args.out || (ep ? `build/${ep}/render` : 'build/render'));
 const pageName = args.page || 'index.html';
 const workers = Number(args.workers || 3);
 fs.mkdirSync(outDir, { recursive: true });
 
-const tl = JSON.parse(fs.readFileSync(path.join(root, 'data/timeline.json')));
+const tl = JSON.parse(fs.readFileSync(path.join(root, dataDir, 'timeline.json')));
 const fps = tl.fps, total = tl.videoDur + tl.outroDur;
 const allTimes = Array.from({ length: Math.round(total * fps) }, (_, i) => i / fps);
 const from = Number(args.from || 0);            // --from FRAME: re-render only frames >= FRAME (1-based names kept)
@@ -32,7 +35,7 @@ const server = http.createServer((req, res) => {
   fs.createReadStream(p).pipe(res);
 });
 await new Promise(r => server.listen(0, '127.0.0.1', r));
-const url = `http://127.0.0.1:${server.address().port}/${pageName}`;
+const url = `http://127.0.0.1:${server.address().port}/${pageName}${ep ? `?ep=${ep}` : ''}`;
 
 const browser = await pw.chromium.launch();
 const t0 = Date.now();

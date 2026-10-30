@@ -9,3 +9,6 @@ project/audio/cleaned_voice.wav
 project/audio/music.wav
 project/audio/sfx.wav
 __pycache__/
+output/**/*.mp4
+output/**/thumbnail.png
+output/**/*.wav

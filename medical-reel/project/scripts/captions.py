@@ -14,6 +14,8 @@ Usage: python3 scripts/captions.py [--asr data/asr_words.json]
 import json, re, sys, os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 P = lambda *a: os.path.join(ROOT, *a)
+DATA = os.environ.get("DATA", "data")                       # episode data dir, e.g. episodes/ep02
+OUTD = os.environ.get("OUT", os.path.join("..", "output"))  # deliverables dir, relative to project/
 
 def srt_time(t):
     ms = int(round(t * 1000)); h, ms = divmod(ms, 3600000); m, ms = divmod(ms, 60000); s, ms = divmod(ms, 1000)
@@ -28,9 +30,9 @@ def parse_line(line):
             "hl": [w for h in hl for w in h.split()], "hl2": [w for h in hl2 for w in h.split()]}
 
 def from_transcript():
-    lines = [l.strip() for l in open(P("data/transcript.txt"), encoding="utf-8") if l.strip() and not l.startswith("#")]
+    lines = [l.strip() for l in open(P(DATA, "transcript.txt"), encoding="utf-8") if l.strip() and not l.startswith("#")]
     caps = [parse_line(l) for l in lines]
-    all_regions = json.load(open(P("data/speech_regions.json")))
+    all_regions = json.load(open(P(DATA, "speech_regions.json")))
     def fill(run, lo, hi):
         # speech-time axis inside [lo, hi]: map a 0..1 fraction onto the concatenated speech regions
         regions = [[max(a, lo), min(b, hi)] for a, b in all_regions if min(b, hi) > max(a, lo)] or [[lo, hi]]
@@ -70,9 +72,9 @@ if __name__ == "__main__":
     caps.sort(key=lambda c: c["start"])
     for a, b in zip(caps, caps[1:]):           # no overlaps
         a["end"] = min(a["end"], b["start"] - 0.02)
-    json.dump(caps, open(P("data/captions.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    os.makedirs(P("..", "output"), exist_ok=True)
-    with open(P("..", "output", "captions.srt"), "w", encoding="utf-8") as f:
+    json.dump(caps, open(P(DATA, "captions.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    os.makedirs(P(OUTD), exist_ok=True)
+    with open(P(OUTD, "captions.srt"), "w", encoding="utf-8") as f:
         for i, c in enumerate(caps, 1):
             f.write(f"{i}\n{srt_time(c['start'])} --> {srt_time(c['end'])}\n‫{c['text']}‬\n\n")
-    print(f"{len(caps)} captions -> data/captions.json, output/captions.srt")
+    print(f"{len(caps)} captions -> {DATA}/captions.json, {OUTD}/captions.srt")

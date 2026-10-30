@@ -30,10 +30,14 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#06142a;font-fam
 <img id="logo" src="graphics/brand/brand_mark.png">
 <div id="en"></div><div id="t"></div><div id="pill"></div><div id="bar"></div><div id="nm"></div><div id="sp"></div>
 <script>
-fetch('data/config.json').then(r=>r.json()).then(async c=>{
+const EP=new URLSearchParams(location.search).get('ep');
+(async()=>{let c=await fetch('data/config.json').then(r=>r.json());
+  if(EP) Object.assign(c,await fetch(`episodes/${EP}/config.json`).then(r=>r.json()));
+  if(c.thumbFrame) document.getElementById('img').src=`${c.frames||'build/frames'}/${c.thumbFrame}.jpg`;
+  if(c.thumbTitle) c.title=c.thumbTitle; if(c.thumbPill) c.subtitleAr=c.thumbPill;
   document.getElementById('t').textContent=c.title; document.getElementById('en').textContent=c.subtitleEn;
   document.getElementById('pill').textContent=c.subtitleAr; document.getElementById('nm').textContent=c.doctorName||''; document.getElementById('sp').textContent=c.specialty||'';
   await Promise.all([800,900].map(w=>document.fonts.load(w+' 40px Cairo','منظار COLON'))); await document.fonts.ready;
-  await document.getElementById('img').decode(); await document.getElementById('logo').decode(); window.ready=true;});
+  await document.getElementById('img').decode(); await document.getElementById('logo').decode(); window.ready=true;})();
 window.seek=async()=>{};
 </script></body></html>

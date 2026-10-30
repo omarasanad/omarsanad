@@ -3,11 +3,14 @@ import cv2, numpy as np, json, sys
 side=[d['side'] if isinstance(d,dict) else d for d in json.load(open(sys.argv[2]))]; fps=30
 # NOTE: the tracked quad is used until 21.9 s; KF below are hand-placed keyframes for the camera push-in of THIS clip.
 # For a new clip, re-check the blur visually and edit KF (source pixel coords, x0,y0,x1,y1).
-KF=[(22.0,(345,10,400,130)),(22.5,(355,0,400,130)),(23.0,(372,0,400,125)),(23.5,(366,0,400,115)),
+EP01_KF=[(22.0,(345,10,400,130)),(22.5,(355,0,400,130)),(23.0,(372,0,400,125)),(23.5,(366,0,400,115)),
     (24.0,(342,5,400,108)),(24.5,(338,0,400,105)),(25.0,(322,0,400,82)),(25.5,(322,0,400,40)),
     (26.0,(345,0,400,30)),(26.5,(358,0,400,16))]
+# optional per-episode settings: argv[4] = '{"trackedUntil":seconds,"kf":[[t,[x0,y0,x1,y1]],...]}'
+OPT=json.loads(sys.argv[4]) if len(sys.argv)>4 else {"trackedUntil":21.9,"kf":[[t,list(r)] for t,r in EP01_KF]}
+KF=[(t,tuple(r)) for t,r in OPT["kf"]]; TRACKED_UNTIL=OPT["trackedUntil"]
 def rect_at(t):
-    if t<KF[0][0] or t>KF[-1][0]: return None
+    if not KF or t<KF[0][0] or t>KF[-1][0]: return None
     for (t0,a),(t1,b) in zip(KF,KF[1:]):
         if t0<=t<=t1:
             u=(t-t0)/(t1-t0); return [a[k]+(b[k]-a[k])*u for k in range(4)]
@@ -16,7 +19,7 @@ while True:
     ok,f=cap.read()
     if not ok: break
     t=i/fps; m=np.zeros(f.shape[:2],np.uint8)
-    if t<21.9:
+    if t<TRACKED_UNTIL:
         q=np.array(side[i],np.float32); c=q.mean(0); q=c+(q-c)*1.18
         cv2.fillConvexPoly(m,q.astype(np.int32),255)
     r=rect_at(t)

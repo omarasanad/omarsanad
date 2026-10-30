@@ -6,8 +6,10 @@ while True:
     frames.append(f)
 H,W=frames[0].shape[:2]
 # monitor quad (bezel) and sidebar-text quad in frame 0, source px (400x368)
-mon=np.float32([[26,116],[214,116],[214,240],[26,240]])
-side=np.float32([[162,124],[212,124],[212,174],[162,174]])
+# starting quads (frame 0, source px): monitor bezel and sidebar-text block. Override per episode:
+#   python3 track_monitor.py SRC OUT.json PREVIEW_DIR '{"mon":[[x,y]x4],"side":[[x,y]x4]}'
+Q=json.loads(sys.argv[4]) if len(sys.argv)>4 else {"mon":[[26,116],[214,116],[214,240],[26,240]],"side":[[162,124],[212,124],[212,174],[162,174]]}
+mon=np.float32(Q["mon"]); side=np.float32(Q["side"])
 orb=cv2.ORB_create(3000)
 def feats(img,quad):
     g=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY); g=cv2.resize(g,None,fx=2,fy=2)
@@ -35,7 +37,7 @@ for i,f in enumerate(frames):
 json.dump(out,open(sys.argv[2],"w"))
 # preview
 fps=30
-for t in range(0,31,1):
+for t in range(0,int(len(frames)/fps)+1):
     i=min(t*fps,len(frames)-1); f=frames[i].copy()
     cv2.polylines(f,[np.int32(out[i]["mon"])],True,(0,255,0),2)
     cv2.imwrite(f"{sys.argv[3]}/tr_{t:02d}.png",f)

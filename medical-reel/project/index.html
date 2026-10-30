@@ -51,6 +51,22 @@ body{font-family:Cairo,sans-serif;color:#fff;position:relative}
 .chip{font-weight:700;font-size:27px;padding:6px 20px;border-radius:999px;background:rgba(255,255,255,.08);color:#9fb6cc;border:2px solid transparent}
 .chip.on{background:rgba(20,184,166,.22);color:#fff;border-color:var(--cyan)}
 .chip.done{color:#d9e7f2}
+/* steps card */
+#steps{left:40px;width:1000px;height:326px;border-radius:30px;overflow:hidden;
+  background:linear-gradient(135deg,rgba(18,48,90,.96),rgba(11,31,58,.98));box-shadow:0 0 0 2px rgba(63,224,208,.3)}
+#stTitle{position:absolute;right:40px;top:22px;font-weight:900;font-size:40px}
+#stRow{position:absolute;left:30px;right:30px;top:96px;height:210px;display:flex;flex-direction:row;justify-content:space-between}
+.st{width:280px;display:flex;flex-direction:column;align-items:center;gap:14px;position:relative}
+.st .ic{width:118px;height:118px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.06);border:4px solid rgba(255,255,255,.18)}
+.st .ic svg{width:62px;height:62px;stroke:#9fb6cc;fill:none;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+.st .lb{font-weight:800;font-size:32px;color:#9fb6cc;white-space:nowrap}
+.st .no{position:absolute;top:-6px;right:62px;width:40px;height:40px;border-radius:50%;background:#0B1F3A;border:3px solid rgba(255,255,255,.25);
+  font-weight:900;font-size:22px;display:flex;align-items:center;justify-content:center;color:#9fb6cc}
+.st.on .ic{background:rgba(20,184,166,.22);border-color:var(--cyan)} .st.on .ic svg{stroke:#fff} .st.on .lb{color:#fff}
+.st.on .no,.st.done .no{background:var(--teal);border-color:var(--teal);color:#06142a}
+.st.done .ic{border-color:var(--teal)} .st.done .ic svg{stroke:var(--cyan)} .st.done .lb{color:#d9e7f2}
+.stLink{position:absolute;top:155px;height:5px;border-radius:3px;background:linear-gradient(90deg,var(--teal),var(--cyan));transform-origin:100% 50%}
 /* magnifier */
 #mag{width:340px;height:340px;border-radius:50%;overflow:hidden;background:#000;
   box-shadow:0 0 0 6px rgba(11,31,58,.95),0 0 0 9px var(--cyan),0 18px 40px rgba(0,0,0,.5)}
@@ -115,6 +131,8 @@ body{font-family:Cairo,sans-serif;color:#fff;position:relative}
   <div id="cardText"><h2 id="aTitle"></h2><div class="note" id="aNote"></div><div id="chips"></div></div>
 </div>
 
+<div id="steps" class="abs"><div id="stTitle"></div><div id="stLinks"></div><div id="stRow"></div></div>
+
 <img id="logo" class="abs" src="graphics/brand/brand_mark.png" alt="">
 <div id="brand" class="abs"><div class="nm" id="bNm"></div><div class="sp" id="bSp"></div></div>
 <div id="title" class="abs"><h1 id="tH"></h1><div class="sub"><span class="bar"></span><span class="en" id="tEn"></span></div><div class="ar" id="tAr" style="margin-top:2px"></div></div>
@@ -139,7 +157,12 @@ const spring=(u,k=9,z=.55)=>{if(u<=0)return 0;const w=k,d=z*w,wd=w*Math.sqrt(1-z
 // window envelope: rises over `a` after t0, falls over `b` before t1
 const env=(t,t0,t1,a=.4,b=.4)=>Math.min(eOut((t-t0)/a),eOut((t1-t)/b));
 
-let CFG,TL,TRK,CAPS,frameCount,vidDur;
+let CFG,TL,TRK,CAPS,frameCount,vidDur,BASE,FRAMES;
+const EP=new URLSearchParams(location.search).get('ep');   // ?ep=ep02 -> episodes/ep02/*
+const ICONS={ // simple line icons for the steps card
+  biopsy:'<svg viewBox="0 0 64 64"><path d="M22 10h14M29 10v8"/><rect x="21" y="18" width="16" height="22" rx="3"/><path d="M29 40v6M14 54h36M20 54c0-6 4-8 9-8s9 2 9 8"/><path d="M44 24c5 2 8 7 8 13"/></svg>',
+  review:'<svg viewBox="0 0 64 64"><rect x="14" y="10" width="36" height="46" rx="5"/><path d="M24 10v-2h16v2M22 26h20M22 34h14M22 42l5 5 10-10"/></svg>',
+  treat:'<svg viewBox="0 0 64 64"><rect x="8" y="22" width="48" height="20" rx="10" transform="rotate(-40 32 32)"/><path d="M24 22l17 17"/></svg>'};
 const SEG=[ // fraction of tube length measured from the cecum end
   {n:'الأعور',a:0,b:.07},{n:'الصاعد',a:.07,b:.27},{n:'المستعرض',a:.27,b:.6},
   {n:'النازل',a:.6,b:.79},{n:'السيني',a:.79,b:.93},{n:'المستقيم',a:.93,b:1.01}];
@@ -147,7 +170,13 @@ const ROUTE=[...SEG].reverse(); // scope travels rectum -> cecum
 
 async function init(){
   const j=p=>fetch(p).then(r=>r.json());
-  [CFG,TL,TRK,CAPS]=await Promise.all([j('data/config.json'),j('data/timeline.json'),j('data/track.json'),j('data/captions.json')]);
+  BASE=EP?`episodes/${EP}/`:'data/';
+  [CFG,TL,TRK,CAPS]=await Promise.all([j('data/config.json'),j(BASE+'timeline.json'),j(BASE+'track.json'),j(BASE+'captions.json')]);
+  if(EP) Object.assign(CFG,await j(BASE+'config.json'));   // episode config overrides the shared branding config
+  FRAMES=CFG.frames||'build/frames';
+  if(TL.steps){ $('stTitle').textContent=CFG.stepsTitle||'';
+    $('stRow').innerHTML=TL.steps.map((s,i)=>`<div class="st" id="st${i}"><div class="ic">${ICONS[s.icon]||''}</div><div class="lb">${s.label}</div><div class="no">${i+1}</div></div>`).join('');
+    $('stLinks').innerHTML=TL.steps.slice(1).map((_,i)=>`<div class="stLink" id="sl${i}"></div>`).join(''); }
   frameCount=TRK.mon.length; vidDur=TL.videoDur;
   $('tH').textContent=CFG.title; $('bNm').textContent=CFG.doctorName||''; $('bSp').textContent=CFG.specialty||''; if(CFG.logo) $('logo').src=CFG.logo; $('wm').src=CFG.logo||'graphics/logo.svg'; $('tEn').textContent=CFG.subtitleEn; $('tAr').textContent=CFG.subtitleAr;
   $('aTitle').textContent=CFG.anatomyTitle; $('aNote').textContent=CFG.anatomyNote;
@@ -190,7 +219,7 @@ function placeImg(img,W,H,z,fx,fy){
 let lastSrc='';
 async function seek(t){
   const fps=TL.fps, out=t>=vidDur, fi=Math.min(frameCount-1,Math.floor(Math.min(t,vidDur-1e-3)*fps));
-  const src=`build/frames/${String(fi+1).padStart(4,'0')}.jpg`;
+  const src=`${FRAMES}/${String(fi+1).padStart(4,'0')}.jpg`;
   const vid=$('vid'), mimg=$('magImg');
   if(src!==lastSrc){vid.src=src; mimg.src=src; lastSrc=src; await Promise.all([vid.decode(),mimg.decode()]).catch(()=>{});}
 
@@ -217,11 +246,11 @@ async function seek(t){
   {const w=spring(t-.7,10,.6); $('wm').style.opacity=.92*clamp((t-.7)*4); $('wm').style.transform=`scale(${.5+.5*w})`;}
 
   // ---- camera: punch-ins + gentle drift, focused on the tracked monitor ----
-  const m=monAt(fi), monValid=t<21.4;
+  const m=monAt(fi), monValid=t<(CFG.monValidUntil??21.4);
   let zAmt=0; for(const zz of TL.zooms){zAmt=Math.max(zAmt,env(t,zz.t0,zz.t1,.35,.55)*(zz.z-1));}
   const z=1.02+.015*Math.sin(t*2*Math.PI/14)+zAmt;
   const focusW=monValid?Math.max(zAmt>0?1:0,sp)*Math.max(clamp(zAmt*12),sp):0;
-  const fx=lerp(.5,m.cx,focusW), fy=lerp(.5,m.cy,focusW);
+  const [bfx,bfy]=CFG.baseFocus||[.5,.5]; const fx=lerp(bfx,m.cx,focusW), fy=lerp(bfy,m.cy,focusW);
   const pl=placeImg(vid,1000,pH,z,fx,fy);
 
   // progress bar under panel
@@ -231,7 +260,17 @@ async function seek(t){
 
   // ---- split-screen anatomy card ----
   const card=$('card'); card.style.top=(pY+pH+40)+'px'; card.style.height='326px';
-  card.style.opacity=clamp(sp*1.6); card.style.transform=`translateY(${(1-eOut(sp))*40}px)`;
+  const useSteps=CFG.card==='steps';
+  card.style.opacity=useSteps?0:clamp(sp*1.6); card.style.transform=`translateY(${(1-eOut(sp))*40}px)`;
+  {const st=$('steps'); st.style.top=(pY+pH+40)+'px'; st.style.opacity=useSteps?clamp(sp*1.6):0; st.style.transform=card.style.transform;
+   if(useSteps&&TL.steps){ const tt0=eOut((t-S.t0-.25)/.4); $('stTitle').style.opacity=tt0;
+     TL.steps.forEach((s,i)=>{const e=$('st'+i); const nx=TL.steps[i+1]; const on=t>=s.t&&(!nx||t<nx.t); const done=nx&&t>=nx.t;
+       e.className='st'+(on?' on':done?' done':''); const a=eOut((t-S.t0-.35-i*.12)/.4); e.style.opacity=a;
+       e.style.transform=`translateY(${(1-a)*20}px) scale(${on?1+.06*spring((t-s.t)*1.4,10,.5)-.06*clamp((t-s.t-.6)*2)+.0:1})`;});
+     // connectors grow from step i to i+1 when step i+1 starts
+     TL.steps.slice(1).forEach((s,i)=>{const l=$('sl'+i); const W=940, cw=280, gap=(W-3*cw)/2; // row is RTL: step0 at right
+       const xr=W+30-(i*(cw+gap))-cw/2-70, xl=W+30-((i+1)*(cw+gap))-cw/2+70; l.style.left=xl+'px'; l.style.width=(xr-xl)+'px';
+       l.style.transform=`scaleX(${eOut((t-s.t+.15)/.45)})`;});}}
   const cu=t-S.t0;
   const draw=eOut((cu-.3)/.9), L=window.TUBE_LEN||800;
   for(const id of ['colTube','colFold']){const p=$(id); p.style.strokeDasharray=id==='colFold'?'3 17':`${L} ${L}`; p.style.opacity=id==='colFold'?.7*draw:1;}
@@ -247,11 +286,12 @@ async function seek(t){
 
   // ---- magnifier callout on the monitor image ----
   const M=TL.magnifier, mg=env(t,M.t0,M.t1,.45,.4);
-  const mag=$('mag'), D=340, mcx=850, mcy=1130;
+  const mag=$('mag'), D=340, [mcx,mcy]=CFG.magPos||[850,1130];
   mag.style.left=(mcx-D/2)+'px'; mag.style.top=(mcy-D/2)+'px';
   mag.style.opacity=clamp(mg*1.4); mag.style.transform=`scale(${.6+.4*spring((t-M.t0)/1.0*1.1,9,.6)*(mg>0?1:0)})`;
   {const [sw,sh]=TRK.src; const r=m.r; const mw=r[2]-r[0], mh=r[3]-r[1];
-   const side=Math.min(mw*.66,mh*.95); const cx=r[0]+mw*.36, cy=r[1]+mh*.5;
+   const mc=CFG.magCrop||{cx:.36,cy:.5,w:.66,h:.95}; // endoscope image inside the tracked monitor box
+   const side=Math.min(mw*mc.w,mh*mc.h); const cx=r[0]+mw*mc.cx, cy=r[1]+mh*mc.cy;
    const s=D/side; mimg.style.width=sw*s+'px'; mimg.style.height=sh*s+'px';
    mimg.style.transform=`translate(${D/2-cx*s}px,${D/2-cy*s}px)`;
    // callout from monitor image (panel coords -> page coords)
@@ -265,7 +305,7 @@ async function seek(t){
   ml.style.left=(mcx-ml.offsetWidth/2)+'px'; ml.style.top=(mcy+D/2+18)+'px';
 
   // ---- HUD on the close endoscopic view ----
-  const H=TL.hud, hu=env(t,H.t0,H.t1,.5,.5), ins=lerp(70,26,eOut((t-H.t0)/.6));
+  const H=TL.hud||{t0:1e9,t1:1e9+1}, hu=env(t,H.t0,H.t1,.5,.5), ins=lerp(70,26,eOut((t-H.t0)/.6));
   const bs=[[0,0,'Left','Top'],[1,0,'Right','Top'],[0,1,'Left','Bottom'],[1,1,'Right','Bottom']];
   bs.forEach(([ix,iy,sx,sy],k)=>{const b=$('b'+k); b.style.left=(ix?1000-ins-74:ins)+'px'; b.style.top=(iy?pH-ins-74:ins)+'px';
     b.style.borderWidth='0'; b.style['border'+sx+'Width']='5px'; b.style['border'+sy+'Width']='5px';

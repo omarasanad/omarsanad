@@ -1,0 +1,27 @@
+{
+ "title": "نشاط المرض بالمنظار",
+ "subtitleEn": "ENDOSCOPY",
+ "subtitleAr": "من داخل غرفة المناظير",
+ "frames": "build/ep02/frames",
+ "monValidUntil": 99,
+ "baseFocus": [
+  0.5,
+  0.36
+ ],
+ "card": "steps",
+ "stepsTitle": "الخطوات الجاية",
+ "magPos": [
+  850,
+  1120
+ ],
+ "magCrop": {
+  "cx": 0.375,
+  "cy": 0.49,
+  "w": 0.57,
+  "h": 0.68
+ },
+ "magnifierLabel": "صورة المنظار",
+ "thumbFrame": "0235",
+ "thumbTitle": "نشاط المرض",
+ "thumbPill": "عينات · إعادة تقييم · علاج"
+}

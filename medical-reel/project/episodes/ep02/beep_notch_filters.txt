@@ -1,0 +1,1 @@
+equalizer=f=515.4:t=h:w=14:g=-18,equalizer=f=1030.8:t=h:w=18:g=-8,equalizer=f=658.8:t=h:w=18:g=-20,equalizer=f=1317.6:t=h:w=24:g=-10,equalizer=f=1976.4:t=h:w=28:g=-8,equalizer=f=2635.2:t=h:w=30:g=-10,equalizer=f=3294:t=h:w=34:g=-10
