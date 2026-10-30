@@ -259,10 +259,10 @@ async function seek(t){
   const pbo=out?0:intro; $('progressTrack').style.opacity=pbo; $('progress').style.opacity=pbo;
 
   // ---- split-screen anatomy card ----
-  const card=$('card'); card.style.top=(pY+pH+40)+'px'; card.style.height='326px';
+  const card=$('card'); const cardTop=pY+560+40; card.style.top=cardTop+'px'; card.style.height='326px';  // fixed slot: never drifts into the captions while fading
   const useSteps=CFG.card==='steps';
   card.style.opacity=useSteps?0:clamp(sp*1.6); card.style.transform=`translateY(${(1-eOut(sp))*40}px)`;
-  {const st=$('steps'); st.style.top=(pY+pH+40)+'px'; st.style.opacity=useSteps?clamp(sp*1.6):0; st.style.transform=card.style.transform;
+  {const st=$('steps'); st.style.top=cardTop+'px'; st.style.opacity=useSteps?clamp(sp*1.6):0; st.style.transform=card.style.transform;
    if(useSteps&&TL.steps){ const tt0=eOut((t-S.t0-.25)/.4); $('stTitle').style.opacity=tt0;
      TL.steps.forEach((s,i)=>{const e=$('st'+i); const nx=TL.steps[i+1]; const on=t>=s.t&&(!nx||t<nx.t); const done=nx&&t>=nx.t;
        e.className='st'+(on?' on':done?' done':''); const a=eOut((t-S.t0-.35-i*.12)/.4); e.style.opacity=a;

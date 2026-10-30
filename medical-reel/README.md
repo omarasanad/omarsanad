@@ -66,6 +66,34 @@ Result: the speech-to-room-noise gap went from about 11.5 dB to about 20 dB. Bre
 
 The mark is cut from the supplied PNG banner (`project/graphics/brand/brand_banner.png` → `scripts/cut_brand_mark.py`). That source is only about 240 px across, so it is shown at 240 px or smaller. A vector/high-resolution original would let it be used larger.
 
+## Episodes (series)
+
+The project is a template for a series. Episode 1 (the colonoscopy clip above) uses `project/data/` and `./build.sh`. Each later episode lives in `project/episodes/<ep>/` and builds with `./build_episode.sh <ep>`. Deliverables go to `output/<ep>/`.
+
+**Episode 2: `ep02`** ("نشاط المرض بالمنظار"; source `WhatsApp_Video_2026-10-28`, 478×850, 15 s, vertical)
+- **Privacy:** the monitor sidebar (date/time and the Name/ID/Age/Sex/Dr fields) is tracked across all 449 frames and blurred.
+- **Audio:**
+  - Notches for this room's steady 515 Hz whine and its periodic 659 Hz monitor beep with harmonics (`episodes/ep02/beep_notch_filters.txt`).
+  - The speech-to-room gap rose from 20 dB to 27.5 dB.
+  - Voice sits 19–23.5 dB above the music.
+- **Graphics:**
+  - a punch-in on the first point at the screen;
+  - a magnifier on the endoscope image while he says the findings show disease activity;
+  - a 3-step card (أخذ عينات → إعادة تقييم → العلاج الصح) that lights up as he says each step;
+  - the same branded header, watermark and Facebook outro as episode 1.
+- **Captions — DRAFT, needs the doctor's confirmation:**
+  - Written in his Egyptian Arabic from five Whisper large-v3 passes, which agreed with each other.
+  - "Activity" is kept in English, as he says it.
+  - Edit `episodes/ep02/transcript.txt`, then run `./build_episode.sh ep02`.
+
+A new episode needs:
+- `source/<ep>.mp4`;
+- `episodes/<ep>/settings.json`: monitor/sidebar quads for tracking, blur options, noise-profile pauses;
+- `beep_notch_filters.txt`;
+- `config.json`: title, card type, focus, magnifier;
+- `timeline.json`: zooms, split/steps, magnifier, SFX;
+- `transcript.txt`.
+
 ## Editing and re-rendering
 
 Requirements: FFmpeg, Node 18+ with `playwright` (Chromium), Python 3 with `numpy scipy soundfile noisereduce opencv-contrib-python-headless` (and `faster-whisper` for `transcribe.py`).
