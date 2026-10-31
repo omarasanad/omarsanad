@@ -24,6 +24,16 @@ while True:
         cv2.fillConvexPoly(m,q.astype(np.int32),255)
     r=rect_at(t)
     if r: cv2.rectangle(m,(int(r[0])-4,int(r[1])-4),(int(r[2])+4,int(r[3])+6),255,-1)
+    if m.any() and OPT.get("occlusionAware"):
+        # anything in front of the monitor (face, glove, scrubs) is coloured; the info panel is greyscale
+        # (black background + white text). Keep coloured pixels sharp; close the mask so glasses frames
+        # inside the face are kept too. Grey pixels in the box are still blurred -> privacy unchanged.
+        hsv=cv2.cvtColor(f,cv2.COLOR_BGR2HSV)
+        col=((hsv[...,1]>55)&(hsv[...,2]>60)).astype(np.uint8)*255
+        col=cv2.morphologyEx(col,cv2.MORPH_OPEN,np.ones((3,3),np.uint8))
+        col=cv2.morphologyEx(col,cv2.MORPH_CLOSE,np.ones((11,11),np.uint8))
+        col=cv2.dilate(col,np.ones((3,3),np.uint8))
+        m=cv2.bitwise_and(m,cv2.bitwise_not(col))
     if m.any():
         sm=cv2.resize(cv2.resize(f,(f.shape[1]//7,f.shape[0]//7),interpolation=cv2.INTER_AREA),(f.shape[1],f.shape[0]),interpolation=cv2.INTER_NEAREST)
         sm=cv2.GaussianBlur(sm,(0,0),5)

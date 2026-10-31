@@ -12,3 +12,4 @@ __pycache__/
 output/**/*.mp4
 output/**/thumbnail.png
 output/**/*.wav
+output/profile_pictures/

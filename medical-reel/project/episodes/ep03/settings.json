@@ -73,7 +73,8 @@
  },
  "anonymize": {
   "trackedUntil": 99,
-  "kf": []
+  "kf": [],
+  "occlusionAware": true
  },
  "trackMethod": "detect"
 }
