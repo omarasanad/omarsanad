@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:CXB;src:url(fonts/Cairo-ExtraBold.ttf)}
+@font-face{font-family:CSB;src:url(fonts/Cairo-SemiBold.ttf)}
+:root{--navy:#061A33;--teal:#2FD0C0;--coral:#FF6A55;--ink:#E9F2F8;--gold:#FFC75A}
+html,body{margin:0;width:1080px;height:1920px;background:radial-gradient(90% 50% at 50% 40%,#0F3A63 0%,#061A33 65%,#03101F 100%);overflow:hidden}
+*{box-sizing:border-box}
+#gl{position:absolute;left:0;top:0;width:1080px;height:1920px}
+#shade{position:absolute;inset:0;pointer-events:none}
+#scopeFrame{position:absolute;inset:0;pointer-events:none;background:radial-gradient(closest-side at 50% 46%,rgba(0,0,0,0) 78%,rgba(0,0,0,.92) 100%)}
+#flash{position:absolute;inset:0;background:#EFFFFD;opacity:0}
+.abs{position:absolute}
+.lbl{font-family:CXB;color:#fff;white-space:nowrap;line-height:1.3}
+.sub{font-family:CSB;color:var(--ink);line-height:1.45}
+.hl{color:var(--teal)}
+.kin{text-shadow:0 4px 26px rgba(0,0,0,.65)}
+.card{position:absolute;border-radius:34px;background:rgba(6,26,51,.82);border:2px solid rgba(47,208,192,.4);box-shadow:0 24px 60px rgba(0,0,0,.4);backdrop-filter:blur(6px)}
+.chip{padding:8px 34px 14px;border-radius:999px;font-family:CXB;font-size:44px;color:#fff;white-space:nowrap;background:rgba(6,26,51,.85);border:3px solid #2FD0C0}
+.ind{width:900px;display:flex;align-items:center;gap:34px;padding:34px 44px}
+.ind .ic{flex:none;width:150px;height:150px;border-radius:36px;background:rgba(47,208,192,.12);border:3px solid rgba(47,208,192,.6);display:flex;align-items:center;justify-content:center}
+.ind .tx{display:flex;flex-direction:column;gap:6px;min-width:0}
+.ind .t1{font-family:CXB;font-size:56px;color:#fff;line-height:1.25}
+.ind .t2{font-family:CSB;font-size:38px;color:#B9CCDD;line-height:1.35}
+.num{font-family:CXB;color:#fff;font-size:44px;width:76px;height:76px;border-radius:50%;background:#2FD0C0;color:#061A33;display:flex;align-items:center;justify-content:center;flex:none}
+svg{overflow:visible}
+</style>
+<script type="importmap">{"imports":{"three":"./three.module.js","three/addons/":"./jsm/"}}</script>
+</head><body>
+<canvas id="gl" width="1080" height="1920"></canvas>
+<div id="scopeFrame"></div><div id="shade"></div><div id="flash"></div>
+<div id="ui"></div>
+<script src="icons.js"></script>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+const $=id=>document.getElementById(id), q=s=>document.querySelector(s);
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x)), seg=(t,a,b)=>clamp((t-a)/(b-a));
+const eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2, eout=x=>1-Math.pow(1-x,3), ein=x=>x*x*x;
+const back=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const lerp=(a,b,p)=>a+(b-a)*p, env=(t,a,b,fi=.35,fo=.35)=>Math.min(seg(t,a,a+fi),1-seg(t,b-fo,b));
+let rs=12345;const rnd=()=>(rs=(rs*16807)%2147483647)/2147483647;
+
+// ---------------- renderer ----------------
+const renderer=new THREE.WebGLRenderer({canvas:$('gl'),antialias:true,preserveDrawingBuffer:true,alpha:true});renderer.setClearColor(0x000000,0);
+renderer.setPixelRatio(1);renderer.setSize(1080,1920,false);
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;renderer.outputColorSpace=THREE.SRGBColorSpace;
+const pmrem=new THREE.PMREMGenerator(renderer);const envTex=pmrem.fromScene(new RoomEnvironment(),0.04).texture;
+
+// ---------------- textures ----------------
+function mucosaCanvas(w,h,base,vessel,density){const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');
+  g.fillStyle=base;g.fillRect(0,0,w,h);
+  for(let i=0;i<9000;i++){const x=rnd()*w,y=rnd()*h,r=1+rnd()*5;g.fillStyle=`rgba(${rnd()<.5?255:150},${90+rnd()*60|0},${80+rnd()*50|0},${.05+rnd()*.07})`;g.beginPath();g.arc(x,y,r,0,7);g.fill()}
+  // branching vessels
+  for(let v=0;v<density;v++){let x=rnd()*w,y=rnd()*h,a=rnd()*6.28,wd=1.5+rnd()*3.2;g.strokeStyle=vessel;g.lineCap='round';
+    for(let s=0;s<60;s++){const nx=x+Math.cos(a)*7,ny=y+Math.sin(a)*7;g.globalAlpha=.25+.35*(wd/4.7);g.lineWidth=wd;g.beginPath();g.moveTo(x,y);g.lineTo(nx,ny);g.stroke();
+      x=nx;y=ny;a+=(rnd()-.5)*.7;wd*=.985;if(rnd()<.06){const bx=x,by=y;let ba=a+(rnd()<.5?1:-1)*(.6+rnd()*.6),bw=wd*.6;for(let k=0;k<25;k++){const mx=x+Math.cos(ba)*6,my=y+Math.sin(ba)*6;g.lineWidth=bw;g.beginPath();g.moveTo(x,y);g.lineTo(mx,my);g.stroke();x=mx;y=my;ba+=(rnd()-.5)*.8;bw*=.96}x=bx;y=by}}}
+  g.globalAlpha=1;return c}
+const mucTex=new THREE.CanvasTexture(mucosaCanvas(1024,1024,'#E59A86','#A3232E',70));mucTex.wrapS=mucTex.wrapT=THREE.RepeatWrapping;mucTex.colorSpace=THREE.SRGBColorSpace;mucTex.anisotropy=8;
+const extTex=new THREE.CanvasTexture(mucosaCanvas(1024,512,'#E3A48E','#B0464A',26));extTex.wrapS=extTex.wrapT=THREE.RepeatWrapping;extTex.colorSpace=THREE.SRGBColorSpace;
+const polTex=new THREE.CanvasTexture(mucosaCanvas(512,512,'#D9786C','#8E1B26',40));polTex.colorSpace=THREE.SRGBColorSpace;
+
+// ================= SCENE 1: external colon =================
+const sceneE=new THREE.Scene();sceneE.environment=envTex;
+const camE=new THREE.PerspectiveCamera(32,1080/1920,0.1,100);
+sceneE.add(new THREE.HemisphereLight(0xdff6ff,0x0a1a30,0.8));
+const key=new THREE.DirectionalLight(0xffffff,2.2);key.position.set(-2,3,5);sceneE.add(key);
+const rim=new THREE.DirectionalLight(0x2fd0c0,2.6);rim.position.set(3,1,-4);sceneE.add(rim);
+const rim2=new THREE.DirectionalLight(0x6fa8ff,1.2);rim2.position.set(-3,-2,-3);sceneE.add(rim2);
+// colon centre-line (viewer faces patient: patient right = viewer left). s=0 caecum -> s=1 rectum
+const P=[[-0.95,-0.55,0.10],[-1.02,-0.15,0.15],[-1.0,0.35,0.10],[-0.88,0.78,0.0],[-0.45,0.62,0.25],[0.0,0.5,0.32],[0.45,0.62,0.22],[0.92,0.92,-0.05],[1.02,0.45,-0.12],
+  [1.0,-0.05,-0.08],[0.95,-0.48,0.0],[0.62,-0.78,0.25],[0.18,-0.62,0.32],[-0.08,-0.82,0.12],[-0.02,-1.12,0.0],[0.0,-1.42,-0.05]].map(p=>new THREE.Vector3(p[0]*1.25,p[1]*1.25,p[2]));
+const colonCurve=new THREE.CatmullRomCurve3(P,false,'catmullrom',0.4);
+function radiusAt(s,ang){
+  let base=s<0.22?0.205:s<0.55?0.17:s<0.72?0.15:s<0.9?0.135:0.155;
+  if(s<0.03)base*=0.85+5*s;
+  const inR=s>0.9; const N=46;
+  const hb=inR?0:Math.pow(Math.abs(Math.sin(Math.PI*s*N)),0.55);
+  let r=base*(0.9+0.16*hb);
+  if(!inR){for(const a0 of [0.3,2.4,4.5]){let d=Math.atan2(Math.sin(ang-a0),Math.cos(ang-a0));r*=1-0.07*Math.exp(-d*d/0.02)}}
+  return r}
+function shapeTube(curve,TS,RS,radiusFn){const g=new THREE.TubeGeometry(curve,TS,1,RS,false);const pos=g.attributes.position;const v=new THREE.Vector3(),c=new THREE.Vector3();
+  for(let i=0;i<=TS;i++){const s=i/TS;curve.getPointAt(s,c);for(let j=0;j<=RS;j++){const k=i*(RS+1)+j;v.fromBufferAttribute(pos,k).sub(c);const r=radiusFn(s,j/RS*Math.PI*2);v.multiplyScalar(r).add(c);pos.setXYZ(k,v.x,v.y,v.z)}}
+  g.computeVertexNormals();return g}
+const colonMat=new THREE.MeshPhysicalMaterial({color:0xF0B0A0,map:extTex,roughness:0.42,clearcoat:0.8,clearcoatRoughness:0.25,sheen:0.6,sheenColor:new THREE.Color(0xffd0c4),transparent:true,opacity:1});
+extTex.repeat.set(10,1);
+const colon=new THREE.Mesh(shapeTube(colonCurve,700,56,radiusAt),colonMat);
+const colonGroup=new THREE.Group();colonGroup.add(colon);
+// caecum cap + appendix
+const cap=new THREE.Mesh(new THREE.SphereGeometry(0.2,40,30),colonMat);cap.position.copy(colonCurve.getPointAt(0));colonGroup.add(cap);
+const appC=new THREE.CatmullRomCurve3([P[0].clone().add(new THREE.Vector3(0.05,-0.12,0)),P[0].clone().add(new THREE.Vector3(0.18,-0.3,0.05)),P[0].clone().add(new THREE.Vector3(0.12,-0.48,0.1))]);
+colonGroup.add(new THREE.Mesh(new THREE.TubeGeometry(appC,30,0.035,14,false),colonMat));
+sceneE.add(colonGroup);
+// scope: enters from outside (below rectum) and follows the colon backwards
+const outside=[new THREE.Vector3(0.0,-2.6,0.25),new THREE.Vector3(0,-2.1,0.1)];
+const revPts=[...outside,...colonCurve.getSpacedPoints(160).reverse().slice(0)];
+const scopeCurve=new THREE.CatmullRomCurve3(revPts,false,'catmullrom',0.3);
+const SC_TS=600;const scopeGeo=new THREE.TubeGeometry(scopeCurve,SC_TS,0.032,14,false);
+const scopeMat=new THREE.MeshPhysicalMaterial({color:0x1b2633,roughness:0.35,metalness:0.2,clearcoat:1});
+const scope=new THREE.Mesh(scopeGeo,scopeMat);scope.renderOrder=-1;sceneE.add(scope);
+const tip=new THREE.Mesh(new THREE.SphereGeometry(0.05,24,16),new THREE.MeshBasicMaterial({color:0xFFFFFF}));sceneE.add(tip);
+const tipGlow=new THREE.Mesh(new THREE.SphereGeometry(0.16,24,16),new THREE.MeshBasicMaterial({color:0xBFFFF8,transparent:true,opacity:.35,depthWrite:false}));sceneE.add(tipGlow);
+const tipLight=new THREE.PointLight(0xfff4e8,3,1.2,2);sceneE.add(tipLight);
+const outerLen=0.08; // fraction of scope curve that is outside the body
+
+// ================= SCENE 2: endoscopic lumen =================
+const sceneL=new THREE.Scene();sceneL.fog=new THREE.Fog(0x050101,1.5,13);sceneL.background=new THREE.Color(0x050101);
+const camL=new THREE.PerspectiveCamera(78,1080/1920,0.02,60);
+sceneL.add(new THREE.AmbientLight(0x552a22,0.25));
+const headLamp=new THREE.PointLight(0xfff1e6,7.2,16,1.6);sceneL.add(headLamp);
+const LP=[];for(let i=0;i<18;i++)LP.push(new THREE.Vector3(Math.sin(i*0.7)*0.9+Math.sin(i*0.23)*0.6,Math.cos(i*0.5)*0.7,-i*4));
+const lumCurve=new THREE.CatmullRomCurve3(LP);const LLEN=lumCurve.getLength();
+function lumR(s,ang){const d=s*LLEN;const f=((d/1.55)%1+1)%1;const ridge=Math.exp(-Math.pow(f-0.5,2)/0.0035);return 1.15*(1-0.24*ridge)*(1+0.07*Math.cos(3*ang+d*0.05))}
+const lumMat=new THREE.MeshPhysicalMaterial({color:0xffffff,map:mucTex,side:THREE.BackSide,roughness:0.33,clearcoat:1,clearcoatRoughness:0.12,sheen:0.4,sheenColor:new THREE.Color(0xffb7a0)});
+mucTex.repeat.set(28,2);
+const lumen=new THREE.Mesh(shapeTube(lumCurve,1400,72,lumR),lumMat);sceneL.add(lumen);
+// polyp (pedunculated) on the wall
+const PS=0.52;const pc=lumCurve.getPointAt(PS),pt=lumCurve.getTangentAt(PS);
+const up0=new THREE.Vector3(0,1,0);const nrm=new THREE.Vector3().crossVectors(pt,up0).normalize();
+const wallDir=nrm.clone().multiplyScalar(-0.75).add(new THREE.Vector3(0,-0.66,0)).normalize();
+const wallPt=pc.clone().add(wallDir.clone().multiplyScalar(lumR(PS,0)*0.96));
+const inward=wallDir.clone().negate();
+const polyp=new THREE.Group();const polMat=new THREE.MeshPhysicalMaterial({color:0xffffff,map:polTex,roughness:0.3,clearcoat:1,clearcoatRoughness:0.1});
+const headG=new THREE.SphereGeometry(0.31,48,36);{const p=headG.attributes.position,v=new THREE.Vector3();for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i);const n=1+0.07*Math.sin(v.x*22)*Math.sin(v.y*19)*Math.sin(v.z*17)+0.04*Math.sin(v.x*41+v.y*33);v.multiplyScalar(n);p.setXYZ(i,v.x,v.y,v.z)}headG.computeVertexNormals()}
+const head=new THREE.Mesh(headG,polMat);head.position.set(0,0.52,0);
+const stalk=new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.13,0.5,24,1),polMat);stalk.position.set(0,0.25,0);
+polyp.add(head,stalk);polyp.position.copy(wallPt);polyp.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),inward);sceneL.add(polyp);
+const site=new THREE.Mesh(new THREE.CircleGeometry(0.12,32),new THREE.MeshStandardMaterial({color:0xF6E3D8,roughness:.6,transparent:true,opacity:0}));
+site.position.copy(wallPt.clone().add(inward.clone().multiplyScalar(0.01)));site.lookAt(wallPt.clone().add(inward));sceneL.add(site);
+// snare: catheter + wire loop
+const wireMat=new THREE.MeshBasicMaterial({color:0xDDE6EC});
+const cathMat=new THREE.MeshStandardMaterial({color:0x2a7bd6,roughness:0.4});
+const loop=new THREE.Mesh(new THREE.TorusGeometry(1,0.045,10,64),wireMat);sceneL.add(loop);
+let cath=null;
+
+function lumenCam(p){const c=lumCurve.getPointAt(p),a=lumCurve.getPointAt(Math.min(0.999,p+0.012));camL.position.copy(c);camL.lookAt(a);headLamp.position.copy(c)}
+
+// ---------------- UI ----------------
+function icon(n,s,c){const i=ICONS[n];return `<svg width="${s}" height="${s*i.h/i.w}" viewBox="0 0 ${i.w} ${i.h}" style="color:${c};display:block">${i.body}</svg>`}
+function el(html){const d=document.createElement('div');d.className='abs';d.innerHTML=html;$('ui').appendChild(d);return d}
+function put(d,x,y,sc=1,op=1){if(op<=0.001){d.style.display='none';return}d.style.left='0px';d.style.top='0px';d.style.display='block';
+  const w=d.offsetWidth,h=d.offsetHeight;d.style.transform=`translate(${x-w/2}px,${y-h/2}px) scale(${sc})`;d.style.opacity=op}
+// kinetic heading: words rise in one by one
+function kin(txt,size,maxw=980){const words=txt.split(' ').map(w=>{let m;let cls='';if((m=w.match(/^\*(.+)\*(.*)$/))){w=`<span style="color:#2FD0C0">${m[1]}</span>${m[2]}`}else if((m=w.match(/^~(.+)~(.*)$/))){w=`<span style="color:#FFC75A">${m[1]}</span>${m[2]}`}return `<span class="kw" style="display:inline-block;margin:0 .13em">${w}</span>`});return el(`<div class="lbl kin" style="font-size:${size}px;white-space:normal;text-align:center;width:${maxw}px">${words.join(' ')}</div>`)}
+function kinAnim(d,t,t0,stagger=.09){d.querySelectorAll('.kw').forEach((s,i)=>{const p=eout(seg(t,t0+i*stagger,t0+i*stagger+.45));s.style.opacity=p;s.style.transform=`translateY(${(1-p)*40}px)`})}
+const U={};
+U.hook1=kin('بتخاف من *منظار* *القولون*؟',96);
+U.hook2=kin('طب تعرف إنه ممكن *يكتشف* *مشكلة*',70);
+U.hook3=kin('قبل ما تتحول ~لحاجة~ ~خطيرة~؟',70);
+U.tag=el('<div class="chip" style="font-size:40px">منظار القولون · إمتى تحتاجه وليه؟</div>');
+U.c1=el('<div class="chip" style="font-size:42px">أنبوبة رفيعة ومرنة</div>');
+U.c2=el('<div class="chip" style="font-size:42px;border-color:#FFC75A">في آخرها كاميرا ونور</div>');
+U.how=kin('بتدخل من فتحة الشرج وتمشي *جوه* *القولون* بهدوء',62);
+U.see=kin('وبنشوف *بطانة* *القولون* من جوه بوضوح',64);
+U.sed=el(`<div class="card ind" style="position:relative"><div class="ic">${icon('sleepy',100,'#2FD0C0')}</div><div class="tx"><div class="t1">غالبًا تحت تهدئة أو مخدر</div><div class="t2">عشان تبقى مرتاح أثناء المنظار</div></div></div>`);
+U.prep=el(`<div class="card ind" style="position:relative"><div class="ic">${icon('pills-2',100,'#2FD0C0')}</div><div class="tx"><div class="t1">وقبله تجهيز للقولون</div><div class="t2">بملين حسب تعليمات الدكتور… عشان الرؤية تبقى واضحة</div></div></div>`);
+U.when=kin('إمتى تحتاج *منظار* *قولون*؟',84);
+const IND=[['blood-cells','دم مع البراز','أو نزيف من فتحة الشرج من غير سبب واضح'],['toilet-paper','تغيير مستمر في الإخراج','إمساك أو إسهال مالوش تفسير'],['hematology','أنيميا نقص حديد','من غير سبب معروف'],
+ ['colon','اشتباه التهابات القولون','زي الالتهابات المزمنة أو مشكلة مقلقة في الأمعاء']];
+U.ind=IND.map(([ic,a,b],i)=>el(`<div class="card ind" style="position:relative"><div class="ic">${icon(ic,100,'#2FD0C0')}</div><div class="tx"><div class="t1">${a}</div><div class="t2">${b}</div></div><div class="num abs" style="left:-20px;top:-20px">${i+1}</div></div>`));
+U.scr=el(`<div class="card" style="position:relative;width:900px;padding:40px 50px;text-align:center"><div class="sub" style="font-size:40px;color:#B9CCDD">الكشف المبكر عن سرطان القولون</div>
+ <div style="display:flex;align-items:center;justify-content:center;gap:24px;margin:6px 0"><div class="lbl" style="font-size:66px">من سن</div><div id="age" class="lbl" style="font-size:150px;color:#FFC75A;line-height:1.1">45</div></div>
+ <div class="sub" style="font-size:38px">للشخص متوسط الخطورة <span style="color:#7FA3C2">(حسب الإرشادات الأمريكية الكبرى)</span></div>
+ <div class="sub" style="font-size:36px;color:#2FD0C0;margin-top:10px">والتوصيات بتختلف حسب بلدك وحالتك</div></div>`);
+U.fam=el(`<div class="card ind" style="position:relative;border-color:#FFC75A"><div class="ic" style="border-color:#FFC75A;background:rgba(255,199,90,.12)">${icon('people',100,'#FFC75A')}</div><div class="tx"><div class="t1">تاريخ عائلي أو عوامل خطورة؟</div><div class="t2">ممكن نحتاج نبدأ الفحص بدري عن كده</div></div></div>`);
+U.not=el(`<div class="card" style="position:relative;width:900px;padding:34px 44px;display:flex;align-items:center;gap:30px;border-color:#7FA3C2"><div style="flex:none">${icon('intestinal-pain',120,'#B9CCDD')}</div><div class="tx"><div class="lbl" style="font-size:52px;white-space:normal">بس خلي بالك…</div><div class="sub" style="font-size:42px">مش كل <b style="font-family:CXB">انتفاخ أو مغص</b> محتاج منظار</div></div></div>`);
+U.why=kin('طب ليه *المنظار* مهم؟',88);
+U.polL=el('<div class="chip" style="font-size:44px;border-color:#FFC75A">بوليب (زائدة لحمية)</div>');
+U.ring=el('<svg width="260" height="260" viewBox="-130 -130 260 260"><circle id="rc" r="110" fill="none" stroke="#FFC75A" stroke-width="7" stroke-dasharray="14 12"/></svg>');
+U.snL=el('<div class="chip" style="font-size:42px">إزالة في نفس الجلسة</div>');
+U.doneL=el('<div class="chip" style="font-size:42px;display:flex;align-items:center;gap:12px"><svg width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20" fill="#2FD0C0"/><path d="M12 23 L19 30 L32 15" stroke="#061A33" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>اتشال</div>');
+U.imp=el(`<div class="card" style="position:relative;width:920px;padding:44px 50px;text-align:center">
+ <div class="lbl" style="font-size:58px;white-space:normal">اكتشاف البوليب وإزالته <span class="hl">بدري</span></div>
+ <svg width="760" height="190" viewBox="0 0 760 190" style="margin:18px auto 6px;display:block">
+  <g id="st1"><circle cx="640" cy="80" r="62" fill="rgba(255,199,90,.15)" stroke="#FFC75A" stroke-width="5"/><circle cx="640" cy="88" r="26" fill="#D9786C"/><rect x="633" y="104" width="14" height="30" rx="6" fill="#D9786C"/></g>
+  <path id="arr1" d="M560 80 H 420 M 446 60 L 420 80 L 446 100" stroke="#B9CCDD" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <g id="st2"><circle cx="330" cy="80" r="62" fill="rgba(255,106,85,.12)" stroke="#FF6A55" stroke-width="5"/><text x="330" y="96" text-anchor="middle" font-family="CXB" font-size="44" fill="#FF6A55">سرطان</text></g>
+  <g id="xx"><line x1="270" y1="20" x2="390" y2="140" stroke="#2FD0C0" stroke-width="12" stroke-linecap="round"/><line x1="390" y1="20" x2="270" y2="140" stroke="#2FD0C0" stroke-width="12" stroke-linecap="round"/></g>
+  <text x="640" y="178" text-anchor="middle" font-family="CSB" font-size="30" fill="#B9CCDD">بوليب</text></svg>
+ <div class="sub" style="font-size:42px">بيساعد نمنع <b style="font-family:CXB;color:#fff">أنواع من سرطان القولون</b> قبل ما تبدأ</div></div>`);
+U.cl1=kin('المنظار *مش* *حاجة* *تخوفك*',74);
+U.cl2=kin('الأهم تعرف *إمتى* *تحتاجه*',64);
+U.caut=el(`<div class="card" style="position:relative;width:900px;padding:30px 44px;display:flex;align-items:center;gap:26px;border-color:#FFC75A"><div style="flex:none">${icon('alert-triangle',90,'#FFC75A')}</div><div class="sub" style="font-size:38px">التجهيز والتخدير ليهم احتياطات، ومفيش إجراء طبي من غير مخاطر… القرار بيتاخد مع دكتورك</div></div>`);
+U.cl3=el(`<div class="card" style="position:relative;width:900px;padding:36px 44px;text-align:center;border-color:#2FD0C0;background:rgba(47,208,192,.14)"><div class="sub" style="font-size:42px">عندك أعراض مستمرة أو عوامل خطورة؟</div><div class="lbl" style="font-size:66px">استشير <span class="hl">دكتور متخصص</span></div></div>`);
+U.doc=el(`<div style="position:relative;width:640px;height:800px;border-radius:44px;overflow:hidden;border:6px solid #2FD0C0;box-shadow:0 30px 80px rgba(0,0,0,.5)"><img id="docimg" src="doc/d001.jpg" style="width:100%;height:100%;object-fit:cover;display:block"></div>`);
+U.logo=el('<img src="logo.png" style="width:900px;border-radius:30px;display:block;box-shadow:0 20px 50px rgba(0,0,0,.4)">');
+U.loc=el(`<div style="display:flex;gap:16px;align-items:center">${icon('geo-location',56,'#2FD0C0')}<div class="sub" style="font-size:48px">مركز النهضة الطبي · شبين القناطر</div></div>`);
+const ALLU=Object.values(U).flat();
+
+// ---------------- frame ----------------
+const WA=[[0, 0.0], [4.0, 1.345], [8.0, 6.073], [8.4, 6.364], [10.2, 8.891], [13.0, 13.545], [13.5, 13.909], [14.3, 14.136], [20.4, 17.545], [22.3, 20.745], [25.0, 25.818], [25.2, 26.036], [27.0, 27.855], [31.5, 32.018], [36.0, 36.8], [40.0, 39.855], [44.4, 44.382], [49.6, 55.236], [52.2, 59.582], [55.0, 63.0], [59.6, 66.909], [62.0, 68.273], [67.7, 70.909], [70.0, 71.455], [75.0, 73.873], [76.8, 75.473], [78.6, 77.727], [80.4, 84.873], [82.6, 89.364], [88.0, 94.273]];
+function warp(o){if(o<=WA[0][1])return WA[0][0];for(let i=1;i<WA.length;i++){const [d0,o0]=WA[i-1],[d1,o1]=WA[i];if(o<=o1)return d0+(d1-d0)*(o-o0)/(o1-o0)}return WA[WA.length-1][0]}
+async function render(tOut){
+  const t=warp(tOut);
+  ALLU.forEach(d=>d.style.display='none');
+  const gl=$('gl');let mode='E';
+  // which 3D scene
+  if((t>=13.5&&t<25)||(t>=55&&t<75))mode='L';
+  $('scopeFrame').style.opacity=mode==='L'?1:0;
+  let blur=0,dark=0;
+  if(mode==='E'){
+    // camera & colon motion
+    const intro=eout(seg(t,0,7.5));let rotY=lerp(-0.5,0.1,intro)+0.05*Math.sin(t*0.4);let dist=lerp(13.5,11.2,intro);let ty=-0.2;
+    if(t>=8&&t<13.5){const p=eio(seg(t,8,13.2));rotY=lerp(0.1,0.0,p);dist=11.2;ty=lerp(-0.2,-0.35,p)}
+    if(t>=25){rotY=-0.3+t*0.03;dist=10.5;ty=-0.2;dark=.55;blur=10}
+    if(t>=75){rotY=0.2+(t-75)*0.03;dist=lerp(10.5,11.5,seg(t,75,88));ty=-0.2}
+    colonGroup.rotation.y=rotY;colonGroup.rotation.x=0.08;scope.rotation.y=rotY;scope.rotation.x=0.08;
+    camE.position.set(0,0.25,dist);camE.lookAt(0,ty,0);
+    // scope progress
+    const sp=t<8?0:t<13.5?eio(seg(t,8.3,13.0)):0;const showScope=t>=8&&t<13.6;
+    scope.visible=showScope;tip.visible=tipGlow.visible=showScope;
+    const reach=outerLen+sp*(1-outerLen);scope.geometry.setDrawRange(0,Math.floor(reach*SC_TS)*14*6);
+    const tp=scopeCurve.getPointAt(Math.min(.999,reach));const w=tp.clone().applyAxisAngle(new THREE.Vector3(1,0,0),0.08).applyAxisAngle(new THREE.Vector3(0,1,0),rotY);
+    tip.position.copy(w);tipGlow.position.copy(w);tipLight.position.copy(w);tipGlow.material.opacity=.25+.15*Math.sin(t*7);
+    if(t>=12.9&&t<13.6){const z=ein(seg(t,12.9,13.5));camE.position.lerp(w.clone().add(new THREE.Vector3(0,0.1,0.5)),z);camE.lookAt(new THREE.Vector3(0,ty,0).lerp(w,Math.min(1,z*1.5)))}
+    colonMat.opacity=showScope?lerp(1,0.38,seg(t,8,8.8)):1;colonMat.depthWrite=!showScope;
+    renderer.render(sceneE,camE);
+  } else {
+    // lumen travel
+    let p;
+    if(t<25)p=lerp(0.04,0.30,(t-13.5)/11.5);
+    else { // polyp sequence: approach and stop
+      const a=seg(t,55,59.5);p=lerp(0.36,PS-0.042,eout(a))}
+    lumenCam(p);
+    // polyp/snare state
+    const inPol=t>=55;polyp.visible=inPol;loop.visible=false;site.material.opacity=0;
+    if(cath){sceneL.remove(cath);cath.geometry.dispose();cath=null}
+    polyp.position.copy(wallPt);polyp.scale.setScalar(1);
+    if(inPol&&t>=61.8){
+      const camR=new THREE.Vector3(),camU=new THREE.Vector3(),camF=new THREE.Vector3();camL.matrixWorld.extractBasis(camR,camU,camF);camF.negate();
+      const start=camL.position.clone().add(camR.clone().multiplyScalar(0.28)).add(camU.clone().multiplyScalar(-0.32)).add(camF.clone().multiplyScalar(0.25));
+      const headW=head.getWorldPosition(new THREE.Vector3()),stalkW=wallPt.clone().add(inward.clone().multiplyScalar(0.22));
+      const ext=eout(seg(t,61.8,63.4));
+      // loop centre travels head -> stalk, then tightens
+      const lc=t<64?headW.clone():headW.clone().lerp(stalkW,eio(seg(t,64,65.2)));
+      const tipPos=start.clone().lerp(lc.clone().add(camF.clone().multiplyScalar(-0.15)),ext*0.85);
+      const cc=new THREE.LineCurve3(start,tipPos);cath=new THREE.Mesh(new THREE.TubeGeometry(cc,8,0.035,10,false),cathMat);sceneL.add(cath);
+      let rad=lerp(0.05,0.42,ext);rad=lerp(rad,0.07,eio(seg(t,65.2,66.2)));
+      const cut=seg(t,66.3,67.6);
+      loop.visible=t<67.8;loop.scale.setScalar(rad);loop.position.copy(t<63.4?tipPos.clone().lerp(lc,ext):lc);
+      loop.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),inward);
+      if(cut>0){polyp.position.copy(wallPt.clone().add(inward.clone().multiplyScalar(0.25*eout(cut))).lerp(start,ein(cut)*0.7));polyp.scale.setScalar(1-0.6*ein(cut));site.material.opacity=Math.min(1,cut*2)*0.85}
+      if(t>67.6){polyp.visible=false;site.material.opacity=.85}
+    }
+    renderer.render(sceneL,camL);
+    if(t>=20&&t<25)dark=.45*seg(t,20,20.5);
+    if(t>=69.5)dark=.62*seg(t,69.5,70.1);
+  }
+  gl.style.filter=blur?`blur(${blur*seg(t,25,25.8)}px)`:'none';
+  $('shade').style.background=`rgba(6,16,30,${dark})`;
+  $('flash').style.opacity=Math.max(0,1-Math.abs(t-13.5)/0.32)*.95+Math.max(0,1-Math.abs(t-55)/0.32)*.9+(t>=75&&t<75.4?1-seg(t,75,75.4):0)*.8;
+
+  // ---------- typography & graphics ----------
+  if(t<8){put(U.tag,540,190,1,env(t,0.3,7.8));
+    put(U.hook1,540,350,1,1-seg(t,7.6,7.95));kinAnim(U.hook1,t,0.15,.07);
+    
+    }
+  if(t>=8&&t<13.4){put(U.c1,560,330,.85+.15*back(seg(t,8.4,8.8)),env(t,8.4,13.3));put(U.c2,560,440,.85+.15*back(seg(t,10.2,10.6)),env(t,10.2,13.3));}
+  
+  if(t>=20.2&&t<25.2){put(U.sed,540,lerp(860,820,eout(seg(t,20.4,20.9))),1,env(t,20.4,25.0));put(U.prep,540,lerp(1150,1110,eout(seg(t,22.3,22.8))),1,env(t,22.3,25.0));}
+  // indications
+  if(t>=25&&t<55){put(U.when,540,lerp(330,260,eio(seg(t,27,27.6))),lerp(1,.78,eio(seg(t,27,27.6))),1-seg(t,54.6,55));kinAnim(U.when,t,25.2);
+    const slots=[[27.0,31.5],[31.5,36],[36,40],[40,44.2]];
+    U.ind.forEach((d,i)=>{const [a,b]=slots[i];const y=520+i*235;const on=t>=a;const act=t<b;
+      put(d,540+(1-eout(seg(t,a,a+.5)))*-260,y,act?1:.94,Math.min(on?seg(t,a,a+.3):0,1-seg(t,44.0,44.4))*(act?1:.55))});
+    if(t>=44.2&&t<55){put(U.scr,540,780,.9+.1*back(seg(t,44.4,44.8)),env(t,44.4,54.7));const n=Math.round(lerp(0,45,eout(seg(t,44.6,45.6))));q('#age').textContent=n;
+      put(U.fam,540,1170,1,env(t,49.6,54.7));put(U.not,540,1420,1,env(t,52.2,54.7));}}
+  // polyp story
+  if(t>=55.3&&t<59.4){put(U.why,540,340,1,1-seg(t,59.0,59.4));kinAnim(U.why,t,55.4);}
+  if(t>=59.4&&t<69.5){const hp=head.getWorldPosition(new THREE.Vector3()).project(camL);const sx=(hp.x*.5+.5)*1080,sy=(-hp.y*.5+.5)*1920;
+    put(U.ring,sx,sy,.8+.2*back(seg(t,59.6,60)),Math.min(seg(t,59.6,59.9),1-seg(t,61.5,61.9)));q('#rc').setAttribute('transform',`rotate(${t*40})`);
+    put(U.polL,540,1480,.85+.15*back(seg(t,59.8,60.2)),env(t,59.8,61.9));
+    put(U.snL,540,1480,.85+.15*back(seg(t,62,62.4)),env(t,62,67.4));
+    put(U.doneL,540,1480,.85+.15*back(seg(t,67.7,68.1)),env(t,67.7,69.5));}
+  if(t>=69.8&&t<75.1){put(U.imp,540,900,.9+.1*back(seg(t,70,70.4)),env(t,70,75.0));
+    q('#arr1').style.opacity=seg(t,71,71.3);q('#st2').style.opacity=seg(t,71.3,71.6);const xx=seg(t,72.3,72.6);q('#xx').style.opacity=xx;q('#xx').setAttribute('transform',`translate(330 80) scale(${.4+.6*back(xx)}) translate(-330 -80)`);}
+  // closing
+  if(t>=75.2&&t<82.8){const o=1-seg(t,82.4,82.8);put(U.cl1,540,520,1,o);kinAnim(U.cl1,t,75.4);put(U.cl2,540,650,1,o);kinAnim(U.cl2,t,76.8);
+    put(U.caut,540,1000,1,Math.min(o,seg(t,78.6,79)));put(U.cl3,540,1330,.9+.1*back(seg(t,80.4,80.8)),Math.min(o,seg(t,80.4,80.7)));}
+  if(t>=82.6){const o=seg(t,82.7,83.2);const fi=Math.min(90,Math.floor((t-82.7)*30*0.62))+1;const img=q('#docimg');const src=`doc/d${String(Math.max(1,fi)).padStart(3,'0')}.jpg`;
+    if(!img.src.endsWith(src)){img.src=src;await img.decode().catch(()=>{})}
+    put(U.doc,540,lerp(700,680,seg(t,82.7,88)),.94+.06*eout(seg(t,82.7,84))+.02*seg(t,84,88),o);
+    put(U.logo,540,1330+(1-eout(seg(t,83.3,83.8)))*40,1,seg(t,83.3,83.7));put(U.loc,540,1560,1,seg(t,84,84.4));}
+  return true;
+}
+window.render=render;window.ready=document.fonts.ready.then(()=>new Promise(r=>setTimeout(r,200)));
+</script></body></html>

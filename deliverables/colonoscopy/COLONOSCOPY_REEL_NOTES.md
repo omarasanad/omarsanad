@@ -1,6 +1,12 @@
 # Reel: منظار القولون — إمتى تحتاج تعمله وليه؟
 
-**Video:** `colonoscopy_reel_1080x1920.mp4`. It is 1080×1920 (9:16), H.264 at 30 fps with AAC audio, and runs 88 s.
+**Video:** `colonoscopy_reel_1080x1920.mp4`. It is 1080×1920 (9:16), H.264 at 30 fps with AAC audio, and runs **94 s**, with the ElevenLabs voiceover you supplied.
+
+**Final version notes:**
+- The voiceover (98 s) was sped up to 1.1× so it still sounds natural, then loudness-normalised and lightly EQ'd. Music ducks automatically under the voice.
+- Every scene was re-timed to the voice. Each card, label, 3D event and the polyp removal starts on the word that describes it.
+- Word-synced Arabic captions are burned in (`colonoscopy_captions_ar.srt` is included). They replace the long on-screen sentences.
+- The total is 94 s rather than 60–90 s because the supplied voiceover is 98 s long.
 
 ## Important: no voice in this version
 
