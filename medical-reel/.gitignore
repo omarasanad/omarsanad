@@ -13,3 +13,9 @@ output/**/*.mp4
 output/**/thumbnail.png
 output/**/*.wav
 output/profile_pictures/
+sibo/web/brand/doc_pip.jpg
+sibo/renders/
+sibo/audio/
+sibo/build/
+sibo/out/
+sibo/web/media/

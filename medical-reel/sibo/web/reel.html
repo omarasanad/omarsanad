@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>SIBO Reel</title>
+<script type="importmap">{"imports":{"three":"./lib/three.module.js","three/addons/":"./lib/jsm/"}}</script>
+<style>
+@font-face{font-family:Cairo;font-weight:500;src:url(fonts/cairo-arabic-500-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E}
+@font-face{font-family:Cairo;font-weight:700;src:url(fonts/cairo-arabic-700-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E}
+@font-face{font-family:Cairo;font-weight:800;src:url(fonts/cairo-arabic-800-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E}
+@font-face{font-family:Cairo;font-weight:900;src:url(fonts/cairo-arabic-900-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E}
+@font-face{font-family:Cairo;font-weight:500;src:url(fonts/cairo-latin-500-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+2080-209F}
+@font-face{font-family:Cairo;font-weight:700;src:url(fonts/cairo-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+2080-209F}
+@font-face{font-family:Cairo;font-weight:800;src:url(fonts/cairo-latin-800-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+2080-209F}
+@font-face{font-family:Cairo;font-weight:900;src:url(fonts/cairo-latin-900-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F,U+2080-209F}
+:root{--navy:#0B1F3A;--navy2:#061224;--teal:#14B8A6;--cyan:#3FE0D0;--amber:#FF9F45;--sand:#d8b48a}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--navy2);font-family:Cairo,sans-serif;color:#fff}
+.abs{position:absolute}
+#gl{left:0;top:0;width:1080px;height:1920px;direction:ltr}
+#gl canvas{width:1080px;height:1920px;display:block}
+#mg{inset:0;background:radial-gradient(900px 900px at 70% 20%,rgba(20,184,166,.16),transparent 70%),linear-gradient(180deg,#0B1F3A,#061224)}
+#mg .grid{position:absolute;inset:0;background-image:radial-gradient(rgba(63,224,208,.12) 1.6px,transparent 1.7px);background-size:40px 40px}
+#veil{inset:0;background:#030a16;pointer-events:none}
+#vign{inset:0;background:radial-gradient(1200px 1700px at 50% 45%,transparent 55%,rgba(2,6,14,.75));pointer-events:none}
+#grain{inset:-50px;opacity:.06;pointer-events:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+/* brand */
+#wm{left:44px;top:70px;width:96px;height:96px;border-radius:50%;box-shadow:0 4px 18px rgba(0,0,0,.5)}
+#chap{right:44px;top:86px;font-weight:800;font-size:28px;letter-spacing:1px;padding:8px 22px;border-radius:999px;background:rgba(6,18,36,.7);border:2px solid rgba(63,224,208,.5);white-space:nowrap}
+#chap b{color:var(--cyan);font-weight:900;direction:ltr;display:inline-block;margin-left:10px}
+/* labels on 3D */
+#labels{inset:0;overflow:visible}
+.lb{position:absolute;font-weight:800;font-size:34px;padding:6px 20px;border-radius:999px;background:rgba(6,18,36,.82);border:2px solid var(--cyan);white-space:nowrap;transform:translate(-50%,-50%)}
+.lb.sand{border-color:var(--sand)} .lb.amber{border-color:var(--amber)}
+.lb small{font-weight:700;font-size:24px;color:#bcd2e4;margin-right:8px}
+.chip{position:absolute;font-weight:800;font-size:36px;padding:10px 26px;border-radius:18px;background:rgba(6,18,36,.85);border:2px solid var(--cyan);white-space:nowrap}
+.en{direction:ltr;unicode-bidi:isolate;font-family:Cairo}
+/* title */
+#title{left:0;width:1080px;top:480px;text-align:center;padding:60px 0 70px;background:radial-gradient(560px 300px at 50% 50%,rgba(3,10,22,.86),rgba(3,10,22,.55) 55%,transparent 75%)}
+#title .big{font-weight:900;font-size:230px;letter-spacing:22px;direction:ltr;line-height:1;text-shadow:0 0 60px rgba(63,224,208,.55)}
+#title .big span{display:inline-block}
+#title .sub{font-weight:800;font-size:46px;color:#d9f7f3;margin-top:18px}
+#title .bar{width:0;height:6px;margin:22px auto 0;border-radius:3px;background:linear-gradient(90deg,var(--teal),var(--cyan))}
+/* density meter */
+#dens{left:90px;width:900px;top:300px}
+.drow{display:flex;align-items:center;gap:22px;margin-bottom:18px;font-weight:800;font-size:32px}
+.dname{width:250px;text-align:right}
+.dtrack{flex:1;height:26px;border-radius:13px;background:rgba(255,255,255,.1);overflow:hidden}
+.dfill{height:100%;border-radius:13px}
+.dval{width:200px;font-size:28px;color:#bcd2e4}
+/* captions */
+#caps{left:50px;width:980px;top:1430px;height:240px;display:flex;align-items:center;justify-content:center}
+#capLine{display:flex;flex-wrap:wrap;justify-content:center;gap:0 14px;direction:rtl;max-width:980px;padding:12px 32px 18px;border-radius:26px;background:rgba(4,12,26,.74);box-shadow:0 0 0 2px rgba(63,224,208,.18)}
+.w{font-weight:800;font-size:var(--fs,58px);line-height:1.38;display:inline-block;text-shadow:0 3px 0 rgba(0,0,0,.35)}
+.w.hl{color:var(--cyan)} .w.hl2{color:var(--amber)} .w[dir=ltr]{margin-right:8px}
+/* doc placeholder */
+#doc{inset:0;background:radial-gradient(800px 900px at 50% 38%,rgba(20,184,166,.22),transparent 70%),linear-gradient(180deg,#0d2747,#061224)}
+#docFrame{left:190px;top:330px;width:700px;height:860px;border-radius:40px;border:4px dashed rgba(63,224,208,.6);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;text-align:center}
+#docFrame img{width:300px;height:300px;border-radius:50%;box-shadow:0 0 0 6px rgba(63,224,208,.35)}
+#docFrame .t1{font-weight:900;font-size:54px} #docFrame .t2{font-weight:700;font-size:30px;color:#bcd2e4}
+#docFrame .t3{font-weight:800;font-size:28px;color:var(--amber);padding:8px 22px;border-radius:999px;border:2px solid var(--amber)}
+#slogan{left:60px;width:960px;top:1180px;text-align:center;font-weight:900;font-size:64px;line-height:1.35}
+#slogan .u{display:block;height:6px;width:0;margin:16px auto 0;background:linear-gradient(90deg,var(--teal),var(--cyan));border-radius:3px}
+/* history */
+.card{position:absolute;border-radius:30px;background:linear-gradient(160deg,rgba(18,48,90,.92),rgba(6,18,36,.95));box-shadow:0 0 0 2px rgba(63,224,208,.25),0 20px 50px rgba(0,0,0,.4)}
+.sepia{background:linear-gradient(160deg,#2a2418,#14110b);box-shadow:0 0 0 2px rgba(216,180,138,.35),0 20px 50px rgba(0,0,0,.45)}
+#tl{left:90px;width:900px;top:330px;height:120px}
+.yr{position:absolute;top:58px;transform:translateX(-50%);font-weight:900;font-size:40px;direction:ltr}
+.h1{font-weight:900;font-size:56px;line-height:1.25}
+.p{font-weight:700;font-size:34px;color:#d6e4ef;line-height:1.5}
+.note{font-weight:700;font-size:26px;color:#9fb6cc}
+/* outro */
+#outro{inset:0;background:linear-gradient(180deg,#0B1F3A,#061224)}
+#oLogo{width:240px;height:240px;left:420px;top:560px;border-radius:50%}
+#oName{left:0;width:1080px;top:850px;text-align:center;font-weight:900;font-size:74px}
+#oEn{left:0;width:1080px;top:955px;text-align:center;font-weight:800;font-size:34px;letter-spacing:9px;color:var(--cyan);direction:ltr}
+#oSp{left:0;width:1080px;top:1010px;text-align:center;font-weight:700;font-size:34px;color:#bcd2e4}
+#oLine{left:0;width:1080px;top:1100px;text-align:center;font-weight:800;font-size:50px}
+#oHandle{left:50%;top:1200px;transform:translateX(-50%);font-weight:800;font-size:44px;direction:ltr;display:flex;align-items:center;gap:18px;padding:10px 40px 10px 14px;border-radius:999px;background:rgba(20,184,166,.18);border:2px solid var(--cyan);white-space:nowrap}
+#preview{left:50%;bottom:40px;transform:translateX(-50%);font-weight:800;font-size:24px;color:#ffcf9a;padding:6px 18px;border-radius:999px;background:rgba(0,0,0,.45);border:1px solid rgba(255,159,69,.6);white-space:nowrap}
+</style>
+</head>
+<body>
+<div id="gl" class="abs"></div>
+<div id="mg" class="abs"><div class="grid"></div><div id="mgRoot" class="abs" style="inset:0"></div></div>
+<div id="doc" class="abs"><img id="docImg" class="abs" style="inset:0;width:1080px;height:1920px;object-fit:cover;display:none" alt="">
+  <div id="docFrame" class="abs"><img src="brand/doc_pip.jpg" alt=""><div class="t1">د. أبوبكر احمد سند</div><div class="t2">أخصائي الباطنة والجهاز الهضمي والكبد والمناظير</div><div class="t3">مكان لقطة الدكتور · هتتركّب بعد التسجيل</div></div>
+  <div id="slogan" class="abs"></div>
+</div>
+<div id="labels" class="abs"></div>
+<div id="title" class="abs"><div class="big" id="tBig"></div><div class="sub">فرط نمو البكتيريا في الأمعاء الدقيقة</div><div class="bar" id="tBar"></div></div>
+<div id="vign" class="abs"></div>
+<div id="grain" class="abs"></div>
+<div id="outro" class="abs">
+  <img id="oLogo" class="abs" src="brand/brand_mark.png" alt="">
+  <div id="oName" class="abs">د. أبوبكر احمد سند</div><div id="oEn" class="abs">DR. ABOBAKR SANAD</div>
+  <div id="oSp" class="abs">أخصائي الباطنة والجهاز الهضمي والكبد والمناظير</div>
+  <div id="oLine" class="abs">تابعونا للمزيد</div>
+  <div id="oHandle" class="abs"><svg viewBox="0 0 64 64" width="58" height="58"><circle cx="32" cy="32" r="32" fill="#1877F2"/><path fill="#fff" d="M35.5 52V34.6h5.8l.9-6.8h-6.7v-4.3c0-2 .6-3.3 3.4-3.3h3.6v-6.1c-.6-.1-2.8-.3-5.2-.3-5.2 0-8.7 3.2-8.7 9v5H22.8v6.8h5.8V52z"/></svg><span style="font-weight:700;font-size:30px;color:#bcd2e4">Facebook</span><span>Dr.Abobakr Sanad</span></div>
+</div>
+<img id="wm" class="abs" src="brand/brand_mark.png" alt="">
+<div id="chap" class="abs"></div>
+<div id="caps" class="abs"><div id="capLine"></div></div>
+<div id="veil" class="abs"></div>
+<div id="preview" class="abs">نسخة معاينة · من غير صوت الدكتور · التوقيت تقريبي</div>
+
+<script type="module">
+import { renderShot, canvas } from './three_scenes.js';
+document.getElementById('gl').appendChild(canvas);
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x)), lerp = (a, b, u) => a + (b - a) * u;
+const eOut = u => 1 - Math.pow(1 - clamp(u), 3), ease = u => { u = clamp(u); return u < .5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2; };
+const spring = (u, k = 9, z = .55) => { if (u <= 0) return 0; const d = z * k, wd = k * Math.sqrt(1 - z * z); return 1 - Math.exp(-d * u) * (Math.cos(wd * u) + d / wd * Math.sin(wd * u)); };
+const env = (t, a, b, i = .35, o = .35) => Math.min(eOut((t - a) / i), eOut((b - t) / o));
+
+// ---------------- timeline ----------------
+export const SHOTS = [
+  [0, 2.8, 'doc', 'السؤال'], [2.8, 12, 'torso', 'الانتفاخ'], [12, 23.5, 'anatomy', 'جوه الجسم'], [23.5, 27, 'lumen', 'الأمعاء الدقيقة'],
+  [27, 29.2, 'ferment', 'التخمير'], [29.2, 31, 'cutaway', 'الانتفاخ'], [31, 41, 'mg:history', 'الحكاية'], [41, 47.5, 'mg:stats', 'الأبحاث'],
+  [47.5, 50, 'doc', 'العلامات'], [50, 53, 'torsoSide', 'العلامات ١'], [53, 57, 'mg:lanes', 'العلامات ٢'], [57, 60.2, 'b12', 'العلامات ٣'],
+  [60.2, 61.5, 'mg:fatigue', 'العلامات ٣'], [61.5, 64.5, 'mg:cards', 'العلامات'], [64.5, 67.4, 'drink', 'التشخيص'], [67.4, 71.5, 'device', 'التشخيص'],
+  [71.5, 78, 'mg:chart', 'التشخيص'], [78, 80, 'doc', 'العلاج'], [80, 86.5, 'mg:plan', 'العلاج'], [86.5, 89, 'mg:noself', 'العلاج'],
+  [89, 94.5, 'doc:slogan', 'الخلاصة'], [94.5, 97.5, 'outro', '']];
+export const DURATION = 97.5;
+
+let CAPS = [], DOC = null;
+async function init() {
+  CAPS = await fetch('data/captions.json').then(r => r.json());
+  DOC = await fetch('data/doc.json').then(r => r.ok ? r.json() : null).catch(() => null);
+  if (DOC) { $('docImg').style.display = 'block'; $('docFrame').style.display = 'none'; $('preview').style.display = 'none'; }
+  for (const c of CAPS) {
+    const ws = c.text.trim().split(/\s+/).reduce((o, w) => { const lat = /^[A-Za-z0-9][A-Za-z0-9.\-]*[؟?]?$/.test(w); if (lat && o.length && /^[A-Za-z0-9]/.test(o[o.length - 1])) o[o.length - 1] += ' ' + w; else o.push(w); return o; }, []);
+    const tot = ws.reduce((a, w) => a + w.length + 1, 0); let acc = c.start;
+    c.words = ws.map(w => { const d = (c.end - c.start) * (w.length + 1) / tot; const o = { w, s: acc, e: acc + d }; acc += d;
+      const bare = w.replace(/[،؟.!:,"…]/g, ''); o.cls = (c.hl || []).some(h => bare.includes(h)) ? 'hl' : (c.hl2 || []).some(h => bare.includes(h)) ? 'hl2' : ''; o.ltr = /[A-Za-z]/.test(w); return o; });
+  }
+  await Promise.all([500, 700, 800, 900].map(w => document.fonts.load(`${w} 40px Cairo`, 'SIBO سيبو ١٢٣ H₂')));
+  await document.fonts.ready;
+  window.ready = true;
+}
+
+// ---------------- motion graphics builders (pure functions of local time) ----------------
+const person = (x, y, s, col) => `<g transform="translate(${x},${y}) scale(${s})" fill="${col}"><circle cx="0" cy="-34" r="16"/><path d="M-26 22 C-26 -6 -14 -12 0 -12 C14 -12 26 -6 26 22 Z"/></g>`;
+function mgHistory(lt) {
+  const toModern = ease((lt - 6.5) / 1.0);                         // 37.5 s: marker slides to 2000s
+  const mx = lerp(160, 760, toModern);
+  const dots = Array.from({ length: 34 }, (_, i) => { const a = clamp((lt - .9 - i * .05) / 1.8); const r1 = (i * 37 % 100) / 100, r2 = (i * 61 % 100) / 100;
+    const sx = 180 + r1 * 520, sy = 140 + r2 * 120; const tx = 470 + Math.cos(i) * 38, ty = 300 + Math.sin(i * 1.7) * 30; return `<circle cx="${lerp(sx, tx, ease(a))}" cy="${lerp(sy, ty, ease(a))}" r="7" fill="#3fcfa0" opacity="${.35 + .6 * a}"/>`; }).join('');
+  const c1 = env(lt, .2, 6.6, .5, .5), c2 = env(lt, 6.7, 10, .5, .4);
+  return `
+  <div class="abs" id="tl" style="opacity:${eOut(lt / .5)}">
+    <svg width="900" height="120" style="overflow:visible"><line x1="20" y1="30" x2="880" y2="30" stroke="rgba(255,255,255,.25)" stroke-width="4" stroke-linecap="round"/>
+      <line x1="20" y1="30" x2="${mx}" y2="30" stroke="#3FE0D0" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="160" cy="30" r="13" fill="${lt > .3 ? '#d8b48a' : '#334'}"/><circle cx="760" cy="30" r="13" fill="${toModern > .9 ? '#3FE0D0' : '#334'}"/>
+      <circle cx="${mx}" cy="30" r="22" fill="none" stroke="#fff" stroke-width="3" opacity=".8"/></svg>
+    <div class="yr" style="left:160px;color:#d8b48a">1939</div><div class="yr" style="left:760px;color:${toModern > .5 ? '#3FE0D0' : '#9fb6cc'}">2000s</div>
+  </div>
+  <div class="card sepia" style="left:80px;top:520px;width:920px;height:820px;opacity:${c1};transform:translateY(${(1 - eOut(lt / .6)) * 40}px)">
+    <div style="position:absolute;right:50px;top:40px;text-align:right"><div class="h1" style="color:#f1dfc2">ملاحظة بعد جراحات الأمعاء</div>
+      <div class="p" style="color:#e6d6bd;margin-top:8px">الأكل بيركن ← البكتيريا تتجمع ← أنيميا وسوء امتصاص</div></div>
+    <svg width="920" height="520" style="position:absolute;left:0;top:230px">
+      <defs><filter id="sk"><feTurbulence baseFrequency=".03" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="3"/></filter></defs>
+      <g filter="url(#sk)" fill="none" stroke="#d8b48a" stroke-width="7" stroke-linecap="round" stroke-dasharray="1600" stroke-dashoffset="${1600 * (1 - ease(lt / 1.2))}">
+        <path d="M60 210 C200 120 300 120 380 200 C430 250 520 250 560 200 C640 110 760 120 860 210"/>
+        <path d="M60 290 C200 200 300 200 380 280 C400 300 420 310 440 310 M500 310 C520 310 540 300 560 280 C640 190 760 200 860 290"/>
+        <path d="M420 300 C380 400 560 420 520 300" stroke="#e8a77b"/>
+      </g>
+      <text x="470" y="470" text-anchor="middle" fill="#e8a77b" font-family="Cairo" font-weight="800" font-size="34" opacity="${clamp((lt - 2) / .5)}" direction="ltr">Blind Loop</text>
+      ${dots}
+    </svg>
+    <div class="note" style="position:absolute;left:40px;bottom:26px;color:#bfa984">Barker &amp; Hummel · 1939</div>
+  </div>
+  <div class="card" style="left:80px;top:520px;width:920px;height:820px;opacity:${c2};transform:translateY(${(1 - eOut((lt - 6.7) / .6)) * 40}px)">
+    <div style="position:absolute;inset:60px 60px auto 60px;text-align:center">
+      <div class="en" style="font-weight:900;font-size:92px;color:#fff;letter-spacing:2px">Mark Pimentel</div>
+      <div class="en" style="font-weight:700;font-size:38px;color:#3FE0D0;margin-top:6px;letter-spacing:4px">CEDARS-SINAI · EARLY 2000s</div>
+      <div style="height:4px;width:${360 * eOut((lt - 7.2) / .8)}px;margin:40px auto;background:#3FE0D0;border-radius:2px"></div>
+      <div class="h1" style="font-size:58px">أبحاث <span style="color:#3FE0D0">ربطت</span> الـ <span class="en">SIBO</span><br>بالقولون العصبي</div>
+      <div class="note" style="margin-top:40px">ربطت · مش أثبتت إنهم نفس المرض</div>
+    </div>
+  </div>`;
+}
+function mgStats(lt) {
+  const venn = ease((lt - 3.5) / .9), gridOp = 1 - venn;
+  let ppl = ''; for (let i = 0; i < 9; i++) { const r = Math.floor(i / 3), c = i % 3; const lit = [1, 5, 6].includes(i); const on = lit && lt > .8 + [1, 5, 6].indexOf(i) * .35;
+    ppl += person(210 + c * 230, 170 + r * 230, 2.6, on ? '#3FE0D0' : 'rgba(255,255,255,.22)'); }
+  const sep = lerp(0, 150, venn);
+  return `
+  <div class="card" style="left:80px;top:300px;width:920px;height:1060px;opacity:${eOut(lt / .4)}">
+    <div class="h1" style="position:absolute;right:56px;top:46px;text-align:right">مرضى القولون العصبي<br><span style="color:#3FE0D0">اللي اختبار التنفس عندهم إيجابي</span></div>
+    <svg width="920" height="640" style="position:absolute;left:0;top:230px">
+      <g opacity="${gridOp}">${ppl}</g>
+      <g opacity="${venn}" font-family="Cairo" font-weight="800" text-anchor="middle">
+        <circle cx="${460 + sep}" cy="330" r="230" fill="rgba(63,224,208,.18)" stroke="#3FE0D0" stroke-width="5"/>
+        <circle cx="${460 - sep}" cy="330" r="230" fill="rgba(216,180,138,.14)" stroke="#d8b48a" stroke-width="5"/>
+        <text x="${460 - sep - 90}" y="345" fill="#f1dfc2" font-size="44">قولون عصبي</text>
+        <text x="${460 + sep + 100}" y="345" fill="#3FE0D0" font-size="58" direction="ltr">SIBO</text>
+      </g>
+    </svg>
+    <div style="position:absolute;left:0;width:920px;top:${lt < 3.5 ? 880 : 900}px;text-align:center">
+      <div style="font-weight:900;font-size:62px;opacity:${gridOp}">≈ <span style="color:#3FE0D0">١ من كل ٣</span></div>
+      <div style="font-weight:900;font-size:56px;opacity:${venn};margin-top:${-86 * venn}px">مش كل قولون عصبي هو <span class="en" style="color:#3FE0D0">SIBO</span></div>
+    </div>
+  </div>
+  <div class="note abs" style="left:80px;width:920px;top:1270px;text-align:center;opacity:${eOut((lt - 1.5) / .5) * gridOp}">النسبة بتختلف حسب نوع الاختبار · حوالي ٣١–٣٨٪ في التحليلات المجمّعة</div>`;
+}
+function mgLanes(lt) {
+  const lane = (y, label, gas, gasEn, col, speed, n) => { let d = ''; for (let i = 0; i < n; i++) { const x = 880 - ((lt * speed + i * (860 / n)) % 860); d += `<circle cx="${x}" cy="${y + 60}" r="16" fill="${col}" opacity=".85"/>`; }
+    return `<rect x="20" y="${y}" width="880" height="120" rx="60" fill="rgba(255,255,255,.06)" stroke="${col}" stroke-opacity=".4" stroke-width="3"/>${d}
+      <text x="20" y="${y - 24}" fill="${col}" font-family="Cairo" font-weight="800" font-size="36" direction="ltr">${gasEn}</text>`; };
+  return `<div class="card" style="left:80px;top:330px;width:920px;height:1010px;opacity:${eOut(lt / .4)}">
+    <div style="position:absolute;right:50px;top:36px;display:flex;align-items:center;gap:20px"><span style="width:70px;height:70px;border-radius:50%;background:#14B8A6;color:#061224;font-weight:900;font-size:40px;display:flex;align-items:center;justify-content:center">2</span><span class="h1">إسهال أو إمساك</span></div>
+    <div class="h1" style="position:absolute;right:30px;top:${200+38}px;opacity:${eOut((lt - .3) / .4)}">إسهال</div><div class="h1" style="position:absolute;right:30px;top:${200+378}px;opacity:${eOut((lt - 1.4) / .4)}">إمساك</div>
+    <svg width="920" height="760" style="position:absolute;left:0;top:200px;overflow:visible;direction:ltr">
+      <g opacity="${eOut((lt - .3) / .4)}">${lane(120, 'إسهال', 'هيدروجين', 'HYDROGEN (H₂)', '#7ff5ea', 420, 9)}</g>
+      <g opacity="${eOut((lt - 1.4) / .4)}">${lane(460, 'إمساك', 'ميثان', 'METHANE (CH₄)', '#FF9F45', 90, 5)}</g>
+    </svg>
+    <div class="note" style="position:absolute;left:0;width:920px;bottom:40px;text-align:center;opacity:${eOut((lt - 2) / .5)}">الإمساك مرتبط أكتر بالبكتيريا اللي بتطلّع ميثان</div></div>`;
+}
+function mgFatigue(lt) {
+  const lvl = lerp(.85, .25, ease(lt / 1.2));
+  return `<div class="card" style="left:180px;top:420px;width:720px;height:860px;opacity:${eOut(lt / .3)}">
+    <svg width="720" height="600" style="position:absolute;top:60px;left:0"><g fill="rgba(255,255,255,.85)"><circle cx="360" cy="190" r="95"/><path d="M180 560 C180 380 260 320 360 320 C460 320 540 380 540 560 Z"/></g>
+      <g transform="translate(470,60)"><rect x="0" y="0" width="150" height="74" rx="14" fill="none" stroke="#FF9F45" stroke-width="7"/><rect x="152" y="22" width="14" height="30" rx="4" fill="#FF9F45"/>
+      <rect x="10" y="10" width="${130 * lvl}" height="54" rx="8" fill="#FF9F45"/></g></svg>
+    <div style="position:absolute;left:0;width:720px;top:640px;text-align:center"><div class="h1" style="color:#FF9F45">إرهاق</div><div class="note">بسبب نقص الفيتامينات · في بعض الحالات</div></div></div>`;
+}
+function mgCards(lt) {
+  const items = [['١', 'انتفاخ'], ['٢', 'إسهال / إمساك'], ['٣', 'نقص B12'], ['٤', 'إرهاق']];
+  const cards = items.map(([n, l], i) => { const a = eOut((lt - i * .15) / .4); return `<div style="display:flex;align-items:center;gap:24px;padding:24px 34px;margin-bottom:22px;border-radius:24px;background:rgba(255,255,255,.07);border:2px solid rgba(63,224,208,.35);opacity:${a};transform:translateX(${(1 - a) * -60}px)">
+    <span style="width:64px;height:64px;border-radius:50%;background:#14B8A6;color:#061224;font-weight:900;font-size:36px;display:flex;align-items:center;justify-content:center">${n}</span><span style="font-weight:800;font-size:46px">${l}</span></div>`; }).join('');
+  const b = spring((lt - 1.1) * 1.2, 9, .6);
+  return `<div class="abs" style="left:140px;width:800px;top:360px">${cards}</div>
+    <div class="abs" style="left:110px;width:860px;top:1050px;text-align:center;opacity:${clamp(b * 1.3)};transform:scale(${.85 + .15 * b})">
+      <div style="display:inline-block;padding:22px 40px;border-radius:26px;background:#14B8A6;color:#061224;font-weight:900;font-size:48px">ولا عرض لوحده بيأكد التشخيص</div></div>`;
+}
+function mgChart(lt) {
+  const X = m => 110 + m / 120 * 720, Y = p => 560 - p / 50 * 460;
+  const h2 = m => 4 + 30 * clamp((m - 30) / 60) * (1 - .1 * clamp((m - 100) / 20)), ch4 = m => 3 + 2 * m / 120;
+  const draw = ease((lt - .3) / 2.4), mm = 120 * draw;
+  const pts = f => Array.from({ length: 61 }, (_, i) => i * 2).filter(m => m <= mm).map(m => `${X(m)},${Y(f(m))}`).join(' ');
+  const pip = spring((lt - 3.9) * 1.1, 9, .6);
+  return `<div class="card" style="left:60px;top:300px;width:960px;height:900px;opacity:${eOut(lt / .4)}">
+    <div style="position:absolute;right:50px;top:34px" class="h1">قراءات اختبار التنفس</div>
+    <div class="note" style="position:absolute;left:50px;top:52px">مثال توضيحي · مش نتيجة مريض حقيقي</div>
+    <svg width="960" height="700" style="position:absolute;left:0;top:150px;direction:ltr" font-family="Cairo">
+      ${[0, 30, 60, 90, 120].map(m => `<line x1="${X(m)}" y1="100" x2="${X(m)}" y2="560" stroke="rgba(255,255,255,.08)"/><text x="${X(m)}" y="600" fill="#9fb6cc" font-size="26" text-anchor="middle">${m}</text>`).join('')}
+      <text x="470" y="650" fill="#9fb6cc" font-size="26" text-anchor="middle">min</text><text x="60" y="90" fill="#9fb6cc" font-size="26">ppm</text>
+      <line x1="${X(0)}" y1="${Y(24)}" x2="${X(120)}" y2="${Y(24)}" stroke="#FF9F45" stroke-dasharray="10 10" stroke-width="3" opacity="${clamp(lt - 1)}"/>
+      <text x="${X(120)}" y="${Y(24) - 12}" fill="#FF9F45" font-size="24" text-anchor="end" opacity="${clamp(lt - 1)}">+20 ppm H₂ ≤ 90 min</text>
+      <line x1="${X(90)}" y1="100" x2="${X(90)}" y2="560" stroke="#FF9F45" stroke-width="2" opacity="${clamp(lt - 1) * .6}"/>
+      <polyline points="${pts(h2)}" fill="none" stroke="#7ff5ea" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+      <polyline points="${pts(ch4)}" fill="none" stroke="#FF9F45" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+      <text x="${X(4)}" y="${Y(46)}" fill="#7ff5ea" font-size="34" font-weight="800">HYDROGEN (H₂)</text><text x="${X(4)}" y="${Y(40)}" fill="#FF9F45" font-size="34" font-weight="800">METHANE (CH₄)</text>
+    </svg></div>
+    <div class="abs" style="left:60px;width:960px;top:1220px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+      ${[['صيام', 0], ['أكل معيّن', .2], ['وقف أدوية حسب الدكتور', .4]].map(([s, d]) => `<span class="chip" style="position:static;font-size:30px;opacity:${eOut((lt - d - .1) / .4)}">${s}</span>`).join('')}
+      <span class="chip" style="position:static;font-size:30px;border-color:#FF9F45;opacity:${eOut((lt - 2.1) / .4)}">النتيجة مش قاطعة لوحدها</span></div>
+    <div class="abs" style="right:70px;top:${960}px;width:260px;text-align:center;opacity:${clamp(pip * 1.3)};transform:scale(${.7 + .3 * pip})">
+      <img src="brand/doc_pip.jpg" style="width:220px;height:220px;border-radius:50%;box-shadow:0 0 0 6px #061224,0 0 0 10px #3FE0D0"><div class="note" style="color:#fff;font-size:26px;margin-top:6px">قراءة الطبيب المتخصص</div></div>`;
+}
+function mgPlan(lt) {
+  const steps = [['🔍', 'ندوّر على السبب', 0], ['🩺', 'علاج تحت إشراف الطبيب', 2.6], ['💊', 'تعويض أي نقص', 4.6], ['🥗', 'نظام أكل مؤقت لو محتاج', 5.3], ['🔁', 'متابعة', 5.9]];
+  const ic = { '🔍': '<circle cx="26" cy="26" r="15" fill="none" stroke="#061224" stroke-width="6"/><line x1="37" y1="37" x2="50" y2="50" stroke="#061224" stroke-width="7" stroke-linecap="round"/>',
+    '🩺': '<path d="M14 10v16a12 12 0 0 0 24 0V10M26 38v6a10 10 0 0 0 20 0v-8" fill="none" stroke="#061224" stroke-width="5" stroke-linecap="round"/><circle cx="46" cy="32" r="5" fill="#061224"/>',
+    '💊': '<rect x="8" y="20" width="44" height="20" rx="10" fill="none" stroke="#061224" stroke-width="5"/><line x1="30" y1="20" x2="30" y2="40" stroke="#061224" stroke-width="5"/>',
+    '🥗': '<path d="M8 28h44a22 18 0 0 1-44 0z" fill="none" stroke="#061224" stroke-width="5"/><path d="M20 26c0-8 8-12 12-14M34 26c2-6 8-8 12-8" stroke="#061224" stroke-width="4" fill="none" stroke-linecap="round"/>',
+    '🔁': '<path d="M14 30a16 16 0 0 1 28-10l4-4v12H34l4-4a10 10 0 0 0-18 6M46 30a16 16 0 0 1-28 10" fill="none" stroke="#061224" stroke-width="5" stroke-linecap="round"/>' };
+  const rows = steps.map(([k, l, d], i) => { const a = eOut((lt - d) / .45); return `<div style="display:flex;align-items:center;gap:26px;height:170px;opacity:${.25 + .75 * a};transform:translateX(${(1 - a) * -40}px)">
+    <span style="width:110px;height:110px;flex:none;border-radius:50%;background:${a > .5 ? '#3FE0D0' : 'rgba(255,255,255,.2)'};display:flex;align-items:center;justify-content:center"><svg width="60" height="60" viewBox="0 0 60 60">${ic[k]}</svg></span>
+    <span style="font-weight:800;font-size:46px">${l}</span></div>`; }).join('');
+  const lineH = 680 * clamp(lt / 6.2);
+  return `<div class="card" style="left:80px;top:300px;width:920px;height:1080px;opacity:${eOut(lt / .4)}">
+    <div class="h1" style="position:absolute;right:56px;top:40px">خطة العلاج</div><div class="note" style="position:absolute;left:50px;top:58px">بتختلف من مريض للتاني</div>
+    <div style="position:absolute;right:112px;top:225px;width:6px;height:${lineH}px;background:linear-gradient(#3FE0D0,#14B8A6);border-radius:3px"></div>
+    <div style="position:absolute;right:56px;top:150px;width:800px">${rows}</div></div>`;
+}
+function mgNoSelf(lt) {
+  const s = spring(lt * 1.3, 10, .45), strike = ease((lt - .45) / .4), shake = lt > .9 && lt < 1.3 ? Math.sin(lt * 70) * 10 : 0;
+  return `<div class="abs" style="left:0;width:1080px;top:470px;text-align:center;transform:scale(${.7 + .3 * s}) translateX(${shake}px);opacity:${clamp(s * 1.4)}">
+    <svg width="560" height="560" viewBox="0 0 560 560"><g transform="rotate(-35 280 280)"><rect x="90" y="200" width="380" height="160" rx="80" fill="#e8f3fb"/><path d="M280 200h110a80 80 0 0 1 0 160H280z" fill="#3FE0D0"/></g>
+      <circle cx="280" cy="280" r="250" fill="none" stroke="#FF5A4A" stroke-width="26" opacity="${strike}"/><line x1="105" y1="105" x2="${105 + 350 * strike}" y2="${105 + 350 * strike}" stroke="#FF5A4A" stroke-width="26" stroke-linecap="round"/></svg>
+    <div class="h1" style="margin-top:30px;font-size:62px">ماتاخدش مضاد حيوي<br><span style="color:#FF9F45">من نفسك</span></div></div>`;
+}
+const MG = { history: mgHistory, stats: mgStats, lanes: mgLanes, fatigue: mgFatigue, cards: mgCards, chart: mgChart, plan: mgPlan, noself: mgNoSelf };
+
+// ---------------- 3D labels ----------------
+function labels(shot, lt, P) {
+  const L = [];
+  const add = (p, html, a, cls = '', dx = 0, dy = 0) => { if (!p || a <= .01) return; L.push(`<div class="lb ${cls}" style="left:${p.x + dx}px;top:${p.y + dy}px;opacity:${a};transform:translate(-50%,-50%) scale(${.85 + .15 * a})">${html}</div>`); };
+  if (shot === 'torso') {
+    add(P.belly, 'انتفاخ', env(lt, 2.6, 4.6, .3, .3), 'amber', 0, -40);
+  } else if (shot === 'anatomy') {
+    const lab = env(lt, .4, 6.4, .4, .4);
+    add(P.stomach, 'المعدة', lab, '', 140, -40); add(P.small, 'الأمعاء الدقيقة', env(lt, .7, 6.4, .4, .4), '', 0, 20); add(P.colon, 'القولون', env(lt, 2.3, 6.4, .4, .4), 'sand', -40, 0);
+    add(P.duodenum, '<small class="en">duodenum</small>الاثنا عشر', env(lt, 1.0, 6.4, .4, .4) * .9, '', -60, -40);
+    add(P.ileum, '<small class="en">ileum</small>اللفائفي', env(lt, 1.3, 6.4, .4, .4) * .9, '', 40, 70);
+    add(P.stomach, '🛡️ حمض المعدة', env(lt, 6.5, 8.6, .3, .3), '', 60, -110);
+    add(P.jejunum, '🛡️ حركة الأمعاء', env(lt, 8.0, 10.4, .3, .3), '', 0, -60);
+    add(P.valve, '🛡️ الصمّام', env(lt, 9.9, 11.5, .3, .3), '', 120, 30);
+  }
+  return L.join('');
+}
+function chips(shot, lt, info) {
+  const c = [];
+  const chip = (html, a, x, y, col = '#3FE0D0') => { if (a > .01) c.push(`<div class="chip" style="right:${x}px;top:${y}px;border-color:${col};opacity:${a};transform:translateY(${(1 - a) * 20}px)">${html}</div>`); };
+  if (shot === 'lumen') { chip('جوه الأمعاء الدقيقة', env(lt, .2, 3.5, .4, .3), 60, 230); chip('طبيعي: بكتيريا قليلة', env(lt, .5, 1.7, .3, .3), 60, 330); chip('زيادة البكتيريا', env(lt, 2.0, 3.5, .3, .3), 60, 330, '#FF9F45'); }
+  if (shot === 'ferment') { chip('تخمير الأكل', env(lt, .1, 2.2, .3, .3), 60, 230); chip('غازات: <span class="en">H₂ · CH₄</span>', env(lt, .9, 2.2, .3, .3), 60, 330, '#FF9F45'); }
+  if (shot === 'cutaway') { chip('انتفاخ', env(lt, .4, 1.8, .3, .2), 60, 230, '#FF9F45'); }
+  if (shot === 'torsoSide') { chip('<span style="color:#3FE0D0">١</span> · انتفاخ وامتلاء', env(lt, .2, 3, .3, .3), 60, 230); }
+  if (shot === 'b12') { chip('<span style="color:#3FE0D0">٣</span> · فيتامين <span class="en">B12</span>', env(lt, .1, 3.2, .3, .3), 60, 230); chip('البكتيريا بتستهلك جزء منه', env(lt, 1.0, 3.2, .3, .3), 60, 330, '#FF9F45'); chip('في بعض الحالات', env(lt, 1.6, 3.2, .3, .3), 60, 430, '#9fb6cc'); }
+  if (shot === 'drink') { chip('محلول سكر', env(lt, .2, 2.9, .3, .3), 60, 230); chip('<span class="en">Glucose / Lactulose</span>', env(lt, .6, 2.9, .3, .3), 60, 330, '#9fb6cc'); }
+  if (shot === 'device') { chip('<span class="en">BREATH TEST</span> · اختبار التنفس', env(lt, .1, 4.1, .3, .3), 60, 230);
+    const ms = [0, 15, 30, 45, 60, 75, 90, 105, 120]; c.push(`<div class="abs" style="left:90px;width:900px;top:1290px;display:flex;justify-content:space-between;direction:ltr;opacity:${eOut(lt / .4)}">${ms.map(m => `<div style="text-align:center"><div style="width:26px;height:26px;margin:0 auto;border-radius:50%;background:${m <= (info.minute ?? 0) ? '#3FE0D0' : 'rgba(255,255,255,.2)'}"></div><div class="note" style="font-size:22px">${m}</div></div>`).join('')}</div>`); }
+  return c.join('');
+}
+
+// ---------------- captions ----------------
+function captions(t) {
+  const cl = $('capLine'); let cap = null;
+  for (const c of CAPS) if (t >= c.start - .05 && t < c.end + .12 && t < 94.5) cap = c;
+  if (!cap) { cl.style.opacity = 0; return; }
+  const key = cap.start + '|' + cap.text;
+  if (cl.dataset.key !== key) { cl.dataset.key = key; cl.innerHTML = cap.words.map((o, i) => `<span class="w ${o.cls}"${o.ltr ? ' dir="ltr"' : ''}>${o.w}</span>`).join('');
+    cl.style.setProperty('--fs', (cap.text.length > 44 ? 46 : cap.text.length > 30 ? 52 : 58) + 'px'); }
+  const a = eOut((t - cap.start + .05) / .2); cl.style.opacity = Math.min(a, clamp((cap.end + .12 - t) / .12));
+  cl.style.transform = `translateY(${(1 - a) * 14}px)`;
+  [...cl.children].forEach((sp, i) => { const o = cap.words[i]; sp.style.opacity = t >= o.s - .03 ? 1 : .45; });
+}
+
+// ---------------- main seek ----------------
+let lastMG = '';
+window.seek = async (t) => {
+  t = Number(t);
+  const shotIdx = SHOTS.findIndex(s => t >= s[0] && t < s[1]); const [s0, s1, name, chapter] = SHOTS[shotIdx < 0 ? SHOTS.length - 1 : shotIdx];
+  const lt = t - s0;
+  const is3D = !name.startsWith('mg:') && !name.startsWith('doc') && name !== 'outro';
+  $('gl').style.visibility = is3D ? 'visible' : 'hidden'; $('mg').style.visibility = name.startsWith('mg:') ? 'visible' : 'hidden';
+  $('doc').style.visibility = name.startsWith('doc') ? 'visible' : 'hidden'; $('outro').style.visibility = name === 'outro' ? 'visible' : 'hidden';
+  let info = {};
+  if (is3D) { info = renderShot(name, t, lt); const z = 1.035 - .035 * eOut(lt / .8); $('gl').style.transform = `scale(${z})`; }
+  // 3D labels + chips
+  $('labels').innerHTML = is3D ? labels(name, lt, info) + chips(name, lt, info) : '';
+  // motion graphics
+  if (name.startsWith('mg:')) $('mgRoot').innerHTML = MG[name.slice(3)](lt);
+  // doc placeholder
+  if (name.startsWith('doc') && DOC) { const f = Math.max(1, Math.round((t + (DOC.offset || 0)) * (DOC.fps || 30)) + 1); const src = DOC.frames.replace('%05d', String(f).padStart(5, '0'));
+    if ($('docImg').getAttribute('src') !== src) { $('docImg').src = src; await $('docImg').decode().catch(() => {}); } $('docImg').style.transform = `scale(${1 + .04 * eOut(lt / (s1 - s0))})`; }
+  if (name.startsWith('doc')) { const p = eOut(lt / .5); $('docFrame').style.transform = `scale(${1.04 - .04 * p})`;
+    const sl = name === 'doc:slogan' ? eOut((lt - 1.9) / .6) : 0; $('slogan').innerHTML = sl > 0 ? `أساس العلاج الصح<br>هو <span style="color:#3FE0D0">التشخيص الصح</span><span class="u" style="width:${520 * eOut((lt - 2.4) / .8)}px"></span>` : '';
+    $('slogan').style.opacity = sl; $('docFrame').style.opacity = name === 'doc:slogan' ? 1 - .7 * sl : 1; }
+  // title
+  const tt = name === 'torso' ? lt - 4.7 : -1, tOp = tt > 0 ? Math.min(1, clamp((4.3 - tt) / .4)) : 0;
+  $('title').style.opacity = tOp;
+  if (tOp > 0) { $('tBig').innerHTML = 'SIBO'.split('').map((ch, i) => { const a = spring((tt - i * .09) * 1.1, 10, .5); return `<span style="opacity:${clamp(a * 1.5)};transform:translateY(${(1 - a) * 60}px) scale(${.8 + .2 * a})">${ch}</span>`; }).join('');
+    $('tBar').style.width = 420 * eOut((tt - .5) / .8) + 'px'; }
+  // outro
+  if (name === 'outro') { const s = spring(lt, 9, .55); $('oLogo').style.transform = `scale(${.3 + .7 * s})`; $('oLogo').style.opacity = clamp(lt * 4);
+    [['oName', .3], ['oEn', .45], ['oSp', .6], ['oLine', .8], ['oHandle', 1.0]].forEach(([id, d]) => { const a = eOut((lt - d) / .45); $(id).style.opacity = a; $(id).style.marginTop = (1 - a) * 24 + 'px'; }); }
+  // brand chrome
+  $('wm').style.opacity = name === 'outro' ? 0 : .95 * clamp(t * 3); $('chap').style.opacity = name === 'outro' || !chapter ? 0 : .95;
+  $('chap').innerHTML = `<b>SIBO</b>${chapter}`;
+  captions(t);
+  // transitions: quick dip at shot boundaries (motion-masked), longer fade into outro
+  const dIn = clamp(1 - lt / .22), dOut = clamp(1 - (s1 - t) / .18);
+  $('veil').style.opacity = (shotIdx === 0 ? 0 : .85 * dIn) + (name === 'outro' ? 0 : .6 * dOut * (SHOTS[shotIdx + 1]?.[2] === 'outro' ? 1.4 : 1));
+  $('preview').style.opacity = name === 'outro' ? 0 : 1;
+};
+init();
+</script>
+</body>
+</html>
