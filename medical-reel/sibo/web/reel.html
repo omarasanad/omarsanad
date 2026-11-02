@@ -85,7 +85,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--navy2);fon
 <div id="mg" class="abs"><div class="grid"></div><div id="mgRoot" class="abs" style="inset:0"></div></div>
 <div id="doc" class="abs"><img id="docImg" class="abs" style="inset:0;width:1080px;height:1920px;object-fit:cover;display:none" alt="">
   <div id="docFrame" class="abs"><img src="brand/doc_pip.jpg" alt=""><div class="t1">د. أبوبكر احمد سند</div><div class="t2">أخصائي الباطنة والجهاز الهضمي والكبد والمناظير</div><div class="t3">مكان لقطة الدكتور · هتتركّب بعد التسجيل</div></div>
-  <div id="slogan" class="abs"></div>
+  <div id="slogan" class="abs"></div><div id="kin" class="abs" style="left:70px;width:940px;top:520px;text-align:center;display:none"></div>
 </div>
 <div id="labels" class="abs"></div>
 <div id="title" class="abs"><div class="big" id="tBig"></div><div class="sub">فرط نمو البكتيريا في الأمعاء الدقيقة</div><div class="bar" id="tBar"></div></div>
@@ -114,25 +114,31 @@ const spring = (u, k = 9, z = .55) => { if (u <= 0) return 0; const d = z * k, w
 const env = (t, a, b, i = .35, o = .35) => Math.min(eOut((t - a) / i), eOut((b - t) / o));
 
 // ---------------- timeline ----------------
-export const SHOTS = [
+export const SHOTS = [  // default (estimated) timeline; replaced by data/shots.json when narration exists
   [0, 2.8, 'doc', 'السؤال'], [2.8, 12, 'torso', 'الانتفاخ'], [12, 23.5, 'anatomy', 'جوه الجسم'], [23.5, 27, 'lumen', 'الأمعاء الدقيقة'],
   [27, 29.2, 'ferment', 'التخمير'], [29.2, 31, 'cutaway', 'الانتفاخ'], [31, 41, 'mg:history', 'الحكاية'], [41, 47.5, 'mg:stats', 'الأبحاث'],
   [47.5, 50, 'doc', 'العلامات'], [50, 53, 'torsoSide', 'العلامات ١'], [53, 57, 'mg:lanes', 'العلامات ٢'], [57, 60.2, 'b12', 'العلامات ٣'],
   [60.2, 61.5, 'mg:fatigue', 'العلامات ٣'], [61.5, 64.5, 'mg:cards', 'العلامات'], [64.5, 67.4, 'drink', 'التشخيص'], [67.4, 71.5, 'device', 'التشخيص'],
   [71.5, 78, 'mg:chart', 'التشخيص'], [78, 80, 'doc', 'العلاج'], [80, 86.5, 'mg:plan', 'العلاج'], [86.5, 89, 'mg:noself', 'العلاج'],
   [89, 94.5, 'doc:slogan', 'الخلاصة'], [94.5, 97.5, 'outro', '']];
-export const DURATION = 97.5;
+export let DURATION = 97.5;
+let WARP = {};
 
 let CAPS = [], DOC = null;
 async function init() {
   CAPS = await fetch('data/captions.json').then(r => r.json());
+  const SJ = await fetch('data/shots.json').then(r => r.ok ? r.json() : null).catch(() => null);
+  if (SJ) { SHOTS.length = 0; SJ.shots.forEach((s, i) => { SHOTS.push([s[0], s[1], s[2], s[3]]); WARP[i] = { pts: s[4], design: s[5] }; }); DURATION = SJ.duration; window.HAS_VO = true; }
   DOC = await fetch('data/doc.json').then(r => r.ok ? r.json() : null).catch(() => null);
   if (DOC) { $('docImg').style.display = 'block'; $('docFrame').style.display = 'none'; $('preview').style.display = 'none'; }
+  else if (window.HAS_VO) { $('docFrame').style.display = 'none'; $('kin').style.display = 'block'; $('preview').style.display = 'none'; }
   for (const c of CAPS) {
     const ws = c.text.trim().split(/\s+/).reduce((o, w) => { const lat = /^[A-Za-z0-9][A-Za-z0-9.\-]*[؟?]?$/.test(w); if (lat && o.length && /^[A-Za-z0-9]/.test(o[o.length - 1])) o[o.length - 1] += ' ' + w; else o.push(w); return o; }, []);
     const tot = ws.reduce((a, w) => a + w.length + 1, 0); let acc = c.start;
-    c.words = ws.map(w => { const d = (c.end - c.start) * (w.length + 1) / tot; const o = { w, s: acc, e: acc + d }; acc += d;
+    const timed = c.words && c.words.length === c.text.trim().split(/\s+/).length ? c.words : null;
+    c.words = ws.map((w, wi) => { const d = (c.end - c.start) * (w.length + 1) / tot; const o = { w, s: acc, e: acc + d }; acc += d;
       const bare = w.replace(/[،؟.!:,"…]/g, ''); o.cls = (c.hl || []).some(h => bare.includes(h)) ? 'hl' : (c.hl2 || []).some(h => bare.includes(h)) ? 'hl2' : ''; o.ltr = /[A-Za-z]/.test(w); return o; });
+    if (timed) { let k = 0; for (const o of c.words) { const n = o.w.split(/\s+/).length; o.s = timed[k].s; o.e = timed[k + n - 1].e; k += n; } }
   }
   await Promise.all([500, 700, 800, 900].map(w => document.fonts.load(`${w} 40px Cairo`, 'SIBO سيبو ١٢٣ H₂')));
   await document.fonts.ready;
@@ -330,10 +336,14 @@ function captions(t) {
 
 // ---------------- main seek ----------------
 let lastMG = '';
+const NOWM = new URLSearchParams(location.search).has('nowm');
+function warp(i, lt, len) { const W = WARP[i]; if (!W || W.design == null) return lt;
+  const P = [[0, 0], ...W.pts, [len, W.design]].sort((a, b) => a[0] - b[0]);
+  for (let k = 0; k < P.length - 1; k++) { const [a0, d0] = P[k], [a1, d1] = P[k + 1]; if (lt <= a1 || k === P.length - 2) return d0 + (d1 - d0) * clamp((lt - a0) / Math.max(1e-3, a1 - a0), 0, 1.2); } return lt; }
 window.seek = async (t) => {
   t = Number(t);
   const shotIdx = SHOTS.findIndex(s => t >= s[0] && t < s[1]); const [s0, s1, name, chapter] = SHOTS[shotIdx < 0 ? SHOTS.length - 1 : shotIdx];
-  const lt = t - s0;
+  const rawLt = t - s0; const lt = warp(shotIdx, rawLt, s1 - s0);
   const is3D = !name.startsWith('mg:') && !name.startsWith('doc') && name !== 'outro';
   $('gl').style.visibility = is3D ? 'visible' : 'hidden'; $('mg').style.visibility = name.startsWith('mg:') ? 'visible' : 'hidden';
   $('doc').style.visibility = name.startsWith('doc') ? 'visible' : 'hidden'; $('outro').style.visibility = name === 'outro' ? 'visible' : 'hidden';
@@ -346,6 +356,13 @@ window.seek = async (t) => {
   // doc placeholder
   if (name.startsWith('doc') && DOC) { const f = Math.max(1, Math.round((t + (DOC.offset || 0)) * (DOC.fps || 30)) + 1); const src = DOC.frames.replace('%05d', String(f).padStart(5, '0'));
     if ($('docImg').getAttribute('src') !== src) { $('docImg').src = src; await $('docImg').decode().catch(() => {}); } $('docImg').style.transform = `scale(${1 + .04 * eOut(lt / (s1 - s0))})`; }
+  if (name.startsWith('doc') && !DOC && window.HAS_VO) {
+    const cards = { 0: ['بطنك بتنتفخ', 'زي البالونة', 'بعد الأكل؟'], 8: ['إيه اللي ممكن', 'يخلّي الدكتور', 'يشك في الـ <span class="en" style="color:#3FE0D0">SIBO</span>؟'], 17: ['العلاج', 'مش مهدئات', 'للقولون وخلاص'] };
+    const lines = cards[shotIdx];
+    if (lines) $('kin').innerHTML = `<img src="brand/brand_mark.png" style="width:150px;height:150px;border-radius:50%;opacity:${eOut(rawLt / .4)};margin-bottom:40px">` + lines.map((l, i) => { const a = spring((rawLt - .15 - i * .22) * 1.2, 10, .6);
+      return `<div style="font-weight:900;font-size:${i === 1 ? 118 : 96}px;line-height:1.25;color:${i === 1 ? '#3FE0D0' : '#fff'};opacity:${clamp(a * 1.4)};transform:translateY(${(1 - a) * 50}px)">${l}</div>`; }).join('');
+    else $('kin').innerHTML = `<img src="brand/brand_mark.png" style="width:220px;height:220px;border-radius:50%;opacity:${eOut(rawLt / .4)}">`;
+    $('kin').style.top = (lines ? 470 : 380) + 'px'; }
   if (name.startsWith('doc')) { const p = eOut(lt / .5); $('docFrame').style.transform = `scale(${1.04 - .04 * p})`;
     const sl = name === 'doc:slogan' ? eOut((lt - 1.9) / .6) : 0; $('slogan').innerHTML = sl > 0 ? `أساس العلاج الصح<br>هو <span style="color:#3FE0D0">التشخيص الصح</span><span class="u" style="width:${520 * eOut((lt - 2.4) / .8)}px"></span>` : '';
     $('slogan').style.opacity = sl; $('docFrame').style.opacity = name === 'doc:slogan' ? 1 - .7 * sl : 1; }
@@ -355,12 +372,14 @@ window.seek = async (t) => {
   if (tOp > 0) { $('tBig').innerHTML = 'SIBO'.split('').map((ch, i) => { const a = spring((tt - i * .09) * 1.1, 10, .5); return `<span style="opacity:${clamp(a * 1.5)};transform:translateY(${(1 - a) * 60}px) scale(${.8 + .2 * a})">${ch}</span>`; }).join('');
     $('tBar').style.width = 420 * eOut((tt - .5) / .8) + 'px'; }
   // outro
+  if (name === 'doc:slogan' && window.HAS_VO && !DOC) { $('slogan').style.top = '820px'; }
   if (name === 'outro') { const s = spring(lt, 9, .55); $('oLogo').style.transform = `scale(${.3 + .7 * s})`; $('oLogo').style.opacity = clamp(lt * 4);
     [['oName', .3], ['oEn', .45], ['oSp', .6], ['oLine', .8], ['oHandle', 1.0]].forEach(([id, d]) => { const a = eOut((lt - d) / .45); $(id).style.opacity = a; $(id).style.marginTop = (1 - a) * 24 + 'px'; }); }
   // brand chrome
-  $('wm').style.opacity = name === 'outro' ? 0 : .95 * clamp(t * 3); $('chap').style.opacity = name === 'outro' || !chapter ? 0 : .95;
+  $('wm').style.opacity = (NOWM || name === 'outro') ? 0 : .95 * clamp(t * 3);   // ?nowm=1: watermark composited at encode time $('chap').style.opacity = name === 'outro' || !chapter ? 0 : .95;
   $('chap').innerHTML = `<b>SIBO</b>${chapter}`;
   captions(t);
+  $('caps').style.visibility = (window.HAS_VO && !DOC && name === 'doc' && [0, 8, 17].includes(shotIdx)) ? 'hidden' : 'visible';
   // transitions: quick dip at shot boundaries (motion-masked), longer fade into outro
   const dIn = clamp(1 - lt / .22), dOut = clamp(1 - (s1 - t) / .18);
   $('veil').style.opacity = (shotIdx === 0 ? 0 : .85 * dIn) + (name === 'outro' ? 0 : .6 * dOut * (SHOTS[shotIdx + 1]?.[2] === 'outro' ? 1.4 : 1));

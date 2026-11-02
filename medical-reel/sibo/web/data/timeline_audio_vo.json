@@ -1,0 +1,181 @@
+{
+ "videoDur": 118.55,
+ "outroDur": 3.2,
+ "sfx": [
+  {
+   "t": 2.59,
+   "type": "whoosh",
+   "gain": 0.35
+  },
+  {
+   "t": 13.74,
+   "type": "chime",
+   "gain": 0.4
+  },
+  {
+   "t": 14.85,
+   "type": "whoosh",
+   "gain": 0.35
+  },
+  {
+   "t": 25.36,
+   "type": "pop",
+   "gain": 0.28
+  },
+  {
+   "t": 26.15,
+   "type": "pop",
+   "gain": 0.28
+  },
+  {
+   "t": 27.15,
+   "type": "pop",
+   "gain": 0.28
+  },
+  {
+   "t": 29.87,
+   "type": "whoosh",
+   "gain": 0.35
+  },
+  {
+   "t": 34.27,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 36.78,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 38.25,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 48.75,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 54.02,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 61.43,
+   "type": "chime",
+   "gain": 0.3
+  },
+  {
+   "t": 62.79,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 66.03,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 68.54,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 72.16,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 76.26,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 78.18,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 82.26,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 86.2,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 91.62,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 95.51,
+   "type": "pop",
+   "gain": 0.3
+  },
+  {
+   "t": 99.43,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 102.12,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 102.22,
+   "type": "tick",
+   "gain": 0.25
+  },
+  {
+   "t": 105.37,
+   "type": "tick",
+   "gain": 0.25
+  },
+  {
+   "t": 108.91,
+   "type": "tick",
+   "gain": 0.25
+  },
+  {
+   "t": 109.94,
+   "type": "tick",
+   "gain": 0.25
+  },
+  {
+   "t": 112.08,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 112.68,
+   "type": "pop",
+   "gain": 0.4
+  },
+  {
+   "t": 114.68,
+   "type": "swish",
+   "gain": 0.25
+  },
+  {
+   "t": 115.6,
+   "type": "chime",
+   "gain": 0.45
+  },
+  {
+   "t": 118.55,
+   "type": "whoosh",
+   "gain": 0.35
+  },
+  {
+   "t": 119.05,
+   "type": "chime",
+   "gain": 0.45
+  }
+ ]
+}
