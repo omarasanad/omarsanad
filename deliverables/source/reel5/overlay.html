@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:CXB;src:url(fonts/Cairo-ExtraBold.ttf)}
+@font-face{font-family:CSB;src:url(fonts/Cairo-SemiBold.ttf)}
+:root{--navy:#061A33;--teal:#2FD0C0;--coral:#FF6A55;--ink:#E9F2F8;--gold:#FFC75A}
+html,body{margin:0;width:1080px;height:1920px;background:transparent;overflow:hidden}
+*{box-sizing:border-box}
+#panel{position:absolute;left:0;top:0;width:1080px;height:0;overflow:hidden;border-radius:0 0 40px 40px;background:radial-gradient(120% 60% at 50% 0%,#0F3560 0%,var(--navy) 60%),var(--navy)}
+#dots{position:absolute;inset:0;background-image:radial-gradient(rgba(47,208,192,.10) 2px,transparent 2.5px);background-size:44px 44px}
+#edge{position:absolute;left:60px;width:960px;height:5px;border-radius:5px;background:var(--teal);box-shadow:0 0 18px rgba(47,208,192,.7)}
+.abs{position:absolute}
+.lbl{font-family:CXB;color:#fff;white-space:nowrap;line-height:1.25}
+.sub{font-family:CSB;color:var(--ink);white-space:nowrap;line-height:1.3}
+.chip{padding:8px 34px 14px;border-radius:999px;font-family:CXB;font-size:50px;color:#fff;white-space:nowrap}
+.card{position:absolute;border-radius:30px;background:rgba(6,26,51,.9);border:2px solid rgba(47,208,192,.35);box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.tile{position:absolute;border-radius:34px;background:rgba(255,255,255,.06);border:3px solid rgba(47,208,192,.55);display:flex;align-items:center;gap:20px;padding:0 30px}
+.tile .t{font-family:CXB;font-size:44px;color:#fff;white-space:nowrap}
+svg{overflow:visible}
+</style></head>
+<body>
+<div id="panel"><div id="dots"></div><div id="sc"></div></div><div id="edge"></div><div id="free"></div>
+<script src="timeline.js"></script><script src="icons.js"></script>
+<script>
+const $=id=>document.getElementById(id), q=s=>document.querySelector(s);
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x)), seg=(t,a,b)=>clamp((t-a)/(b-a));
+const eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2, eout=x=>1-Math.pow(1-x,3);
+const back=x=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const lerp=(a,b,p)=>a+(b-a)*p;
+function icon(n,s,c){const i=ICONS[n];return `<svg width="${s}" height="${s*i.h/i.w}" viewBox="0 0 ${i.w} ${i.h}" style="color:${c};display:block">${i.body}</svg>`}
+function el(html,parent='sc'){const d=document.createElement('div');d.className='abs';d.innerHTML=html;$(parent).appendChild(d);return d}
+function put(d,x,y,sc=1,op=1,rot=0){if(op<=0.001){d.style.display='none';return}
+  d.style.left='0px';d.style.top='0px';d.style.display='block';const w=d.offsetWidth,h=d.offsetHeight;
+  d.style.transform=`translate(${x-w/2}px,${y-h/2}px) scale(${sc}) rotate(${rot}deg)`;d.style.opacity=op}
+function panelState(t){const M=TL.modes;let bottom=TL.panel[M[0][1]],op=1;
+  for(let i=1;i<M.length;i++){const [s,m,d,k]=M[i];const prev=TL.panel[M[i-1][1]];if(t<s)break;const p=eio(seg(t,s,s+d));
+    if(k==='dissolve'&&m==='S'){bottom=prev;op=1-p;if(p>=1){bottom=0;op=1}}else{bottom=lerp(prev,TL.panel[m],p);op=1}}
+  return {bottom,op}}
+const GLASS=(w)=>`<svg width="${w}" height="${w*1.45}" viewBox="0 0 200 290"><defs><clipPath id="gc${w}"><path d="M30 20 L170 20 L152 270 Q150 282 138 282 L62 282 Q50 282 48 270Z"/></clipPath></defs>
+ <rect class="milk" x="0" y="80" width="200" height="220" fill="#F7F4EC" clip-path="url(#gc${w})"/><path d="M30 20 L170 20 L152 270 Q150 282 138 282 L62 282 Q50 282 48 270Z" fill="rgba(255,255,255,.08)" stroke="#E9F2F8" stroke-width="8" stroke-linejoin="round"/></svg>`;
+// custom stomach (600x700 box)
+const SPATH="M255 0 L255 115 C255 165 215 190 185 240 C130 330 112 440 170 535 C240 645 410 668 510 595 C572 550 588 470 548 428 C516 396 470 404 448 438 C418 488 342 500 304 450 C270 408 296 330 326 262 C348 212 334 168 322 118 L322 0 Z";
+const STOM=`<svg width="600" height="700" viewBox="0 0 600 700"><defs><clipPath id="sclip"><path d="${SPATH}"/></clipPath>
+ <radialGradient id="acid" cx="50%" cy="60%" r="60%"><stop offset="0" stop-color="#FF6A55" stop-opacity=".55"/><stop offset="1" stop-color="#FF6A55" stop-opacity="0"/></radialGradient></defs>
+ <path id="sbody" d="${SPATH}" fill="#123B63" stroke="#2FD0C0" stroke-width="10" stroke-linejoin="round"/>
+ <g clip-path="url(#sclip)"><rect id="pool" x="0" y="700" width="600" height="400" fill="#F7F4EC" opacity=".92"/>
+   <rect id="acidglow" x="0" y="0" width="600" height="700" fill="url(#acid)" opacity="0"/>
+   <g id="parts"></g><g id="acids"></g><g id="drops"></g></g>
+ <path id="coat" d="${SPATH}" fill="none" stroke="#FFFFFF" stroke-width="26" stroke-linejoin="round" opacity=".95" clip-path="url(#sclip)"/>
+</svg>`;
+
+const S={};
+const bub=(t)=>el(`<div style="max-width:780px;padding:18px 34px 24px;border-radius:38px 38px 10px 38px;background:#FFFFFF;font-family:CXB;font-size:48px;color:#061A33;line-height:1.35;box-shadow:0 12px 30px rgba(0,0,0,.25)">${t}</div>`);
+S.msgH=el(`<div style="display:flex;align-items:center;gap:18px"><div style="width:92px;height:92px;border-radius:50%;background:#0B2A4B;border:4px solid #2FD0C0;display:flex;align-items:center;justify-content:center">${icon('person',60,'#E9F2F8')}</div><div class="sub" style="font-size:42px">رسالة من مريض</div></div>`);
+S.b=[bub('دكتور، بعد إذنك…'),bub('اتشخّصت إن عندي <span style="color:#0E8C80">قولون عصبي</span>'),bub('باخد علاج… بس الانتفاخات لسه مستمرة'),bub('هل ده صحيح؟ ولا في <span style="color:#0E8C80">حاجة تانية</span>؟')];
+S.typing=el(`<div style="padding:16px 30px;border-radius:30px 30px 10px 30px;background:#fff;display:flex;gap:14px">${[0,1,2].map(i=>`<div class="td" style="width:20px;height:20px;border-radius:50%;background:#7FA3C2"></div>`).join('')}</div>`);
+// four months
+S.m4=el('<div style="text-align:right"><div class="lbl" style="font-size:120px;color:#FFC75A;line-height:1">4 شهور</div><div class="sub" style="font-size:44px">والحالة بتتردد</div></div>');
+S.months=[1,2,3,4].map(i=>el(`<div style="width:190px;height:200px;border-radius:30px;background:rgba(255,255,255,.06);border:3px solid rgba(47,208,192,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px">${icon('calendar',80,'#2FD0C0')}<div class="lbl" style="font-size:38px">شهر ${['١','٢','٣','٤'][i-1]}</div><div style="display:flex;gap:8px">${[0,1,2].map(()=>`<div style="width:16px;height:16px;border-radius:50%;background:#FF6A55"></div>`).join('')}</div></div>`));
+S.cycle=el(`<svg width="560" height="560" viewBox="-280 -280 560 560"><circle r="200" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="16"/><path id="cyc" d="M0 -200 A200 200 0 1 1 -0.1 -200" fill="none" stroke="#FF6A55" stroke-width="16" stroke-linecap="round" stroke-dasharray="1257" stroke-dashoffset="1257"/><path id="cyh" d="M-26 -226 L0 -200 L-26 -174" fill="none" stroke="#FF6A55" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/></svg>`);
+S.cycPill=el(icon('pills-2',140,'#E9F2F8'));
+S.cA=el('<div class="chip" style="font-size:44px">مسكنات</div>');
+S.cB=el('<div class="chip" style="font-size:44px">مضادات للتقلصات والغازات</div>');
+S.cC=el('<div class="chip" style="font-size:46px;border-color:#FF6A55;background:rgba(255,106,85,.16)">نفس الشكوى</div>');
+S.zig=el(`<svg width="900" height="420" viewBox="0 0 900 420"><text x="890" y="30" text-anchor="end" font-family="CSB" font-size="34" fill="#B9CCDD">شدّة الأعراض</text>
+ <line x1="20" y1="380" x2="880" y2="380" stroke="rgba(255,255,255,.3)" stroke-width="5"/>
+ <path id="zz" d="M880 120 L820 120 L790 310 L760 120 L560 120 L530 310 L500 120 L300 120 L270 310 L240 120 L40 120" fill="none" stroke="#FF6A55" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="2200" stroke-dashoffset="2200"/>
+ <g id="zl"><text x="790" y="355" text-anchor="middle" font-family="CXB" font-size="34" fill="#2FD0C0">يوم</text><text x="660" y="95" text-anchor="middle" font-family="CXB" font-size="36" fill="#FF6A55">10 أيام</text></g></svg>`);
+// ultrasound abdomen & pelvis
+S.torso=el(`<svg width="380" height="600" viewBox="0 0 380 600"><path d="M120 10 C120 60 60 70 40 140 C20 220 30 330 50 420 C60 470 70 540 90 590 L290 590 C310 540 320 470 330 420 C350 330 360 220 340 140 C320 70 260 60 260 10Z" fill="rgba(233,242,248,.10)" stroke="#E9F2F8" stroke-width="6"/>
+ <ellipse id="ab" cx="190" cy="300" rx="120" ry="95" fill="rgba(47,208,192,.25)" stroke="#2FD0C0" stroke-width="5"/><ellipse id="pv" cx="190" cy="470" rx="110" ry="65" fill="rgba(47,208,192,.18)" stroke="#2FD0C0" stroke-width="5" stroke-dasharray="12 10"/></svg>`);
+S.probe=el(icon('ultrasound-scanner',150,'#2FD0C0'));
+S.usL=el('<div class="chip" style="font-size:46px">سونار على البطن والحوض</div>');
+S.docL=el(`<div class="chip" style="display:flex;align-items:center;gap:12px;font-size:42px;border-color:#FFC75A">${icon('doctor-male',50,'#FFC75A')}<span>دكتور متخصص</span></div>`);
+S.mag=el(icon('magnifying-glass',130,'#FFC75A'));
+// gallstones ultrasound
+S.us=el(`<div style="position:relative;width:820px;height:640px;border-radius:34px;background:#05080C;border:6px solid #2FD0C0;overflow:hidden">
+ <svg width="820" height="640" viewBox="0 0 820 640"><defs><clipPath id="fan2"><path d="M410 30 L780 600 Q410 650 40 600Z"/></clipPath><radialGradient id="gb" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#0A0A0A"/><stop offset="1" stop-color="#1B1B1B"/></radialGradient>
+ <linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".95"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></linearGradient></defs>
+ <path d="M410 30 L780 600 Q410 650 40 600Z" fill="#3A3A3A"/><g clip-path="url(#fan2)"><g id="spk"></g>
+ <path d="M260 250 C250 190 330 160 420 175 C520 190 590 240 585 300 C580 360 520 395 430 395 C330 395 270 330 260 250Z" fill="url(#gb)" stroke="rgba(255,255,255,.35)" stroke-width="5"/>
+ <g id="stones"><path d="M380 370 q22 -26 44 0" stroke="#FFFFFF" stroke-width="12" fill="none" stroke-linecap="round"/><path d="M432 372 q18 -22 38 0" stroke="#FFFFFF" stroke-width="11" fill="none" stroke-linecap="round"/><path d="M470 365 q16 -20 34 0" stroke="#F2F2F2" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <rect x="378" y="380" width="128" height="260" fill="url(#sh)"/></g>
+ <rect id="scl" x="0" y="0" width="820" height="5" fill="rgba(47,208,192,.55)"/></g>
+ <text x="40" y="60" font-family="Arial" font-size="24" fill="#7FA3C2">RUQ · GB</text></svg></div>`);
+S.stoneL=el('<div class="chip" style="font-size:48px;border-color:#FFC75A;background:rgba(255,199,90,.16)">حصوات في المرارة</div>');
+S.arrowS=el('<svg width="150" height="120" viewBox="0 0 150 120"><path d="M140 10 L40 90 M60 100 L36 94 L44 70" stroke="#FFC75A" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+S.pain=el(`<div style="display:flex;align-items:center;gap:20px"><svg width="120" height="120" viewBox="-60 -60 120 120">${[0,1].map(i=>`<circle class="pr" r="20" fill="none" stroke="#FF6A55" stroke-width="6"/>`).join('')}<circle r="18" fill="#FF6A55"/></svg><div class="lbl" style="font-size:52px">مغص شديد متكرر</div></div>`);
+// comparison
+const route=(title,col,steps)=>el(`<div class="card" style="position:relative;width:940px;padding:24px 34px;border-color:${col}"><div class="lbl" style="font-size:44px;color:${col};margin-bottom:12px">${title}</div><div style="display:flex;align-items:center;gap:16px;justify-content:flex-start">${steps.map((s,i)=>`${i?`<div style="font-family:CXB;font-size:44px;color:#7FA3C2">←</div>`:''}<div class="chip" style="font-size:34px;padding:6px 20px 10px;border-color:${col}">${s}</div>`).join('')}</div></div>`);
+S.rA=route('اللي حصل: 4 شهور','#FF6A55',['مسكنات','مضادات','نفس الشكوى','تاني…']);
+S.rB=route('لو من الأول','#2FD0C0',['سونار','تشخيص','علاج ✓']);
+// clinic card (speaker)
+S.loc=el(`<div class="card" style="position:relative;padding:22px 50px 28px;text-align:center"><div class="sub" style="font-size:38px;color:#2FD0C0">عيادة الباطنة والجهاز الهضمي</div><div class="lbl" style="font-size:66px">مركز النهضة الطبي</div><div style="display:flex;gap:12px;align-items:center;justify-content:center">${icon('geo-location',48,'#2FD0C0')}<div class="sub" style="font-size:44px">شبين القناطر</div></div></div>`,'free');
+S.pr=el(`<div class="card" style="position:relative;width:760px;padding:26px 40px">${['نسمعك صح','نشخّصك صح','العلاج المناسب'].map((t,i)=>`<div class="prr" style="display:flex;align-items:center;gap:20px;margin:8px 0"><svg width="60" height="60" viewBox="0 0 60 60"><circle cx="30" cy="30" r="28" fill="#2FD0C0"/><path d="M16 31 L26 41 L44 20" stroke="#061A33" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="lbl" style="font-size:56px">${t}</div></div>`).join('')}</div>`,'free');
+// logo + specialties
+S.logo=el('<img src="logo.png" style="width:900px;border-radius:34px;display:block;box-shadow:0 20px 50px rgba(0,0,0,.35)">','free');
+S.specs=[['الباطنة','internal-medicine'],['الجهاز الهضمي','stomach'],['الكبد','liver'],['المناظير','endo']].map(([t,n])=>el(`<div class="tile" style="position:relative;width:484px;height:160px;gap:20px;padding:0 30px">${n==='endo'?`<svg width="100" height="100" viewBox="0 0 100 100"><path d="M18 14 C 70 6, 88 30, 70 52 S 30 78, 64 90" stroke="#2FD0C0" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="64" cy="90" r="8" fill="#FFC75A"/><circle cx="64" cy="90" r="15" fill="#FFC75A" opacity=".3"/><rect x="4" y="6" width="22" height="16" rx="5" fill="#2FD0C0"/></svg>`:icon(n,100,'#2FD0C0')}<div class="t" style="font-size:44px">${t}</div></div>`));
+// end card
+S.endLogo=el('<img src="logo.png" style="width:900px;border-radius:30px;display:block">');
+S.endLoc=el(`<div style="display:flex;gap:16px;align-items:center">${icon('geo-location',56,'#2FD0C0')}<div class="sub" style="font-size:48px">مركز النهضة الطبي · شبين القناطر</div></div>`);
+S.ls=el('<div style="width:440px;height:440px;border-radius:40px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;box-shadow:0 20px 50px rgba(0,0,0,.35)"><img src="lightscan.png" style="width:420px;height:420px;display:block"></div>');
+const ALL=Object.values(S).flat();
+function render(t){
+  ALL.forEach(d=>d.style.display='none');
+  const P=panelState(t);const pn=$('panel');pn.style.height=P.bottom+'px';pn.style.opacity=P.op;pn.style.borderRadius=P.bottom>=1919?'0':'0 0 40px 40px';
+  const eg=$('edge');eg.style.top=(P.bottom-3)+'px';eg.style.opacity=(P.bottom>20&&P.bottom<1900)?Math.min(1,P.bottom/200)*P.op:0;
+  $('dots').style.backgroundPosition=`${-t*14}px ${t*22}px`;
+  // A: chat 1.2-12.8 (split, zone 0-760): right-aligned bubbles, newest at the bottom
+  if(t>1.1&&t<12.9){const o=1-seg(t,12.55,12.85);put(S.msgH,800,95,1,Math.min(o,seg(t,1.15,1.4)));
+    const T=[1.2,1.7,4.1,9.1];const typing=t>4.7&&t<9.05;
+    const shown=[];T.forEach((x,i)=>{if(t>=x)shown.push(i)});
+    const items=shown.map(i=>({d:S.b[i],t0:T[i]}));if(typing)items.push({d:S.typing,t0:4.7});
+    let y=700;for(let k=items.length-1;k>=0;k--){const {d,t0}=items[k];d.style.display='block';d.style.left='0px';d.style.top='0px';
+      const w=d.offsetWidth,hh=d.offsetHeight;const p=eout(seg(t,t0,t0+.35));const yy=y-hh+(1-p)*40;
+      const op=Math.min(o,seg(t,t0,t0+.2))*(yy<150?0:1);d.style.opacity=op;d.style.display=op<=0.001?'none':'block';
+      d.style.transform=`translate(${1040-w}px,${yy}px) scale(${.92+.08*back(p)})`;d.style.transformOrigin='right bottom';y=yy-24;}
+    document.querySelectorAll('.td').forEach((d,i)=>d.style.transform=`translateY(${-10*Math.max(0,Math.sin(t*9-i*.9))}px)`);}
+  // B: 4 months / cycle / zigzag 12.9-31.5 (full)
+  if(t>12.9&&t<31.5){const o=1-seg(t,31.2,31.45);
+    put(S.m4,380,420-6*Math.sin(t*1.3),(.8+.2*back(seg(t,12.95,13.3)))*(1+.02*Math.sin(t*1.7)),Math.min(o,seg(t,12.95,13.15),1-seg(t,26.7,27.0)));
+    S.months.forEach((d,i)=>{const ta=13.0+i*.4;put(d,885-i*230,700+8*Math.sin(t*2+i),(.6+.4*back(seg(t,ta,ta+.35)))*(1+.02*Math.sin(t*2.2+i)),Math.min(o,seg(t,ta,ta+.12),1-seg(t,26.7,27.0)))});
+    const cy=seg(t,17.7,19.6);put(S.cycle,540,1060,1,Math.min(o,seg(t,17.7,17.9),1-seg(t,26.7,27.0)));q('#cyc').setAttribute('stroke-dashoffset',1257*(1-eio(cy)));
+    q('#cyh').style.opacity=cy>0.98?1:0;const a=(t-17.7)*1.2;
+    put(S.cycPill,540,1060,1+.05*Math.sin(t*3),Math.min(o,seg(t,17.9,18.1),1-seg(t,24.6,24.85)));
+    put(S.cA,820,1300,.8+.2*back(seg(t,20.45,20.8)),Math.min(o,seg(t,20.45,20.6),1-seg(t,26.7,27.0)));
+    put(S.cB,420,1300,.8+.2*back(seg(t,22.2,22.55)),Math.min(o,seg(t,22.2,22.35),1-seg(t,26.7,27.0)));
+    put(S.cC,540,1060,(.8+.2*back(seg(t,24.75,25.1)))*(1+.04*Math.sin(t*4)),Math.min(o,seg(t,24.75,24.9),1-seg(t,26.7,27.0)));
+    if(t>19.6)S.cycle.style.transform+=` rotate(${(t-19.6)*45}deg)`;
+    put(S.zig,540,950-8*Math.sin(t*1.5),1+.02*Math.sin(t*2),Math.min(o,seg(t,26.98,27.2)));q('#zz').setAttribute('stroke-dashoffset',2200*(1-eio(seg(t,27.0,30.9))));q('#zl').style.opacity=seg(t,28.7,29.0);}
+  // C: ultrasound abdomen/pelvis 31.5-40.7 (split)
+  if(t>31.5&&t<40.75){const o=1-seg(t,40.45,40.72);put(S.torso,300,400,1,Math.min(o,seg(t,31.5,31.75)));
+    q('#ab').setAttribute('opacity',.6+.4*Math.sin(t*3));q('#pv').setAttribute('opacity',.6+.4*Math.sin(t*3+1.5));
+    put(S.probe,lerp(250,360,.5+.5*Math.sin(t*1.6)),lerp(300,480,.5+.5*Math.sin(t*1.1)),1,Math.min(o,seg(t,31.6,31.8)));
+    put(S.usL,760,200,.8+.2*back(seg(t,31.6,31.95)),Math.min(o,seg(t,31.6,31.8)));
+    put(S.docL,760,340,.8+.2*back(seg(t,34.56,34.9)),Math.min(o,seg(t,34.56,34.7)));
+    put(S.mag,lerp(700,820,.5+.5*Math.sin(t*2)),lerp(520,600,.5+.5*Math.cos(t*2)),1,Math.min(o,seg(t,36.73,36.9)));}
+  // E: gallstones 42.7-49.6 (full)
+  if(t>42.7&&t<49.6){const o=1-seg(t,49.3,49.55);put(S.us,520,880,(.85+.15*eout(seg(t,42.75,43.2)))*(1+.015*Math.sin(t)),Math.min(o,seg(t,42.75,42.95)));
+    let sp='';for(let i=0;i<260;i++){const x=(i*137+Math.floor(t*15)*29)%760+30,y=(i*71+Math.floor(t*15)*13)%560+40;sp+=`<rect x="${x}" y="${y}" width="${3+i%4}" height="2" fill="rgba(255,255,255,${.05+(i%6)*.035})"/>`}q('#spk').innerHTML=sp;
+    q('#scl').setAttribute('y',40+((t*150)%560));q('#stones').style.opacity=seg(t,43.3,43.7);
+    put(S.stoneL,520,1300,.8+.2*back(seg(t,43.6,43.95)),Math.min(o,seg(t,43.6,43.75)));
+    put(S.arrowS,690,1110,1,Math.min(o,seg(t,43.8,44.0)));
+    const pa=seg(t,45.6,45.8);document.querySelectorAll('.pr').forEach((c,i)=>{const ph=((t-45.6)/1.0+i/2)%1;c.setAttribute('r',18+ph*40);c.setAttribute('opacity',(1-ph))});
+    put(S.pain,420,420,.8+.2*back(seg(t,45.6,45.95)),Math.min(o,pa));}
+  // F: comparison 49.6-56.7 (split)
+  if(t>49.6&&t<56.7){const o=1-seg(t,56.4,56.65);put(S.rA,540,230,1,Math.min(o,seg(t,49.65,49.9))*(t>52.43?.55:1));
+    put(S.rB,540,560,.85+.15*back(seg(t,52.43,52.8)),Math.min(o,seg(t,52.43,52.6)));}
+  // G: clinic card & promises (speaker, above head)
+  if(t>56.7&&t<64.2){put(S.loc,540,290,.9+.1*back(seg(t,56.75,57.1)),Math.min(seg(t,56.75,56.95),1-seg(t,63.9,64.15)));}
+  if(t>64.0&&t<68.8){put(S.pr,540,320,1,Math.min(seg(t,64.05,64.3),1-seg(t,68.5,68.75)));
+    document.querySelectorAll('.prr').forEach((r,i)=>{const ta=[64.09,65.51,67.13][i];r.style.opacity=seg(t,ta,ta+.2);r.style.transform=`translateX(${(1-eout(seg(t,ta,ta+.35)))*-60}px)`});}
+  // H: logo + specialties 68.8-75.2
+  if(t>68.8&&t<75.2){const o=Math.min(seg(t,68.85,69.2),1-seg(t,74.95,75.15));const m=eio(seg(t,68.8,69.3));
+    put(S.logo,540,lerp(330,150,m),lerp(1,.82,m),o);
+    S.specs.forEach((d,i)=>{const ta=[70.71,72.01,73.05,73.63][i];put(d,i%2===0?792:288,i<2?400:590,.6+.4*back(seg(t,ta,ta+.35)),Math.min(1-seg(t,74.95,75.15),seg(t,ta,ta+.12)))});}
+  // I: end card with both logos
+  if(t>75.3){put(S.endLogo,540,560-8*seg(t,75.4,79.6),.92+.05*eout(seg(t,75.4,76.2))+.03*seg(t,76.2,79.6),seg(t,75.4,75.8));
+    put(S.endLoc,540,790,1,seg(t,75.9,76.2));
+    put(S.ls,540,1180,(.85+.15*back(seg(t,76.6,77.0)))*(1+.02*seg(t,77,79.6)),seg(t,76.6,76.85));}
+  return true;
+}
+window.render=render;window.ready=document.fonts.ready.then(()=>true);
+</script></body></html>
