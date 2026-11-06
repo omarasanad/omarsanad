@@ -33,18 +33,20 @@ def refine(fr_big,fg):
     m=np.clip((m-0.25)/0.5,0,1)
     return cv2.resize(m,(W,H),interpolation=cv2.INTER_LINEAR)
 def relight(s):
-    K=(0.74+0.34*np.clip(1-(xx-120)/900,0,1))*(0.78+0.24*np.exp(-((yy-700)/560)**2))
+    K=(0.86+0.16*np.clip(1-(xx-120)/900,0,1))*(0.84+0.18*np.exp(-((yy-700)/560)**2))
     s=s*K[...,None]
-    s=s*np.array([1.08,1.0,0.88])
-    s=0.47+(s-0.47)*1.18
-    l=s.mean(-1,keepdims=True);s=l+(s-l)*1.04
+    s=s*np.array([1.045,1.0,0.945])
+    s=0.46+(s-0.46)*1.10
+    l=s.mean(-1,keepdims=True);s=l+(s-l)*1.02
     return np.clip(s,0,1)
 def place(img,a,S,cx=540):  # scale subject about bottom-centre
     M=np.float32([[S,0,cx-S*W/2],[0,S,H-S*H]])
     return cv2.warpAffine(img,M,(W,H),flags=cv2.INTER_LINEAR,borderMode=cv2.BORDER_REPLICATE),cv2.warpAffine(a,M,(W,H),flags=cv2.INTER_LINEAR,borderValue=0)
 def compose(fr,prev_m,S=0.88,zoom=1.0,zc=(540,760),seed=0):
     big=cv2.resize(fr,(W,H),interpolation=cv2.INTER_LANCZOS4)
-    bl=cv2.GaussianBlur(big,(0,0),2.0);big=cv2.addWeighted(big,1.45,bl,-0.45,0)
+    big=cv2.fastNlMeansDenoisingColored(big,None,3,3,5,15) if False else big
+    bl=cv2.GaussianBlur(big,(0,0),1.4);big=cv2.addWeighted(big,1.7,bl,-0.7,0)
+    bl2=cv2.GaussianBlur(big,(0,0),4.0);big=cv2.addWeighted(big,1.15,bl2,-0.15,0)
     m=refine(big,segment(fr))
     if prev_m is not None: m=0.6*m+0.4*prev_m
     s=big.astype(np.float32)/255
@@ -59,11 +61,11 @@ def compose(fr,prev_m,S=0.88,zoom=1.0,zc=(540,760),seed=0):
     s=s*(1-k)+inner*k
     ring=(cv2.dilate(hard,np.ones((9,9),np.uint8))-cv2.erode(hard,np.ones((31,31),np.uint8))).astype(np.float32)
     lum0=(big.astype(np.float32)/255).mean(-1);lin=inner.mean(-1)
-    glow=np.clip((lum0-lin-0.10)*5,0,1)*ring
+    glow=np.clip((lum0-lin-0.06)*6,0,1)*ring
     m=m*(1-cv2.GaussianBlur(glow,(0,0),2))
     s=relight(s)
     sp,ap=place(s,m,S)
-    ap=cv2.erode(ap,np.ones((5,5),np.uint8))
+    ap=cv2.erode(ap,np.ones((7,7),np.uint8))
     a=cv2.GaussianBlur(ap,(0,0),1.4)[...,None]
     wrap=cv2.GaussianBlur(BG,(0,0),14)
     edge=np.clip(cv2.GaussianBlur(1-ap,(0,0),6)[...,None]*a,0,1)
@@ -71,7 +73,7 @@ def compose(fr,prev_m,S=0.88,zoom=1.0,zc=(540,760),seed=0):
     out=BG*(1-a)+sp*a
     if zoom!=1.0:
         M=cv2.getRotationMatrix2D(zc,0,zoom);out=cv2.warpAffine(out,M,(W,H),flags=cv2.INTER_LINEAR,borderMode=cv2.BORDER_REFLECT)
-    rng=np.random.default_rng(seed);out=out+rng.normal(0,0.012,(H,W,1)).astype(np.float32)
+    rng=np.random.default_rng(seed);out=out+rng.normal(0,0.007,(H,W,1)).astype(np.float32)
     out=np.clip(out,0,1)
     out[:127]=0;out[H-127:]=0
     return out,m

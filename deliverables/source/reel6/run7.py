@@ -3,10 +3,14 @@ exec(open('comp7.py').read().split("if __name__")[0])
 C=json.load(open('cuts.json'));FPS=30
 a,b=int(sys.argv[1]),int(sys.argv[2])
 caps=C['caps']
+KEEP=C['keep'];SEGS=[];acc=0.0
+for a_,b_ in KEEP: SEGS.append((acc,acc+b_-a_));acc+=b_-a_
 def zoom_at(t):
     z=1.0
     for ar,en,s,e,zz in caps:
         if t>=s-0.25: z=zz
+    for s0,s1 in SEGS:                      # slow push-in within every shot
+        if s0<=t<s1: z*=1+0.035*(t-s0)/max(1.0,s1-s0);break
     return z
 dec=subprocess.Popen(["ffmpeg","-v","error","-ss",f"{a/FPS:.4f}","-i","cut.mkv","-f","rawvideo","-pix_fmt","rgb24","-"],stdout=subprocess.PIPE)
 out=sys.stdout.buffer;prev=None

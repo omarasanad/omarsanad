@@ -36,12 +36,35 @@ wood=np.array([0.11,0.075,0.05])
 hl=np.zeros((H,W),np.float32)
 for px in (905,1052): hl[:,px-16:px-10]=1
 for ry in range(260,1700,250): hl[ry-7:ry-3,905:1052]=1
-m=blur(m,2.2);hl=blur(hl,2.5)
+m=blur(m,1.6);hl=blur(hl,1.8)
 img=img*(1-m[...,None]*0.85)+m[...,None]*wood+hl[...,None]*np.array([0.10,0.07,0.045])*0.8
 # right side falls into darkness
 img*= (1-0.55*np.clip((x-700)/380,0,1)**1.3)[...,None]
+# tall arched panel on the left, lit warm orange (as in the reference)
+arch=np.zeros((H,W),np.float32)
+ax0,ax1,atop=-40,170,330
+inside=(x>ax0)&(x<ax1)&(y>atop+ (ax1-ax0)/2)
+cx_,r_=(ax0+ax1)/2,(ax1-ax0)/2
+cap=((x-cx_)**2+(y-(atop+r_))**2<r_**2)&(y<=atop+r_)
+arch[inside|cap]=1
+arch=blur(arch,7)
+archcol=np.array([0.60,0.29,0.11])*(0.45+0.55*np.exp(-((y-700)/560)**2))[...,None]
+img=img*(1-arch[...,None]*0.85)+archcol*arch[...,None]*0.85
+edge=np.clip(blur(arch,1.5)-blur(arch,9),0,1)*1.6
+img+=edge[...,None]*np.array([0.08,0.04,0.02])
+# crisper light shafts with a little haze
+sh2=np.zeros((H,W),np.float32)
+for c,wid in [(-20,38),(150,30),(290,44)]:
+    sh2+=np.exp(-((u-c)/wid)**4)
+sh2=blur(sh2,6)*np.clip(1-(y/1350),0,1)**1.4*np.clip((x+100)/700,0,1)
+img+=sh2[...,None]*np.array([0.11,0.075,0.045])
+haze=blur(rng.standard_normal((H,W)).astype(np.float32),40)*0.06*np.clip(1-y/1400,0,1)
+img*= (1+haze)[...,None]
+# subtle vertical wall panel seams
+for px in (330,640):
+    img[:,px-1:px+1]*=0.93
 # depth of field
-img=np.dstack([blur(img[...,c],5.5) for c in range(3)])
+img=np.dstack([blur(img[...,c],3.2) for c in range(3)])
 # white boucle sofa arms at bottom corners
 def arm(cx,cy,rx,ry,flip):
     d=((x-cx)/rx)**2+((y-cy)/ry)**2
