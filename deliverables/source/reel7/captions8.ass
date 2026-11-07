@@ -1,0 +1,68 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Ar,Cairo XB,76,&H00FFFFFF,&H00FFFFFF,&H00141414,&HA0000000,0,0,0,0,100,100,0,0,1,3.6,4,5,90,90,0,-1
+Style: En,Cairo XB,64,&H0000DCFF,&H0000DCFF,&H00141414,&HA0000000,0,0,0,0,100,100,0,0,1,3.2,4,8,120,120,0,1
+Style: Stk,Cairo XB,50,&H00203448,&H00203448,&H00B9D8EA,&H60000000,0,0,0,0,100,100,0,0,3,16,4,5,90,90,0,-1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 2,0:00:00.12,0:00:02.72,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}تحس بحموضة وارتجاع شديد في المريء
+Dialogue: 2,0:00:00.12,0:00:02.72,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}You feel severe heartburn and reflux
+Dialogue: 2,0:00:02.80,0:00:05.95,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}غيّرت العلاج أكتر من مرة… ولفّيت ما بين الدكاترة
+Dialogue: 2,0:00:02.80,0:00:05.95,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}You've changed treatments, gone from doctor to doctor,
+Dialogue: 2,0:00:06.02,0:00:08.45,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}وكل ما بتاخد العلاج وتيجي توقّفه
+Dialogue: 2,0:00:06.02,0:00:08.45,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}and every time you stop the medicine,
+Dialogue: 2,0:00:08.55,0:00:10.68,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}ترجع تاني من نقطة الصفر
+Dialogue: 2,0:00:08.55,0:00:10.68,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}you're back to square one.
+Dialogue: 2,0:00:10.74,0:00:14.15,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}تعرف إن الموضوع ممكن يكون بعيد تمامًا عن الحمض؟
+Dialogue: 2,0:00:10.74,0:00:14.15,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}Did you know it may have nothing to do with acid?
+Dialogue: 2,0:00:14.22,0:00:17.95,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}وإن في ضيف رخم هو اللي عامل لك المشكلة
+Dialogue: 2,0:00:14.22,0:00:17.95,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}And that an annoying guest is causing the problem?
+Dialogue: 2,0:00:18.19,0:00:20.23,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}لحد أوائل التمانينات
+Dialogue: 2,0:00:18.19,0:00:20.23,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}Until the early '80s,
+Dialogue: 2,0:00:20.30,0:00:21.78,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}الدكاترة كانوا معتقدين
+Dialogue: 2,0:00:20.30,0:00:21.78,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}doctors believed
+Dialogue: 2,0:00:21.78,0:00:25.08,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}إن زيادة الحمض في المعدة
+Dialogue: 2,0:00:21.78,0:00:25.08,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}that excess stomach acid
+Dialogue: 2,0:00:25.15,0:00:29.25,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}السبب الرئيسي لها ممكن يكون الأكل اللي مش صحي
+Dialogue: 2,0:00:25.15,0:00:29.25,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}was mainly caused by unhealthy food
+Dialogue: 2,0:00:29.32,0:00:31.47,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}أو التوتر والضغط بتاع الشغل
+Dialogue: 2,0:00:29.32,0:00:31.47,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}or stress and work pressure,
+Dialogue: 2,0:00:31.54,0:00:34.37,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}لحد ما اتنين من العلماء الأستراليين
+Dialogue: 2,0:00:31.54,0:00:34.37,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}until two Australian scientists
+Dialogue: 2,0:00:34.43,0:00:36.75,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}بدأوا يدوّروا على المشكلة
+Dialogue: 2,0:00:34.43,0:00:36.75,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}started looking into the problem
+Dialogue: 2,0:00:36.82,0:00:39.53,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}ووصلوا لضيف رخم موجود معانا
+Dialogue: 2,0:00:36.82,0:00:39.53,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}and found an annoying guest living with us,
+Dialogue: 2,0:00:39.61,0:00:42.26,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}واللي كلنا عارفينه… جرثومة المعدة
+Dialogue: 2,0:00:39.61,0:00:42.26,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}one we all know: H. pylori.
+Dialogue: 2,0:00:42.32,0:00:45.75,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}جرثومة المعدة بتعيش في طبقة من طبقات المعدة
+Dialogue: 2,0:00:42.32,0:00:45.75,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}H. pylori lives in a layer of the stomach lining
+Dialogue: 2,0:00:45.82,0:00:47.21,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}وتحمي نفسها
+Dialogue: 2,0:00:45.82,0:00:47.21,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}and protects itself,
+Dialogue: 2,0:00:47.43,0:00:49.96,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}وتعيش في الوسط الحامضي الشديد
+Dialogue: 2,0:00:47.43,0:00:49.96,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}surviving in a highly acidic environment
+Dialogue: 2,0:00:50.03,0:00:52.61,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}عن طريق تظبيط البيئة المحيطة بيها
+Dialogue: 2,0:00:50.03,0:00:52.61,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}by adjusting the environment around it.
+Dialogue: 2,0:00:52.67,0:00:54.79,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}تبدأ تستقر في جدار المعدة
+Dialogue: 2,0:00:52.67,0:00:54.79,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}It settles into the stomach wall,
+Dialogue: 2,0:00:54.86,0:00:58.41,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}تعمل لك التهابات… وأحيانًا قُرحة في المعدة
+Dialogue: 2,0:00:54.86,0:00:58.41,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}causing inflammation… and sometimes a stomach ulcer.
+Dialogue: 2,0:00:58.48,0:01:00.57,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}علاجها سهل وبسيط
+Dialogue: 2,0:00:58.48,0:01:00.57,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}Its treatment is easy and simple,
+Dialogue: 2,0:01:00.67,0:01:04.43,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}بس الأهم… لازم التشخيص الصح والدقيق
+Dialogue: 2,0:01:00.67,0:01:04.43,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}but first you need an accurate diagnosis
+Dialogue: 2,0:01:04.68,0:01:08.12,Ar,,0,0,0,,{\an5\pos(540,1180)\fad(80,80)\fscx94\fscy94\t(0,140,\fscx100\fscy100)}عشان نبدأ العلاج بشكل مظبوط
+Dialogue: 2,0:01:04.68,0:01:08.12,En,,0,0,0,,{\an8\pos(540,1236)\fad(80,80)}so we can start the right treatment.
+Dialogue: 3,0:00:18.38,0:00:20.98,Stk,,0,0,0,,{\an5\pos(540,1520)\frz4\fad(90,160)\fscx55\fscy55\t(0,200,\fscx106\fscy106)\t(200,320,\fscx100\fscy100)}أوائل الثمانينات
+Dialogue: 3,0:00:31.77,0:00:34.37,Stk,,0,0,0,,{\an5\pos(540,1520)\frz4\fad(90,160)\fscx55\fscy55\t(0,200,\fscx106\fscy106)\t(200,320,\fscx100\fscy100)}عالِمين أستراليين
+Dialogue: 3,0:00:40.37,0:00:42.97,Stk,,0,0,0,,{\an5\pos(540,1520)\frz4\fad(90,160)\fscx55\fscy55\t(0,200,\fscx106\fscy106)\t(200,320,\fscx100\fscy100)}جرثومة المعدة · H. pylori
+Dialogue: 3,0:00:56.05,0:00:58.65,Stk,,0,0,0,,{\an5\pos(540,1520)\frz4\fad(90,160)\fscx55\fscy55\t(0,200,\fscx106\fscy106)\t(200,320,\fscx100\fscy100)}قُرحة المعدة
+Dialogue: 3,0:01:01.74,0:01:04.34,Stk,,0,0,0,,{\an5\pos(540,1520)\frz4\fad(90,160)\fscx55\fscy55\t(0,200,\fscx106\fscy106)\t(200,320,\fscx100\fscy100)}التشخيص الدقيق
