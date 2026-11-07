@@ -1,6 +1,6 @@
 # Reel 8: القولون العصبي والتوتر (IBS and the gut–brain axis)
 
-**File:** `reel8_ibs_gut_brain_1080x1920.mp4`. It is 1080×1920 (9:16), H.264 at 30 fps with AAC audio, about 113 s long and under 30 MB.
+**File:** `reel8_ibs_gut_brain_1080x1920.mp4`. It is 1080×1920 (9:16), H.264 at 30 fps with AAC audio, 113.4 s long and 29.1 MB.
 
 ## What was done
 - **Background:** the plaid wall is replaced with your teal studio image, recomposed for vertical framing.
@@ -23,7 +23,7 @@
   - The voice is cleaned (noise reduction, EQ, gentle compression and a soft gate between words) and brought to normal level. The original recording was very quiet.
   - An original music bed sits under the voice and ducks automatically.
   - Light sound effects accompany the stickers and the transitions.
-  - The final mix is about −14.7 LUFS.
+  - The final mix is −14.8 LUFS.
 
 ## Please check
 - **Unclear words.** A few words in the recording are unclear. The captions use the most likely reading:
