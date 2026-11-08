@@ -33,12 +33,15 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 export const envTex = pmrem.fromScene(new RoomEnvironment(), 0.035).texture;
 
 // ---------- HDR target with depth ----------
-const rt = new THREE.WebGLRenderTarget(W, H, { samples: 4, type: THREE.HalfFloatType });
-rt.depthTexture = new THREE.DepthTexture(W, H); rt.depthTexture.type = THREE.UnsignedIntType;
+// 3D is rendered into an HDR target at RS x the output size (the post pass upscales); MSAA samples are configurable for speed
+const QP = new URLSearchParams(location.search); export const RS = Number(QP.get('rs') || 1), MSAA = Number(QP.get('msaa') ?? 4);
+const RW = Math.round(W * RS), RH = Math.round(H * RS);
+const rt = new THREE.WebGLRenderTarget(RW, RH, { samples: MSAA, type: THREE.HalfFloatType });
+rt.depthTexture = new THREE.DepthTexture(RW, RH); rt.depthTexture.type = THREE.UnsignedIntType;
 
 const postMat = new THREE.ShaderMaterial({
   uniforms: {
-    tColor: { value: rt.texture }, tDepth: { value: rt.depthTexture }, uRes: { value: new THREE.Vector2(W, H) },
+    tColor: { value: rt.texture }, tDepth: { value: rt.depthTexture }, uRes: { value: new THREE.Vector2(W, H) }, uTexRes: { value: new THREE.Vector2(RW, RH) }, uAA: { value: MSAA > 0 ? 0 : 1 },
     uNear: { value: .1 }, uFar: { value: 100 }, uFocus: { value: 5 }, uAperture: { value: 0 }, uMaxBlur: { value: 18 },
     uHaze: { value: 0 }, uTime: { value: 0 }, uSplit: { value: .35 }, uVig: { value: .16 }, uGrain: { value: .025 },
     uSun: { value: new THREE.Vector2(.85, .1) }, uSunAmt: { value: 0 }, uSunCol: { value: new THREE.Color(1.0, .78, .5) },
@@ -46,12 +49,27 @@ const postMat = new THREE.ShaderMaterial({
   },
   vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0., 1.); }',
   fragmentShader: `
-    uniform sampler2D tColor; uniform sampler2D tDepth; uniform vec2 uRes; uniform float uNear, uFar, uFocus, uAperture, uMaxBlur;
+    uniform sampler2D tColor; uniform sampler2D tDepth; uniform vec2 uRes, uTexRes; uniform float uAA; uniform float uNear, uFar, uFocus, uAperture, uMaxBlur;
     uniform float uHaze, uTime, uSplit, uVig, uGrain, uSunAmt, uExposure, uBloom, uFade; uniform vec2 uSun; uniform vec3 uSunCol, uFadeCol;
     varying vec2 vUv;
     float lin(float d){ float z = d * 2. - 1.; return (2. * uNear * uFar) / (uFar + uNear - z * (uFar - uNear)); }
     float hash(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
     float coc(float d){ return clamp(abs(d - uFocus) / max(d, 1e-3) * uAperture, 0., 1.) * uMaxBlur; }
+    float lum(vec3 c){ c = c / (1. + c); return dot(c, vec3(.299, .587, .114)); }
+    vec3 fxaa(vec2 uv){   // FXAA (edge anti-aliasing) on the HDR input, used when MSAA is off
+      vec2 px = 1. / uTexRes; vec3 m = texture2D(tColor, uv).rgb; if (uAA < .5) return m;
+      vec3 nw = texture2D(tColor, uv + vec2(-1., 1.) * px).rgb, ne = texture2D(tColor, uv + vec2(1., 1.) * px).rgb;
+      vec3 sw = texture2D(tColor, uv + vec2(-1., -1.) * px).rgb, se = texture2D(tColor, uv + vec2(1., -1.) * px).rgb;
+      float lNW = lum(nw), lNE = lum(ne), lSW = lum(sw), lSE = lum(se), lM = lum(m);
+      float lMin = min(lM, min(min(lNW, lNE), min(lSW, lSE))), lMax = max(lM, max(max(lNW, lNE), max(lSW, lSE)));
+      if (lMax - lMin < max(.03, lMax * .1)) return m;
+      vec2 dir = vec2(-((lNW + lNE) - (lSW + lSE)), ((lNW + lSW) - (lNE + lSE)));
+      float red = max((lNW + lNE + lSW + lSE) * .03125, 1. / 128.); float rcp = 1. / (min(abs(dir.x), abs(dir.y)) + red);
+      dir = clamp(dir * rcp, -8., 8.) * px;
+      vec3 a = .5 * (texture2D(tColor, uv + dir * (1. / 3. - .5)).rgb + texture2D(tColor, uv + dir * (2. / 3. - .5)).rgb);
+      vec3 b = a * .5 + .25 * (texture2D(tColor, uv - dir * .5).rgb + texture2D(tColor, uv + dir * .5).rgb);
+      float lB = lum(b); return (lB < lMin || lB > lMax) ? a : b;
+    }
     void main(){
       vec2 uv = vUv;
       if (uHaze > 0.) {  // rising heat shimmer: stronger towards the bottom, drifting upward
@@ -61,20 +79,20 @@ const postMat = new THREE.ShaderMaterial({
       }
       vec3 col; float dc = lin(texture2D(tDepth, uv).r);
       if (uAperture > 0.) {
-        float c = coc(dc); vec3 acc = vec3(0.); float ws = 0.;
-        for (int i = 0; i < 28; i++) {
-          float ang = float(i) * 2.39996; float r = sqrt((float(i) + .5) / 28.);
+        float c = coc(dc); vec3 acc = vec3(0.); float ws = 0.; float rot = hash(vUv * uRes) * 6.2832;   // per-pixel rotation turns sampling patterns into fine noise
+        for (int i = 0; i < 16; i++) {
+          float ang = float(i) * 2.39996 + rot; float r = sqrt((float(i) + .5) / 16.);
           vec2 o = vec2(cos(ang), sin(ang)) * r * c / uRes;
           float sd = lin(texture2D(tDepth, uv + o).r); float sc = coc(sd);
           float w = sd < dc ? 1. : clamp(sc / max(c, 1e-3), 0., 1.);  // keep sharp subjects from bleeding over focused areas
           w = max(w, .05); acc += texture2D(tColor, uv + o).rgb * w; ws += w;
         }
-        col = acc / ws;
-      } else col = texture2D(tColor, uv).rgb;
+        col = mix(fxaa(uv), acc / ws, smoothstep(.6, 2.2, c));   // in-focus pixels keep the sharp, anti-aliased centre
+      } else col = fxaa(uv);
       if (uBloom > 0.) {   // soft highlight glow
         vec3 b = vec3(0.);
-        for (int i = 0; i < 12; i++) { float ang = float(i) * 0.5236; vec2 o = vec2(cos(ang), sin(ang)) * 26. / uRes; b += max(texture2D(tColor, uv + o).rgb - 0.9, 0.); }
-        col += b / 12. * uBloom * 4.;
+        for (int i = 0; i < 6; i++) { float ang = float(i) * 1.0472 + .3; vec2 o = vec2(cos(ang), sin(ang)) * 26. / uRes; b += max(texture2D(tColor, uv + o).rgb - 0.9, 0.); }
+        col += b / 6. * uBloom * 4.;
       }
       // sun glow + soft anamorphic streak
       if (uSunAmt > 0.) {
@@ -106,18 +124,18 @@ export const post = postMat.uniforms;
 //   panels: [{scene, camera, rect:[x,y,w,h] (pixels, top-left origin) | undefined for full frame}]
 export function renderFrame(panels, fx = {}) {
   // NB: render targets carry their own viewport/scissor in three.js (renderer.setViewport only affects the canvas)
-  rt.viewport.set(0, 0, W, H); rt.scissor.set(0, 0, W, H); rt.scissorTest = false;
+  rt.viewport.set(0, 0, RW, RH); rt.scissor.set(0, 0, RW, RH); rt.scissorTest = false;
   renderer.setRenderTarget(rt); renderer.setClearColor(fx.clear ?? PAL.ivory, 1); renderer.clear(true, true, true);
   for (const p of panels) {
-    if (p.rect) { const [x, y, w, h] = p.rect; rt.viewport.set(x, H - y - h, w, h); rt.scissor.set(x, H - y - h, w, h); rt.scissorTest = true; p.camera.aspect = w / h; }
-    else { rt.viewport.set(0, 0, W, H); rt.scissorTest = false; p.camera.aspect = W / H; }
+    if (p.rect) { const [x, y, w, h] = p.rect.map(v => Math.round(v * RS)); rt.viewport.set(x, RH - y - h, w, h); rt.scissor.set(x, RH - y - h, w, h); rt.scissorTest = true; p.camera.aspect = w / h; }
+    else { rt.viewport.set(0, 0, RW, RH); rt.scissorTest = false; p.camera.aspect = W / H; }
     renderer.setRenderTarget(rt);   // re-applies the target's viewport + scissor
     p.camera.updateProjectionMatrix();
     if (p.clear !== undefined) { renderer.setClearColor(p.clear, 1); renderer.clear(true, true, true); }
     else renderer.clear(false, true, false);
     renderer.render(p.scene, p.camera);
   }
-  rt.viewport.set(0, 0, W, H); rt.scissorTest = false; renderer.setRenderTarget(rt);
+  rt.viewport.set(0, 0, RW, RH); rt.scissorTest = false; renderer.setRenderTarget(rt);
   renderer.render(EMPTY, panels[0].camera);   // full-frame MSAA resolve (a scissored resolve would leave the rest black)
   const cam = panels[0].camera; post.uNear.value = cam.near; post.uFar.value = cam.far;
   for (const k of ['uFocus', 'uAperture', 'uMaxBlur', 'uHaze', 'uTime', 'uSplit', 'uVig', 'uGrain', 'uSunAmt', 'uExposure', 'uBloom', 'uFade'])

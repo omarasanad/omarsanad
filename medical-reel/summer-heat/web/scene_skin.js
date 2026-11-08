@@ -84,13 +84,13 @@ export function anchorsWorld() { blk.updateMatrixWorld(true); const w = p => blk
 const M4 = new THREE.Matrix4(), Q = new THREE.Quaternion();
 // heat: 0 normal -> 1 hot (vessels dilate & warm, sweat beads grow, vapour rises)
 export function update(lt, opts = {}) {
-  const heat = opts.heat ?? ease((lt - .4) / 2.2);
-  artMat.userData.grow.value = .012 * heat; venMat.userData.grow.value = .007 * heat; capMat.userData.grow.value = .006 * heat;   // cutaneous vasodilation
-  artMat.emissiveIntensity = .55 * heat; capMat.emissiveIntensity = .7 * heat;
-  beads.forEach((b, i) => { const s = .012 + .03 * eOut((lt - .8 - i * .25) / 1.6) * heat; b.scale.set(s, s * .62, s); b.position.y = yEpi + s * .45; });
-  ex.forEach((e, i) => { const s = e.s * eOut((lt - 1.2 - e.t0 * 1.5) / 1.2) * heat; extra.setMatrixAt(i, M4.compose(V(e.x, yEpi + s * .4, e.z), Q, V(s, s * .6, s))); });
+  const heat = opts.heat ?? ease((lt - .4) / 2.2); const vaso = opts.vaso ?? heat, sweat = opts.sweat ?? heat;
+  artMat.userData.grow.value = .012 * vaso; venMat.userData.grow.value = .007 * vaso; capMat.userData.grow.value = .006 * vaso;   // cutaneous vasodilation
+  artMat.emissiveIntensity = .55 * vaso; capMat.emissiveIntensity = .7 * vaso;
+  beads.forEach((b, i) => { const s = .012 + .03 * eOut((lt - .8 - i * .25) / 1.6) * sweat; b.scale.set(s, s * .62, s); b.position.y = yEpi + s * .45; });
+  ex.forEach((e, i) => { const s = e.s * eOut((lt - 1.2 - e.t0 * 1.5) / 1.2) * sweat; extra.setMatrixAt(i, M4.compose(V(e.x, yEpi + s * .4, e.z), Q, V(s, s * .6, s))); });
   extra.instanceMatrix.needsUpdate = true;
-  vap.forEach((p, i) => { const age = ((lt + p.t0) % 3) / 3; const s = p.s * heat * (1 - age); vapour.setMatrixAt(i, M4.compose(V(p.x + Math.sin(age * 6 + i) * .04, yEpi + .02 + age * .9, p.z), Q, V(s, s, s))); });
+  vap.forEach((p, i) => { const age = ((lt + p.t0) % 3) / 3; const s = p.s * sweat * (1 - age); vapour.setMatrixAt(i, M4.compose(V(p.x + Math.sin(age * 6 + i) * .04, yEpi + .02 + age * .9, p.z), Q, V(s, s, s))); });
   vapour.instanceMatrix.needsUpdate = true;
   const u = ease(lt / 6);
   camera.position.set(lerp(1.9, 1.6, u), lerp(1.25, 1.05, u), lerp(4.4, 3.9, u)); camera.lookAt(0, lerp(-.55, -.5, u), 0);

@@ -5,6 +5,8 @@ import { renderFrame, canvas, DEFAULT_FX } from './core.js';
 document.body.appendChild(canvas);
 const mods = {};
 window.seek = async (spec) => { const [name, lt, mode] = spec.split(':'); const m = mods[name] || (mods[name] = await import(`./scene_${name}.js`)); if (m.ready) await m.ready;
+  if (name === 'reflux') { m.update(Number(lt), { reflux: Number(mode || 0) }); renderFrame([{ scene: m.scene, camera: m.camera }], { ...DEFAULT_FX, ...m.fx() }); return; }
+  if (name === 'table') { m.update(Number(lt), mode, { bacteria: mode === 'food' ? .7 : 0, level: mode === 'water' ? .3 : .85 }); renderFrame([{ scene: m.scene, camera: m.camera }], { ...DEFAULT_FX, ...m.fx(Number(lt), mode) }); return; }
   const o = { mode }; m.update(Number(lt), o); renderFrame([{ scene: m.scene, camera: m.camera }], { ...DEFAULT_FX, ...(m.fx ? m.fx(Number(lt), o) : {}) }); };
 window.ready = true;
 </script></body></html>

@@ -136,3 +136,4 @@ export function update(lt) {
   focus.dist = camera.position.distanceTo(V(Math.cos(m) * .35, .25, -Math.sin(m) * .35 + .0).add(V(0, 0, 0)));
 }
 export function fx(lt) { return { uFocus: focus.dist, uAperture: 1.3, uMaxBlur: 16, uSunAmt: .4, uSun: [.1, .86], uExposure: .74, uBloom: .14, uSplit: .32, uVig: .16, uHaze: .25, uTime: lt }; }
+export const parts = { fleshMat, wedgeGeo, seedGeo, seedMat, R, THICK };
