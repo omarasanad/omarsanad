@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>Summer Heat Samples</title>
+<script type="importmap">{"imports":{"three":"./lib/three.module.js","three/addons/":"./lib/jsm/"}}</script>
+<link rel="stylesheet" href="identity.css">
+<style>
+#gl{position:absolute;left:0;top:0;width:1080px;height:1920px;direction:ltr}
+#ov{position:absolute;inset:0}
+</style>
+</head>
+<body>
+<div id="gl"></div>
+<div id="ov"></div>
+<script type="module">
+import { THREE, renderFrame, canvas, DEFAULT_FX, project, V, W, H } from './core.js';
+import * as WM from './scene_watermelon.js';
+import * as SK from './scene_skin.js';
+import * as BD from './scene_body.js';
+import * as BR from './scene_barrier.js';
+import * as MB from './scene_microbiome.js';
+import * as ST from './scene_stomach.js';
+document.getElementById('gl').appendChild(canvas);
+const $ = id => document.getElementById(id);
+await BD.ready;
+const brand = `<img class="abs brand" src="brand/brand_mark.png" alt="">`;
+const kicker = (num, txt, light = false) => `<div class="abs kicker${light ? ' light' : ''}"><span class="num">${num}</span><span class="rule"></span><span>${txt}</span></div>`;
+const sunline = w => `<div class="abs sunline" style="width:${w}px"></div>`;
+// label with a leader line from text anchor to a target point (page px)
+function label(tx, ty, px, py, html, cls = '', align = 'right', pill = false) {
+  const side = align === 'right' ? `right:${W - tx}px` : `left:${tx}px`;
+  return { html: `<div class="abs lbl ${cls}${pill ? ' pill' : ''}" data-px="${px}" data-py="${py}" data-c="${cls}" style="${side};top:${ty - 22}px;text-align:${align}">${html}</div>` };
+}
+// leader lines start on the label box edge nearest to the target (measured after layout)
+function overlay(parts, labels = []) {
+  $('ov').innerHTML = parts.join('') + labels.map(l => l.html).join('') + '<svg class="leaders" width="1080" height="1920"></svg>';
+  let svg = '';
+  for (const el of $('ov').querySelectorAll('.lbl[data-px]')) {
+    const r = el.getBoundingClientRect(), px = +el.dataset.px, py = +el.dataset.py, c = el.dataset.c;
+    const col = c === 'hot' ? '#D9583B' : c === 'cool' ? '#4E8C88' : '#1F3A5F';
+    const sx = px < r.left ? r.left - 6 : px > r.right ? r.right + 6 : (r.left + r.right) / 2;
+    const sy = py < r.top ? r.top - 4 : py > r.bottom ? r.bottom + 4 : (r.top + r.bottom) / 2;
+    svg += `<line x1="${sx}" y1="${sy}" x2="${px}" y2="${py}" stroke="${col}" stroke-width="2"/><circle cx="${px}" cy="${py}" r="7" fill="${col}" stroke="#FCFAF6" stroke-width="3"/>`;
+  }
+  $('ov').querySelector('svg.leaders').innerHTML = svg;
+}
+const SAMPLES = {
+  // 1 — cinematic summer opening
+  1() {
+    const lt = 3.4; WM.update(lt); renderFrame([{ scene: WM.scene, camera: WM.camera }], { ...DEFAULT_FX, ...WM.fx(lt) });
+    overlay([
+      `<div class="abs" style="left:0;right:0;bottom:0;height:820px;background:linear-gradient(to top, rgba(46,26,14,.74), rgba(46,26,14,.0))"></div>`,
+      sunline(310), brand, kicker('◐', 'صيف × جهازك الهضمي'),
+      `<div class="abs headline" style="right:72px;top:1352px;color:#FCFAF6;font-size:124px">القصة أكبر</div>`,
+      `<div class="abs headline" style="right:72px;top:1500px;color:#FCFAF6;font-size:92px"><span class="soft">من حتة بطيخ ساقعة</span></div>`,
+      `<div class="abs" style="right:76px;top:1660px;width:120px;height:4px;background:var(--amber)"></div>`,
+      `<div class="abs foot" style="right:72px;top:1694px;color:#F3E2CC;font-size:30px;font-weight:500">ليه دايمًا في الصيف بنشتكي من حموضة، وانتفاخ، وتقل في المعدة؟</div>`]);
+  },
+  // 2 — thermoregulation: figure in the sun (top) + skin cross-section (bottom)
+  2() {
+    const lt = 3.6, top = [0, 0, 1080, 1000], bot = [0, 1000, 1080, 920];
+    BD.update(2.5, { mode: 'heat', heat: 1 }); SK.update(lt, { heat: 1 });
+    BD.camera.position.set(.95, 1.2, 3.25); BD.camera.lookAt(-.02, 1.0, 0);
+    renderFrame([{ scene: BD.scene, camera: BD.camera, rect: top, clear: 0xF2D8B6 }, { scene: SK.scene, camera: SK.camera, rect: bot, clear: 0xF6F0E6 }],
+      { ...DEFAULT_FX, uExposure: .8, uHaze: .35, uTime: lt, uSunAmt: .42, uSun: [.12, .97], uAperture: 0, uVig: .12 });
+    const a = SK.anchorsWorld(); const P = k => project(SK.camera, a[k], bot);
+    const g = P('gland'), v = P('vessel'), b = P('bead');
+    overlay([
+      sunline(420), brand, kicker('١', 'الجسم بيبرّد نفسه'),
+      `<div class="abs" style="left:0;right:0;top:996px;height:8px;background:#FCFAF6"></div>`,
+      `<div class="abs chip" style="right:72px;top:1030px;color:var(--ink);background:#FCFAF6">مقطع في الجلد</div>`,
+      `<div class="abs" style="left:64px;top:620px;width:300px;font-family:Plex;font-weight:600;font-size:30px;color:var(--coral);line-height:1.45">الدم بيروح للجلد<br>عشان يطلّع الحرارة<div class="term" style="font-size:24px;margin-top:6px">Heat loss</div></div>`,
+      `<div class="abs" style="left:0;top:0;width:1080px;height:1000px;background:radial-gradient(520px 520px at 12% 4%, rgba(255,214,150,.55), rgba(255,214,150,0) 70%);mix-blend-mode:screen"></div>`,
+      `<div class="abs cap" style="top:1752px;font-size:44px;padding:16px 30px 20px">بيعرّق، و<span class="h">بيوسّع أوعية الجلد</span></div>`],
+      [label(250, 1120, g.x, g.y, 'غدد العرق<small>Sweat glands</small>', 'cool', 'left'),
+       label(1016, 1600, v.x, v.y, 'الأوعية بتتوسّع<small>Cutaneous vasodilation</small>', 'hot', 'right', true),
+       label(1016, 1120, b.x, b.y, 'نقط العرق', 'cool', 'right')]);
+  },
+  // 3 — splanchnic circulation (x-ray) + data callout
+  3() {
+    const lt = 4.2; BD.update(lt, { mode: 'vascular', heat: .85 }); { const a = -.42; BD.camera.position.set(Math.sin(a) * 1.15, 1.16, Math.cos(a) * 1.15); BD.camera.lookAt(0, 1.13, -.03); }
+    renderFrame([{ scene: BD.scene, camera: BD.camera }], { ...DEFAULT_FX, ...BD.fx(lt, { mode: 'vascular' }), uAperture: .5 });
+    const P = k => project(BD.camera, BD.anchors[k]);
+    const ao = P('aorta'), ce = P('celiac'), sm = P('sma');
+    overlay([
+      `<div class="abs" style="left:0;right:0;top:0;height:640px;background:linear-gradient(to bottom, rgba(246,240,230,.96) 55%, rgba(246,240,230,0))"></div>`,
+      sunline(560), brand, kicker('١', 'الدم بيروح للجلد'),
+      `<div class="abs foot" style="right:72px;top:208px;font-size:28px;color:var(--ink2)">في الإجهاد الحراري الشديد، حتى حوالي</div>`,
+      `<div class="abs headline" style="right:64px;top:236px;font-size:190px;color:var(--coral)">٥٠٪</div>`,
+      `<div class="abs" style="right:72px;top:452px;font-family:Alexandria;font-weight:700;font-size:40px;color:var(--ink)">من ضخ القلب ممكن يروح للجلد</div>`,
+      `<div class="abs foot" style="right:72px;top:512px">مش في يوم صيف عادي · <span class="term">Crandall &amp; González-Alonso, 2010</span></div>`,
+      `<div class="abs" style="left:64px;top:1470px;font-family:Fraunces;font-style:italic;font-size:34px;color:var(--ink2)">Splanchnic circulation</div>`,
+      `<div class="abs cap">فالدم اللي رايح <span class="h">للمعدة والأمعاء</span> بيقل</div>`],
+      [label(1016, ce.y - 40, ce.x, ce.y, 'الجذع البطني<small>Celiac trunk</small>', 'hot', 'right', true),
+       label(64, sm.y + 60, sm.x, sm.y, 'شريان الأمعاء<small>SMA</small>', 'hot', 'left', true),
+       label(1016, ao.y + 150, ao.x, ao.y, 'الشريان الأورطي<small>Aorta</small>', '', 'right', true)]);
+  },
+  // 4 — intestinal barrier, stacked split: normal (top) vs severe heat stress (bottom)
+  4() {
+    const lt = 4; BR.update(lt, { stress: 1 });
+    const top = [0, 250, 1080, 690], bot = [0, 980, 1080, 690];
+    const c1 = new THREE.PerspectiveCamera(30, 1, .05, 60), c2 = new THREE.PerspectiveCamera(30, 1, .05, 60);
+    c1.position.set(-.85, 1.0, 3.3); c1.lookAt(-.85, .05, 0); c2.position.set(.95, 1.0, 3.3); c2.lookAt(.95, .05, 0);
+    renderFrame([{ scene: BR.scene, camera: c1, rect: top, clear: 0xF4E6D6 }, { scene: BR.scene, camera: c2, rect: bot, clear: 0xF4E6D6 }],
+      { ...DEFAULT_FX, uExposure: .8, uAperture: 0, uVig: .14 });
+    const j = project(c1, BR.junctionPoint(-1), top), gp = project(c2, BR.gapPoint(), bot), lp = project(c1, BR.lpsPoint(), top);
+    overlay([
+      sunline(700), brand, kicker('٢', 'جدار الأمعاء'),
+      `<div class="abs" style="left:0;right:0;top:938px;height:42px;background:#F6F0E6"></div>`,
+      `<div class="abs chip" style="right:72px;top:268px;color:var(--teal);background:rgba(252,250,246,.85)">طبيعي</div>`,
+      `<div class="abs chip" style="right:72px;top:998px;color:var(--coral);background:rgba(252,250,246,.85)">إجهاد حراري شديد</div>`,
+      `<div class="abs foot" style="right:72px;top:1690px">مع المجهود في الحر الشديد — مش في يوم صيف عادي · <span class="term">Pires et al., 2017</span></div>`,
+      `<div class="abs cap" style="top:1748px;font-size:42px;padding:16px 30px 20px">المسافات بين خلاياه توسع… فتعدّي <span class="h">مواد من البكتيريا</span> للدم</div>`],
+      [label(64, 880, j.x, j.y, 'الوصلات المحكمة<small>Tight junctions</small>', 'cool', 'left', true),
+       label(1016, 1290, gp.x, gp.y, 'فراغ بين الخلايا', 'hot', 'right', true),
+       label(64, 330, lp.x, lp.y, 'مواد بكتيرية<small>Endotoxins</small>', 'hot', 'left', true)]);
+  },
+  // 5 — microbiome macro
+  5() {
+    const lt = 4; MB.update(lt); renderFrame([{ scene: MB.scene, camera: MB.camera }], { ...DEFAULT_FX, ...MB.fx(lt) });
+    overlay([
+      `<div class="abs" style="left:0;right:0;top:0;height:560px;background:linear-gradient(to bottom, rgba(243,223,203,.95) 45%, rgba(243,223,203,0))"></div>`,
+      sunline(840), brand, kicker('٣', 'بكتيريا الأمعاء'),
+      `<div class="abs headline" style="right:72px;top:200px;font-size:104px">بتتأثر<span class="soft"> بالحر؟</span></div>`,
+      `<div class="abs term" style="right:76px;top:340px;font-size:36px">Gut microbiome</div>`,
+      `<div class="abs" style="right:72px;top:404px;display:flex;gap:14px"><span class="chip" style="color:var(--teal)">مش كلها ضارّة</span><span class="chip" style="color:var(--mute)">أغلب الأدلة من الحيوانات</span></div>`,
+      `<div class="abs cap">الدراسات على <span class="h">الحيوانات</span> بيّنت إن الحر الشديد بيغيّر توازنها</div>`]);
+  },
+  // 6 — premium editorial: warning signs
+  6() {
+    ST.update(1.2); ST.camera.position.set(0, .45, 6.6); ST.camera.lookAt(0, .25, 0);
+    renderFrame([{ scene: ST.scene, camera: ST.camera, rect: [10, 720, 430, 760], clear: 0xF6F0E6 }], { ...DEFAULT_FX, uAperture: 0, uExposure: .86, uVig: .06, uGrain: .018, clear: 0xF6F0E6 });
+    const items = ['ألم متكرر', 'بيصحّيك من النوم', 'نزول في الوزن من غير سبب', 'قيء دم أو براز أسود', 'صعوبة في البلع', 'قيء مستمر', 'أعراض جديدة بعد سن الستين'];
+    overlay([
+      sunline(980), brand, kicker('◉', 'علامات الخطر'),
+      `<div class="abs headline" style="right:64px;top:196px;font-size:236px;line-height:1">اسمع</div>`,
+      `<div class="abs headline" style="right:72px;top:432px;font-size:142px;line-height:1"><span class="soft">لجسمك</span></div>`,
+      `<div class="abs foot" style="right:76px;top:610px;font-size:30px;color:var(--ink2)">مش كل ألم في المعدة حموضة عادية أو مغص وهيروح</div>`,
+      `<div class="abs" style="right:64px;top:700px;width:610px">${items.map((t, i) => `<div style="display:flex;align-items:baseline;gap:20px;padding:15px 0;border-bottom:1.5px solid rgba(31,58,95,.16)"><span style="font-family:Alexandria;font-weight:300;font-size:46px;color:var(--coral);width:44px;text-align:center">${'١٢٣٤٥٦٧'[i]}</span><span style="font-family:Alexandria;font-weight:700;font-size:33px;color:var(--ink);white-space:nowrap">${t}</span></div>`).join('')}</div>`,
+      `<div class="abs foot" style="right:72px;top:1470px">علامات تستاهل كشف وتقييم طبي · <span class="term">ACG/CAG 2017 &amp; clinical practice</span></div>`,
+      `<div class="abs" style="left:0;right:0;top:1560px;height:300px;background:var(--red)"></div>`,
+      `<div class="abs" style="right:72px;top:1598px;font-family:Alexandria;font-weight:900;font-size:76px;color:#FCFAF6">طوارئ فورًا</div>`,
+      `<div class="abs" style="right:72px;top:1712px;font-family:Plex;font-weight:600;font-size:34px;color:#FFE1D4">تشوّش · إغماء · سخونية عالية في الحر</div>`,
+      `<div class="abs" style="left:72px;top:1716px;font-family:Fraunces;font-style:italic;font-size:30px;color:#FFD2C0">possible heat stroke</div>`]);
+  },
+};
+window.seek = async n => { await document.fonts.ready; SAMPLES[n](); };
+await Promise.all(['300', '500', '700', '800', '900'].map(w => document.fonts.load(`${w} 40px Alexandria`, 'اسمع لجسمك ٥٠٪')));
+await Promise.all(['400', '600'].map(w => document.fonts.load(`${w} 30px Plex`, 'مش كل ألم')));
+await document.fonts.load('italic 30px Fraunces', 'Aorta'); await document.fonts.ready;
+window.ready = true;
+</script>
+</body>
+</html>

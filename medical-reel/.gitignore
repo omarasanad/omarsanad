@@ -19,3 +19,7 @@ sibo/audio/
 sibo/build/
 sibo/out/
 sibo/web/media/
+summer-heat/renders/
+summer-heat/out/
+summer-heat/web/models/figure.bin
+summer-heat/web/models/figure.json
