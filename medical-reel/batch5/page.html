@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>Endoscopy Clips</title>
+<style>
+@font-face{font-family:Cairo;font-weight:700;src:url(fonts/cairo-arabic-700-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E}
+@font-face{font-family:Cairo;font-weight:800;src:url(fonts/cairo-arabic-800-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E}
+@font-face{font-family:Cairo;font-weight:900;src:url(fonts/cairo-arabic-900-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E}
+@font-face{font-family:Cairo;font-weight:700;src:url(fonts/cairo-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:Cairo;font-weight:800;src:url(fonts/cairo-latin-800-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+2000-206F}
+:root{--navy:#0B1F3A;--navy2:#071629;--teal:#14B8A6;--cyan:#3FE0D0;--orange:#FF9F45}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--navy2);font-family:Cairo;color:#fff}
+.abs{position:absolute}
+#vid{inset:0;overflow:hidden}
+#vid img{width:1080px;height:1920px;display:block;transform-origin:50% 35%}
+#shade{inset:0;background:linear-gradient(to bottom, rgba(7,22,41,.88) 0, rgba(7,22,41,.55) 230px, rgba(7,22,41,0) 380px, rgba(7,22,41,0) 62%, rgba(7,22,41,.85) 86%, rgba(7,22,41,.95))}
+.lock{left:50px;top:46px;display:flex;align-items:center;gap:20px;direction:ltr}
+.lock img{width:104px;height:104px;border-radius:50%;box-shadow:0 0 0 3px rgba(63,224,208,.55)}
+.lock .t{direction:rtl;text-align:left}
+.lock .nm{font-weight:900;font-size:38px;line-height:1.2;text-shadow:0 2px 10px rgba(0,0,0,.5)}
+.lock .sp{font-weight:700;font-size:23px;color:var(--cyan);line-height:1.3;text-shadow:0 2px 10px rgba(0,0,0,.5)}
+.chip{right:50px;top:186px;font-weight:800;font-size:34px;color:var(--navy2);background:var(--cyan);padding:6px 28px 10px;border-radius:999px;white-space:nowrap}
+.bar{left:0;top:0;height:7px;background:linear-gradient(90deg,var(--orange),var(--cyan))}
+.cap{left:56px;right:56px;top:1620px;text-align:center;font-weight:800;line-height:1.45;text-shadow:0 3px 14px rgba(0,0,0,.7)}
+.cap .w{display:inline-block}
+.cap .on{color:var(--cyan)}
+.hook{left:60px;right:60px;top:300px;text-align:right;font-weight:900;font-size:78px;line-height:1.2;text-shadow:0 4px 20px rgba(0,0,0,.65)}
+.hook span{color:var(--orange)}
+.inset{left:52px;top:1060px;width:430px;height:430px;border-radius:50%;border:6px solid var(--cyan);box-shadow:0 18px 50px rgba(0,0,0,.55);background-repeat:no-repeat;background-color:#000}
+.ilbl{left:52px;top:1500px;width:430px;text-align:center;font-weight:800;font-size:28px;color:var(--cyan);text-shadow:0 2px 10px rgba(0,0,0,.7)}
+.card{right:46px;top:1180px;width:520px;padding:24px 30px 26px;border-radius:28px;background:rgba(7,22,41,.86);border:2px solid rgba(63,224,208,.55);box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.card .row{display:flex;align-items:center;gap:16px;font-weight:800;font-size:31px;line-height:1.3}
+.card .row+.row{margin-top:16px}
+.card .dot{width:20px;height:20px;border-radius:50%;background:var(--orange);flex:none}
+.card .en{font-size:26px;color:var(--cyan);direction:ltr;unicode-bidi:isolate}
+#outro{inset:0;background:radial-gradient(1000px 1100px at 50% 40%, #12345c, var(--navy2) 72%)}
+.fb{display:inline-flex;align-items:center;gap:18px;padding:14px 42px 14px 18px;border-radius:999px;background:#fff;color:var(--navy);direction:ltr;white-space:nowrap}
+</style>
+</head>
+<body>
+<div id="vid" class="abs"><img id="frame" alt=""></div>
+<div id="shade" class="abs"></div>
+<div id="ov" class="abs" style="inset:0"></div>
+<div id="hdr" class="abs" style="inset:0;pointer-events:none"><div class="lock abs"><img src="brand_mark.png" alt=""><div class="t"><div class="nm">د. أبو بكر أحمد سند</div><div class="sp">أخصائي الجهاز الهضمي والكبد والمناظير</div></div></div><div id="chip" class="chip abs"></div></div>
+<div id="bar" class="abs bar"></div>
+<div id="outro" class="abs" style="opacity:0"></div>
+<script>
+// Per-clip content. Captions are the doctor's words as heard (Egyptian Arabic); [start, end, text, highlighted words]
+const CLIPS = {
+  1: { dur: 20.85, n: 625, topic: 'منظار القولون', hook: [0.3, 5.4, 'جوه غرفة <span>المناظير</span>'],
+       caps: [[5.8, 11.4, 'زي ما احنا شايفين هنا في منظار القولون…', ['منظار', 'القولون…']], [11.8, 18.9, 'بنبدأ بفحص كل أجزاء القولون', ['كل', 'أجزاء', 'القولون']]],
+       card: [12.2, [['بنفحص القولون كله', ''], ['من أوله لآخره', '']]] },
+  2: { dur: 36.41, n: 1092, topic: 'زوائد القولون', hook: [0.3, 7.0, 'منظار القولون<br>بيكشف <span>إيه؟</span>'],
+       caps: [[7.4, 11.4, 'واحدة من المشاكل اللي ممكن نقابلها…'], [11.6, 17.4, 'منظار القولون بيساعدنا نكتشف وجود أورام في القولون', ['أورام']],
+              [17.6, 21.2, 'وزي ما احنا شايفين بالمنظار ده…'], [21.3, 25.6, 'عندي زوائد في القولون موجودة هنا', ['زوائد']], [25.8, 31.0, 'ودي لازم نستأصلها', ['نستأصلها']]],
+       card: [21.6, [['زوائد القولون', 'Colon polyps'], ['بيتم استئصالها بالمنظار', '']]] },
+  3: { dur: 34.04, n: 1021, topic: 'زوائد القولون', hook: null,
+       caps: [[0.3, 4.4, 'واحدة من الحاجات اللي ممكن نشوفها بمنظار القولون'], [4.6, 10.2, 'الزوائد اللحمية في القولون', ['الزوائد', 'اللحمية']],
+              [10.5, 14.0, 'زي ما واضح هنا… في القولون الصاعد', ['القولون', 'الصاعد']], [14.2, 21.0, 'وبعضها بيبقى ليه عنق اسمه Pedicle', ['عنق', 'Pedicle']],
+              [21.2, 25.0, 'اللي هو الجزء اللي متعلقة منه من تحت'], [25.4, 33.6, 'وطبعًا الحاجات دي بيتم استئصالها بمنظار القولون', ['استئصالها']]],
+       card: [14.4, [['زائدة لحمية ليها عنق', 'Pedunculated polyp'], ['بيتم استئصالها بالمنظار', '']]] },
+  4: { dur: 26.93, n: 808, topic: 'البواسير الداخلية', hook: null,
+       caps: [[0.3, 4.8, 'واحدة من المشاكل اللي ممكن تقابلنا'], [5.0, 10.2, 'واللي بيحصل بسببها نزيف شرجي كتير', ['نزيف', 'شرجي']],
+              [10.5, 14.0, 'زي ما انت شايف هنا…'], [14.2, 18.0, 'دي البواسير الداخلية', ['البواسير', 'الداخلية']],
+              [18.2, 23.0, 'ودي من أهم الأسباب اللي ممكن تعمل نزيف شرجي', ['نزيف', 'شرجي']], [23.2, 26.8, 'وهي ما يسمى بالبواسير الداخلية', ['بالبواسير', 'الداخلية']]],
+       card: [14.4, [['البواسير الداخلية', 'Internal hemorrhoids'], ['سبب شائع للنزيف الشرجي', '']]] },
+  5: { dur: 16.67, n: 499, topic: 'أهمية منظار القولون', hook: null,
+       caps: [[0.2, 3.7, 'معانا النهارده حلقة عن منظار القولون', ['منظار', 'القولون']], [3.9, 8.0, 'منظار القولون بيساعدنا في تشخيص حالات كتير جدًا', ['تشخيص']],
+              [8.2, 12.6, 'ممكن تكون مش معروفة…'], [12.8, 16.6, 'ومش ظاهرة في التحاليل والأشعة العادية', ['التحاليل', 'والأشعة']]],
+       card: [8.4, [['بيشخّص حالات مش ظاهرة', ''], ['في التحاليل والأشعة العادية', '']]] },
+};
+const V = Number(new URLSearchParams(location.search).get('v') || 1), C = CLIPS[V];
+const VDUR = C.dur, OUTRO = 3.6, TOTAL = VDUR + OUTRO; window.DURATION = TOTAL;
+let SCOPE = null;
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x)), eo = u => 1 - Math.pow(1 - clamp(u), 3), fin = (t, a, d = .45) => eo((t - a) / d);
+const LINES = C.caps.map(([a, b, text, hl = []]) => { const ws = text.split(' '); const L = ws.reduce((s, w) => s + w.length + 1, 0); let acc = 0;
+  return { a, b, hl, len: text.length, words: ws.map(w => { const s = a + (b - a) * acc / L; acc += w.length + 1; return { w, s }; }) }; });
+const $ = id => document.getElementById(id);
+window.seek = async t => {
+  t = Number(t); const v = t < VDUR;
+  const f = Math.min(C.n, Math.floor(t * 30) + 1), src = `build/v${V}/frames/${String(f).padStart(4, '0')}.jpg`, img = $('frame');
+  if (v && !img.src.endsWith(src)) { img.src = src; await img.decode().catch(() => 0); }
+  img.style.transform = `scale(${1 + .04 * clamp(t / VDUR)})`;
+  $('chip').textContent = C.topic; $('bar').style.width = (1080 * clamp(t / TOTAL)) + 'px';
+  let o = '';
+  if (v && C.hook && t < C.hook[1] + .4) { const a = Math.min(fin(t, C.hook[0], .5), clamp((C.hook[1] + .4 - t) / .4));
+    o += `<div class="hook abs" style="opacity:${a};transform:translateY(${(1 - a) * 30}px)">${C.hook[2]}</div>`; }
+  // magnified endoscope image (only the round image: the rest of the monitor is blurred for privacy)
+  const box = v ? SCOPE[f - 1] : null;
+  if (box) { const sc = 1 + .04 * clamp(t / VDUR), cx = 540 + ((box[0] + box[2]) / 2 - 540) * sc, cy = 672 + ((box[1] + box[3]) / 2 - 672) * sc;
+    const d = Math.min(box[2] - box[0], box[3] - box[1]) * .9 * sc, k = 430 / d;
+    o += `<div class="inset abs" style="background-image:url(${src});background-size:${1080 * sc * k}px ${1920 * sc * k}px;background-position:${215 - cx * k}px ${215 - cy * k}px"></div><div class="ilbl abs">صورة المنظار</div>`; }
+  if (v && C.card && t > C.card[0] - .1) { const a = fin(t, C.card[0], .5);
+    o += `<div class="card abs" style="opacity:${a};transform:translateX(${(1 - a) * -50}px)">${C.card[1].map(([ar, en], i) => { const r = fin(t, C.card[0] + .3 + i * .8, .4);
+      return `<div class="row" style="opacity:${r}"><span class="dot"></span><div>${ar}${en ? `<div class="en">${en}</div>` : ''}</div></div>`; }).join('')}</div>`; }
+  let cap = null; for (const c of LINES) if (t >= c.a - .08 && t < c.b + .3) cap = c;
+  if (v && cap) { const a = Math.min(fin(t, cap.a - .08, .2), clamp((cap.b + .3 - t) / .15));
+    o += `<div class="cap abs" style="font-size:${cap.len > 38 ? 46 : cap.len > 28 ? 52 : 58}px;opacity:${a};transform:translateY(${(1 - a) * 14}px)">${cap.words.map(w => `<span class="w${cap.hl.includes(w.w) ? ' on' : ''}" style="opacity:${t >= w.s - .03 ? 1 : .45}">${w.w}</span>`).join(' ')}</div>`; }
+  $('ov').innerHTML = o;
+  const u = t - VDUR, oa = clamp(u / .35); $('outro').style.opacity = oa; $('hdr').style.opacity = 1 - oa;
+  if (u > 0) { const s = k => fin(u, k, .4);
+    $('outro').innerHTML = `<img src="brand_mark.png" class="abs" style="left:415px;top:500px;width:250px;height:250px;border-radius:50%;box-shadow:0 0 0 5px rgba(63,224,208,.45);transform:scale(${.6 + .4 * eo(u / .5)})">
+      <div class="abs" style="left:0;right:0;top:800px;text-align:center;font-weight:900;font-size:78px;opacity:${s(.2)}">د. أبو بكر أحمد سند</div>
+      <div class="abs" style="left:0;right:0;top:910px;text-align:center;font-weight:700;font-size:38px;color:var(--cyan);opacity:${s(.35)}">أخصائي الجهاز الهضمي والكبد والمناظير</div>
+      <div class="abs" style="left:140px;right:140px;top:1020px;height:3px;background:linear-gradient(90deg,transparent,var(--teal),transparent);opacity:${s(.5)}"></div>
+      <div class="abs" style="left:0;right:0;top:1070px;text-align:center;font-weight:800;font-size:50px;color:var(--orange);opacity:${s(.7)}">تابعونا للمزيد</div>
+      <div class="abs" style="left:0;right:0;top:1180px;text-align:center;opacity:${s(.9)}"><span class="fb"><svg viewBox="0 0 64 64" width="56" height="56"><circle cx="32" cy="32" r="32" fill="#1877F2"/><path fill="#fff" d="M35.5 52V34.6h5.8l.9-6.8h-6.7v-4.3c0-2 .6-3.3 3.4-3.3h3.6v-6.1c-.6-.1-2.8-.3-5.2-.3-5.2 0-8.7 3.2-8.7 9v5H22.8v6.8h5.8V52z"/></svg><span style="font-weight:700;font-size:28px;color:#5b6b80">Facebook</span><span style="font-weight:800;font-size:44px">Dr.Abobakr Sanad</span></span></div>`; }
+  await Promise.all([...document.images].map(i => i.complete ? 0 : i.decode().catch(() => 0)));
+};
+(async () => { SCOPE = (await (await fetch(`build/v${V}/scope.json`)).json()).scope;
+  for (const w of [700, 800, 900]) await document.fonts.load(`${w} 40px Cairo`, 'منظار القولون'); await document.fonts.ready; await window.seek(0); window.ready = true; })();
+</script>
+</body>
+</html>
