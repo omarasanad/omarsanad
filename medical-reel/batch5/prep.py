@@ -46,7 +46,7 @@ if good.any():
     last = -999
     for i in range(len(B)):
         if good[i]: last = i
-        gap_ok[i] = good[i] or (i - last <= 20 and any(good[i:i + 21]))
+        gap_ok[i] = good[i] or (i - last <= 40 and any(good[i:i + 41]))
     for k in range(4): B[:, k] = median_filter(B[:, k], 7, mode='nearest')
 S = 1080 / W; meta = []; prev = []
 for i, f in enumerate(frames):
